@@ -233,3 +233,9 @@ $RECYCLE.BIN/
 #.idea and .cache
 .idea/
 .cache/
+
+#.synctex.gz
+
+.synctex.gz
+.synctex
+.gz
