@@ -1,16 +1,14 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage[colorlinks=True, linkcolor=blue]{hyperref}
-\usepackage{tabularx}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage[labelfont=bf]{caption}
-\usepackage{mathpazo}
+\documentclass[../../doc/thesis/thesis.tex]{subfiles}
 
 \begin{document}
 
 \begin{longtable}{p{.29\textwidth}  p{.71\textwidth}}
-    \caption{Phenotype domains used for clinical metrics}\vspace*{-0,1cm}\\
+    \caption{Phenotype domains used for clinical metrics}\vspace*{-0,1cm} \label{tab:var}\\
+    \toprule
+    \textbf{Phenotype domain} & \textbf{Clinical Variables}\\
+    \midrule
+\endfirsthead
+    \caption*{\textbf{Table \ref{tab:var} Continued:} Phenotype domains used for clinical metrics}\vspace*{-0,1cm}\\
     \toprule
     \textbf{Phenotype domain} & \textbf{Clinical Variables}\\
     \midrule
