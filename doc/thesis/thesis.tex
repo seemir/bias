@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{book}
 \usepackage[utf8]{inputenc}
 \usepackage[colorlinks=True, linkcolor=blue, citecolor=blue]{hyperref}
 \usepackage{tabularx}
@@ -8,11 +8,29 @@
 \usepackage{mathpazo}
 \usepackage{subfiles}
 \usepackage[round]{natbib}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{lipsum}
+\graphicspath{{images/}}
+
 
 \begin{document}
 
-\subfile{../../data/data_doc/variable_description.tex}
+\subfile{title/title.tex}
 
-\subfile{../master_prep/preparations.tex}
+\subfile{chapters/abstract.tex}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\subfile{chapters/introduction.tex}
+
+\newpage
+
+\subfile{chapters/background.tex}
+
 
 \end{document}
