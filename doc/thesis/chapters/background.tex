@@ -1,9 +1,24 @@
 \documentclass[../thesis.tex]{subfiles}
-
 \begin{document}
 
 \chapter{Background}
+\label{chap:back}
 
-\lipsum
+In this chapter we present a quick treatment on the literature of the application of ML techniques for the assessment of heart failure\footnote{We highly recommend reading \cite{tripoliti2017heart} for a broader overview of the literature on the state-of-the-art ML methodologies applied for the assessment of heart failure.}. Important topics such as HF detection, subtype estimation and prediction of clinical outcomes in the context of ML will be presented and explained.
+
+\section{HF Detection}
+
+\noindent The ESC defines HF as a clinical syndrome caused by structural and/or functional cardiac abnormality, resulting in a reduced cardiac output (CO) and/or elevated intracardiac pressures at rest or during stress. It is typically characterized by symptoms, such as breathlessness, ankle swelling and fatigue that may be accompanied by signs, such as for example elevated jugular venous pressure (JVP), pulmonary crackles and peripheral oedema (swelling in lower limbs), see \cite[page.~2136]{ponikowski20162016}. HF prevents the heart from fulfilling the circulatory demands from the body due to its impairing abilities on the ventricles to maintain the bodies hemodynamics (blood flow). As there is no broad definitive industry accepted diagnostic test for HF. One finds in clinical practice, medical diagnosis being made with a combination of careful examinations (physical and historical) with assisting tests, such as blood tests, chest radiography (chest X-ray, CXR), electrocardiography (EKG) and echocardiography (echo), see e.g \cite{henein2010heart} and \cite{son2012decision}. As a result of this several criteria for determining the presence of HF have been proposed, including the Framingham criteria \citep{mckee1971natural}, the Boston criteria \citep{carlson1985analysis}, the Gothenburg criteria \citep{eriksson1987cardiac} and the ESC criteria \citep{swedberg2005guidelines}, see \cite{roger2010heart}. All of which are much used.\\
+\indent In a non-acute setting the ESC have also defined an algorithm for diagnosing HF, see \citep[page.~2140]{ponikowski20162016}. The algorithm is structured in the following way. First the probability of HF ($\hat{p}_{HF}$) is evaluated along three dimension: i) the patients prior clinical history [e.g. any history of coronary artery disease (CAD) or arterial hypertension, exposition to cardiotoxic drugs/radiation, diuretic use or orthopnea (shortness of breath when lying down)], ii) physical examination of the patient [e.g. crackles/rales, bilateral ankle oedema (swelling in both ankles), abnormal heart sounds/murmur, jugular venous dilatation, laterally displaced/broadened apical beat (pulse felt at the point of maximum impulse)] and iii) any abnormalities in EKG. If all elements along the three dimensions are normal/absent, $\hat{p}_{HF}$ is estimated to be highly unlikely. Should however at least one element be abnormal, then plasma Natriuretic Peptides (NPs)\footnote{A hormone mainly secreted from the heart that has important natriuretic and kaliuretic properties (excretion of sodium and potassium in the urine), see \cite{pandit2011natriuretic}.} should be measured inorder to identify patients who need echocardiography. Specifically, should the NP values be above the exclusion threshold or assessment of NPs not routinely done in clinical practice then patients need to be forwarded to echocardiography. The following is a flow chart detailing the structure of the ESC algorithm.
+
+\newpage
+
+\section{Subtype Estimation}
+
+\subsection{Supervised learning}
+
+\subsection{Unsupervised learning}
+
+\section{Prediction of Clinical Outcomes}
 
 \end{document}

@@ -1,24 +1,53 @@
-\documentclass{book}
+\documentclass[openany, 11pt]{book}
 \usepackage[utf8]{inputenc}
+\usepackage{amssymb, amsmath}
 \usepackage[colorlinks=True, linkcolor=blue, citecolor=blue]{hyperref}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage[labelfont=bf]{caption}
-\usepackage{mathpazo}
 \usepackage{subfiles}
-\usepackage[round]{natbib}
+\usepackage{natbib}
+\usepackage{mathpazo}
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{lipsum}
 \graphicspath{{images/}}
-
+\bibliographystyle{apalike} 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\textbf{\thepage}}
+\fancyhead[LO]{\textbf{\nouppercase{\rightmark}}}
+\fancyhead[RE]{\textbf{\nouppercase{\leftmark}}}
+\setlength{\headheight}{13.6pt}
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+\usepackage{pdfpages}
+\usepackage{tikz}
+\usepackage{mathdots}
+\usepackage{yhmath}
+\usepackage{cancel}
+\usepackage{fading}
+\usepackage{}
 
 \begin{document}
 
+\includepdf[width=1.71\textwidth,height=1.5\textheight]{m_eng_a4.pdf}
+
+\newpage{\pagestyle{empty}\cleardoublepage}
+
 \subfile{title/title.tex}
 
+\pagenumbering{roman}
 \subfile{chapters/abstract.tex}
+
+\newpage{\pagestyle{empty}\cleardoublepage}
+
+\subfile{chapters/acknowledgements.tex}
 
 \newpage
 
@@ -26,11 +55,26 @@
 
 \newpage
 
+\pagenumbering{arabic}
 \subfile{chapters/introduction.tex}
-
-\newpage
 
 \subfile{chapters/background.tex}
 
+\newpage
+
+\subfile{chapters/methodology.tex}
+
+\newpage
+
+\subfile{chapters/experiments.tex}
+
+\newpage
+
+\subfile{chapters/conclusion.tex}
+
+\newpage
+\bibliography{chapters/thesis.bib}
+\addcontentsline{toc}{chapter}{Bibliography}
 
 \end{document}
+
