@@ -13,7 +13,7 @@ make_na <- function(data){
   data
 }
 
-summary_mv <- function(data){
+summary_missing <- function(data){
   #' Summary of the missing values in a dataset
   #' 
   #' @description This function returns a list with the total number of na
@@ -34,7 +34,7 @@ summary_mv <- function(data){
   outp
 }
 
-summary_zv <- function(data){
+summary_zeros <- function(data){
   #' Summary of the zero values in a dataset
   #' 
   #' @description The function returns a list with the percentage of zero
@@ -90,4 +90,22 @@ zero_to_na <- function(data, except=NULL){
  exp_data <- data[, exp_idx]; not_exp_data <- data[, !exp_idx]
  not_exp_data[not_exp_data == 0] <- NA; 
  data <- cbind(not_exp_data, exp_data); data
+}
+
+move_columns <- function(from_mat, to_mat, column_name){
+ #' Move one column from one matric to another. 
+ #' 
+ #' @description This function moves one column with name column_name
+ #' from matrix called from_mat to matrix called to_mat.
+ #' 
+ #' @param from_mat matrix. Matrix to move column from
+ #' @param to_mat matrix. Matric to move column to 
+ #' @param column_name character. Name of column to be moved
+
+  to_mat <- cbind(to_mat,from_mat[, colnames(from_mat) == column_name])
+  colnames(to_mat)[ncol(to_mat)] <- column_name
+  from_mat <- from_mat[, colnames(from_mat) != column_name]
+  outp <- list(from_mat, to_mat)
+  names(outp) <- c('from_mat','to_mat')
+  outp
 }
