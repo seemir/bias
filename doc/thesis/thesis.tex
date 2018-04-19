@@ -1,11 +1,11 @@
-\documentclass[openany, 11pt]{book}
+\documentclass[openany, 12pt]{book}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb, amsmath}
 \usepackage[colorlinks=True, linkcolor=blue, citecolor=blue]{hyperref}
 \usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{ltablex}
 \usepackage{booktabs}
-\usepackage{longtable}
-\usepackage[labelfont=bf]{caption}
 \usepackage{subfiles}
 \usepackage{natbib}
 \usepackage{mathpazo}
@@ -13,30 +13,39 @@
 \usepackage{epstopdf}
 \usepackage{lipsum}
 \graphicspath{{images/}}
-\bibliographystyle{apalike} 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[LE,RO]{\textbf{\thepage}}
 \fancyhead[LO]{\textbf{\nouppercase{\rightmark}}}
 \fancyhead[RE]{\textbf{\nouppercase{\leftmark}}}
-\setlength{\headheight}{13.6pt}
-\newcommand\blankpage{%
-    \null
-    \thispagestyle{empty}%
-    \addtocounter{page}{-1}%
-    \newpage}
+\setlength{\headheight}{14.5pt}
 \usepackage{pdfpages}
 \usepackage{tikz}
 \usepackage{mathdots}
 \usepackage{yhmath}
 \usepackage{cancel}
-\usepackage{fading}
-\usepackage{}
+\usepackage{color}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage[final]{microtype}
+\usepackage{enumitem} 
+\usepackage{wrapfig}
+\newcolumntype{P}[1]{>{\hspace{0pt}}p{#1}}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}  
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\usepackage[labelfont=bf]{caption}
+\bibliographystyle{apalike} 
+\usepackage{pbox}
+\usepackage{lipsum}
 
 \begin{document}
 
-\includepdf[width=1.71\textwidth,height=1.5\textheight]{m_eng_a4.pdf}
+\includepdf[width=1.58\textwidth,height=1.5\textheight]{m_eng_a4.pdf}
 
 \newpage{\pagestyle{empty}\cleardoublepage}
 
@@ -55,8 +64,18 @@
 
 \newpage
 
+\listoffigures
+
+\newpage
+
+\listoftables
+
+\newpage
+
 \pagenumbering{arabic}
 \subfile{chapters/introduction.tex}
+
+\newpage
 
 \subfile{chapters/background.tex}
 
@@ -73,8 +92,11 @@
 \subfile{chapters/conclusion.tex}
 
 \newpage
+
+\subfile{chapters/appendix.tex}
+
+\newpage
 \bibliography{chapters/thesis.bib}
 \addcontentsline{toc}{chapter}{Bibliography}
 
 \end{document}
-

@@ -1,0 +1,24 @@
+
+\begin{footnotesize}
+\begin{tabularx}{\textwidth}{Lp{1cm}LLLp{3cm}}
+\caption{Literature review of HF detection}\\
+\toprule
+Author & HRV? & Method & Data & Features & Evaluation\\
+\midrule
+\endfirsthead
+\caption*{\textbf{Table \ref{tab:ML_HF_detection_lit}:} Literature review of HF detection (\textit{continued})} \label{tab:ML_HF_detection_lit}\\
+\toprule
+Author & HRV? & Method & Data & Features & Evaluation\\
+\midrule
+\endhead
+\cite{masetic2016congestive} & False & SVM, k-NN, NN, RF & $N = 28$ (13 normal and 15 HF) & Response: Normal \& HF. Predictor: Features extracted by EKG. & SVM:\newline Accuracy: 99.53\%\newline k-NN:\newline Accuracy: 99.93\%\newline NN:\newline Accuracy: 99.20\%\newline RF:\newline Accuracy: 100.00\%\newline\newline Validation: 10-fold cross validation\\
+\cite{liu2014new} & True & SVM, k-NN & $N = 47$ (30 normal and 17 HF) & Response: Normal \& HF. Predictor: Short term HRV measure (ST-HRV) & SVM:\newline Accuracy: 100.00\%\newline \newline Validation: Cross-validation\\
+&\\
+\cite{narin2014investigating} & True & SVM, k-NN, LDA, NN & $N = 83$ (54 normal and 29 HF) & Response: Normal \& HF. Predictor: ST-HRV & SVM:\newline Accuracy: 91.56\%\newline k-NN:\newline Accuracy: 85.54\%\newline LDA:\newline Accuracy: 85.54\%\newline NN:\newline Accuracy: 89.15\%\newline \newline Validation: Leave-one-ut cross valid- ation.\\
+&\\
+\cite{gharehchopogh2011neural} & False & NN & $N = 40$ (26 normal and 14 HF) & Response: Normal \& HF. Predictor: Gender, age, blood pressure, smoking habits. & NN:\newline Accuracy: 95.00\%\newline \newline Validation: Testing set.\\
+&\\
+\cite{yang2010heart} & False & Naive-Bayes, SVM, NNC & $N=153$ (58 Nor- mal, 30 HF-prone, 65 HF) & Response: Non-HF group (Health or HF-prone) \& HF. Predictor: clinical test results & SVM:\newline Accuracy: 74.40\% \newline \newline Validation: Test set of $N=90$ subjects\\[-0,05cm]
+\midrule
+\end{tabularx}
+\end{footnotesize}

@@ -1,0 +1,20 @@
+
+\begin{footnotesize}
+\begin{tabularx}{\textwidth}{Lp{1cm}LLp{3cm}}
+\caption{Literature review of HF subtype classification}\\
+\toprule
+Author & Method & Data & Features & Evaluation\\
+\midrule
+\endfirsthead
+\caption*{\textbf{Table \ref{tab:ML_HF_subtype_supervised_lit}:} Literature review of HF subtype classification (\textit{continued})} \label{tab:ML_HF_subtype_supervised_lit}\\
+\toprule
+Author & Method & Data & Features & Evaluation\\
+\midrule
+\endhead
+\cite{austin2013using} & Bagging, Boosting, RF, SVM & $N=8212$ (3697 for training, 4515 for testing) & Response: HFrEF \& HFpEF. Predictor: Demographics, vital signs, symptoms, lab investigation and prev. history. & Bagging:\newline Sensitivity: 45.1\%\newline Specificity: 84.9\%\newline Boosting:\newline Sensitivity: 87.6\%\newline Specificity: 45.3\%\newline Random Forest:\newline Sensitivity: 37.8\%\newline Specificity: 89.7\%\newline SVM:\newline Sensitivity: 40.1\%\newline Specificity: 88.7\%\newline \newline Validation: Testing set of 8339 subjects\\
+\cite{alonso2015exploring} & Naive-Bayes, SVM, NNC & $N = 111$ (48 for training, 63 Monte Carlo simulated instances for testing) & Response: HFrEF \& HFpEF. Predictor: End-systolic Volume Index. &  Naive-Bayes:\newline Train error: 4.14\%\newline Test error: 9.52\%\newline SVM:\newline Train error: 2.08\%\newline Test error: 4.76\%\newline NNC (ib1, see \cite{aha1991instance}):\newline Train error: 2.08\%\newline Test error: 4.76\%\newline \newline Validation: Testing set of 63 instances. 10-fold cross validation.\\
+&\\
+\cite{isler2016discrimination} & k-NN, NN & $N=30$ (18 with HFrEF \& 12 with HFpEF) & Response: HFrEF \& HFpEF. Predictor: Short term HRV measures & k-NN:\newline Sensitivity: 87.5\% \newline Specificity: 91.07\% \newline Accuracy: 89.29\%\newline NN: \newline Sensitivity: 93.75\%\newline Specificity: 100.00\%\newline Accuracy: 96.43\% \newline \newline Validation: Leave-one-out cross-valid- ation.\\
+\midrule
+\end{tabularx}
+\end{footnotesize}

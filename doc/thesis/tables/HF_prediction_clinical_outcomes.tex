@@ -1,0 +1,24 @@
+
+\begin{footnotesize}
+\begin{tabularx}{\textwidth}{LLLLp{1.7cm}p{3cm}}
+\caption{Literature review of prediction of HF outcomes}\label{tab:ML_HF_predition_outcomes}\\
+\toprule
+Author & Outcome & Method & Data & Features & Evaluation\\
+\midrule
+\endfirsthead
+\caption*{\textbf{Table \ref{tab:ML_HF_predition_outcomes}:} Literature review of prediction of HF outcomes (\textit{continued})}\\
+\toprule
+Author & Outcome & Method & Data & Features & Evaluation\\
+\midrule
+\endhead
+\cite{austin2012regression} & Mortality & Logistic regression\newline Logistic, Bagged and Boosted trees. Random Forrest & Baseline:\newline$N=9945$ (8240 incl.) Followup: $N=8339$ (7608 incl.) & Response: Whether 30-day death in\newline hospital\newline Predictors: 34 clinical variables & Logistic regression:\newline(Splines)\newline AUC: 0.786 \newline R$^2$: 0.203\newline Brier's score: 0.119\newline Boosted regression:\newline (depth four)\newline AUC: 0.777\newline R$^2$: 0.180\newline Brier's score: 0.107\newline \newline Validation:\newline Follow-up sample used as validation.\\
+&\\
+\cite{zolfaghar2013big} & Re-hosp- italization & Logistic regression Random Forrest & No. of data: $1681562$. & Response:\newline 30-day risk of re- admission. \newline Yes or No\newline Predictor: more than 100 featur- es  & Logistic regression:\newline Accuracy: 78.03\%\newline Random Forest:\newline Accuracy: 87.12\% \newline\newline Validation: \newline 70\% training \newline 30\% testing\\
+&\\
+\cite{shah2014phenomapping} & Mortality \& Re-hos- pitalization & SVM & $N=397$ with HFpEF & Response: mortality and re-\newline admission: Yes or No. \newline Predictor: 67 features & Mortality:\newline Precision: 60.90\%\newline Re-hospitalization:\newline Precision: 63.60\%\\
+\cite{panahiazar2015using} & Mortality & Logistic Regression\newline Random Forest & $N=5044$ & Response: 1, 2 and 5 yr survival\newline Predictor:\newline 45 clinical variables & 1-year:\newline Log Regression:\newline AUC: 81.00\%\newline Random Forest:\newline AUC: 80.00\%\newline 2-year:\newline Log Regression:\newline AUC: 74.00\%\newline Random Forrest:\newline AUC: 72.00\%\newline 5-year:\newline Log Regression:\newline AUC: 73.00\%\newline Random Forrest: AUC:72.00\%\newline\newline Validation: Testing set of 3484 patients.\\
+&\\
+\cite{koulaouzidis2016telemonitoring} & Re-hosp- italization & Naive Bayes classifier & $N = 308$ & Response: High or\newline Low Risk\newline of HF\newline hospital- ization\newline Predictor: 25 clinical variables & Naive Bayes\newline classifier:\newline AUC: 82.00\%\newline\newline Validation:10-fold-cross-validation\\
+\midrule
+\end{tabularx}
+\end{footnotesize}
