@@ -2,6 +2,7 @@
 # Install packages (if not already installed)
 # ----------------------------------------------------------- #
 # install.packages("docstring")
+
 # ----------------------------------------------------------- #
 # Load package for docstring
 # ----------------------------------------------------------- #
@@ -127,7 +128,7 @@ move_columns <- function(from_mat, to_mat, column_name){
  #' to_mat.
  #' 
  #' @param from_mat matrix. Matrix to move column from
- #' @param to_mat matrix. Matric to move column to 
+ #' @param to_mat matrix. Matrix to move column to 
  #' @param column_name character. Name of column to be moved
 
   to_mat <- cbind(to_mat,from_mat[, colnames(from_mat) == 

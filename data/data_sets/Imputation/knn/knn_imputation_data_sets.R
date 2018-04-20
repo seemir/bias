@@ -56,10 +56,8 @@ HFpEF_matrix_not_ind <- zero_to_na(HFpEF_matrix_not_ind, not_zeros_HFpEF)
 HFmrEF_matrix_not_ind <- zero_to_na(HFmrEF_matrix_not_ind, not_zeros_HFmrEF)
 
 # Plot of missing valus distribution
-pdf(file="HFpEF_missing_dist.pdf")
 aggr(cbind(HFpEF_matrix_not_ind, HFpEF_matrix_ind_var), plot = T, 
      sortVars = T, bars = F, combined = T, ylabs = "", cex.axis = 0.7)
-dev.off()
 aggr(cbind(HFmrEF_matrix_not_ind, HFmrEF_matrix_ind_var), plot = T, 
      sortVars = T, bars = F, combined = T, ylabs = "", cex.axis = 0.7)
   
