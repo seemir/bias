@@ -45,7 +45,7 @@ HFmrEF_BMI <- move_columns(HFmrEF_matrix_ind_var, HFmrEF_matrix_not_ind,
 HFmrEF_matrix_ind_var<- HFmrEF_BMI$from_mat
 HFmrEF_matrix_not_ind <- HFmrEF_BMI$to_mat
 
-# Convert zeros to missings, the following variables are not to be convert.
+# Convert zeros to missings, the following variables are not to be converted.
 not_zeros_HFpEF <- c("comorbidities", "weightchange", "daysfollowupdischarge", 
                      "Timetonextadm")
 not_zeros_HFmrEF <- c("numbercomorditiesnoIDA", "comorbidities", "Timetoadmission",
@@ -56,15 +56,12 @@ HFpEF_matrix_not_ind <- zero_to_na(HFpEF_matrix_not_ind, not_zeros_HFpEF)
 HFmrEF_matrix_not_ind <- zero_to_na(HFmrEF_matrix_not_ind, not_zeros_HFmrEF)
 
 # Plot of missing valus distribution
-tikz(file="../../../../doc/thesis/images/HFpEF_missing_dist.tex")
+pdf(file="HFpEF_missing_dist.pdf")
 aggr(cbind(HFpEF_matrix_not_ind, HFpEF_matrix_ind_var), plot = T, 
      sortVars = T, bars = F, combined = T, ylabs = "", cex.axis = 0.7)
 dev.off()
-
-tikz(file="../../../../doc/thesis/images/HFmrEF_missing_dist.tex")
 aggr(cbind(HFmrEF_matrix_not_ind, HFmrEF_matrix_ind_var), plot = T, 
      sortVars = T, bars = F, combined = T, ylabs = "", cex.axis = 0.7)
-dev.off()
   
 # Summary of variables
 cap_desc_HFpEF <- "Patient characteristics: HFpEF variables"
