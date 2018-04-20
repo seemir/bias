@@ -1,25 +1,37 @@
-#Load package for docstring
+# ----------------------------------------------------------- #
+# Install packages (if not already installed)
+# ----------------------------------------------------------- #
+# install.packages("docstring")
+# ----------------------------------------------------------- #
+# Load package for docstring
+# ----------------------------------------------------------- #
 library(docstring)
 
+# ----------------------------------------------------------- #
+# Helper function used in this thesis
+# ----------------------------------------------------------- #
 make_na <- function(data){
   #' Converts all the NaN in a matrix to NA
   #' 
-  #' @description This function returns a matrix in which all the NaN values
-  #' are replaced with NA values. Note! NaN ("not a number") is not the R syntax 
-  #' for missing values. The correct syntax is NA ("not available").
+  #' @description This function returns a matrix in which all 
+  #' the NaN values are replaced with NA values. Note! NaN 
+  #' ("not a number") is not the R syntax for missing values. 
+  #' The correct syntax is NA ("not available").
   #' 
   #' @param data matrix. Matrix containing NaN values
   data[is.nan(data)] <- NA 
-  data
+  return(data)
 }
 
+# ----------------------------------------------------------- #
 summary_missing <- function(data){
   #' Summary of the missing values in a dataset
   #' 
-  #' @description This function returns a list with the total number of na
-  #' values and the total percentage in the entire dataset, including the 
-  #' percentage of missing values for all variables (columns) and the 
-  #' relative percentage of missing values to the total (both as vectors).
+  #' @description This function returns a list with the total 
+  #' number of na values and the total percentage in the entire 
+  #' dataset, including the percentage of missing values for 
+  #' all variables (columns) and the relative percentage of 
+  #' missing values to the total (both as vectors).
   #' 
   #' @param data matrix. Matrix containing missing values
 
@@ -29,17 +41,21 @@ summary_missing <- function(data){
   pmv_vec <- num_na_vec / nrow(data) 
   rel_pmv_vec <- num_na_vec / num_na
   
-  outp <- list(num_na, tot_pmv, num_na_vec, pmv_vec, rel_pmv_vec)
-  names(outp) <- c('num_na', 'tot_pmv', 'num_na_vec', 'pmv_vec', 'rel_pmv_vec') 
-  outp
+  outp <- list(num_na, tot_pmv, num_na_vec, pmv_vec, 
+               rel_pmv_vec)
+  names(outp) <- c('num_na', 'tot_pmv', 'num_na_vec', 
+                   'pmv_vec', 'rel_pmv_vec') 
+  return(outp)
 }
 
+# ----------------------------------------------------------- #
 summary_zeros <- function(data){
   #' Summary of the zero values in a dataset
   #' 
-  #' @description The function returns a list with the percentage of zero
-  #' values for all variables in a dataset, including the total number of zero
-  #' values and the total percentage and the relative percentage of zero values 
+  #' @description The function returns a list with the 
+  #' percentage of zero values for all variables in a dataset, 
+  #' including the total number of zero values and the total 
+  #' percentage and the relative percentage of zero values 
   #' to the total.
   #' 
   #' @param data matrix. Matrix containing zero values
@@ -50,62 +66,77 @@ summary_zeros <- function(data){
   pzv_vec <- num_zeros_vec / nrow(data)
   rel_pzv_vec <- num_zeros_vec / num_zeros
   
-  outp <- list(num_zeros, tot_pzv, num_zeros_vec, pzv_vec, rel_pzv_vec)
-  names(outp) <- c('num_zeros', 'tot_pzv', 'num_zeros_vec', 'pzv_vec', 'rel_pzv_vec')
-  outp
+  outp <- list(num_zeros, tot_pzv, num_zeros_vec, pzv_vec, 
+               rel_pzv_vec)
+  names(outp) <- c('num_zeros', 'tot_pzv', 'num_zeros_vec', 
+                   'pzv_vec', 'rel_pzv_vec')
+  return(outp)
 }
 
+# ----------------------------------------------------------- #
 rm_indicator <- function(data, n_uniq){
-  #' Removes indicator variable columns from a dataset based on predefined number of
-  #' unique element in that column
+  #' Removes indicator variable columns from a dataset based on
+  #' predefined number of unique element in that column
   #' 
-  #' @description This function return a matrix without indicator variable columns.
-  #' A indicator variable column is defined as a column containing less that a 
-  #' predefined number of unique elements (n_uniq)
+  #' @description This function return a matrix without 
+  #' indicator variable columns. A indicator variable column is 
+  #' defined as a column containing less that a predefined 
+  #' number of unique elements (n_uniq)
   #' 
   #' @param data matrix. Matrix containing indicator variables
-  #' @param n_uniq integer. Number of unique element in a column needed for that
-  #' column to be defined as a indicator variable column.
+  #' @param n_uniq integer. Number of unique element in a 
+  #' column needed for that column to be defined as a indicator 
+  #' variable column.
   
-  non_indicator <- data[, apply(data, 2, function(col) length(unique(col)) > n_uniq)]
+  non_indicator <- data[, apply(data, 2, function(col) 
+    length(unique(col)) > n_uniq)]
   ind_var_idx <- !(colnames(data) %in% colnames(non_indicator))
   indicator <- data[, ind_var_idx]
   
   outp <- list(non_indicator, indicator)
   names(outp) <- c('non_indicator', 'indicator')
-  outp
+  return(outp)
 }
 
+# ----------------------------------------------------------- #
 zero_to_na <- function(data, except=NULL){
  #' Convert zero datapoints to na in a dataset. 
  #' 
- #' @description This function converts all the zero datapoints in a dataset into na.
- #' One can also supply a vector of columnames (except) corresponding to variables 
- #' that this function should not be applied on.
+ #' @description This function converts all the zero datapoints 
+ #' in a dataset into na. One can also supply a vector of 
+ #' columnames (except) corresponding to variables that this 
+ #' function should not be applied on.
  #' 
  #' @param data matrix. Matrix containing zero datapoints
- #' @param except character vector. Names of matrix column not to apply function on. 
+ #' @param except character vector. Names of matrix column not 
+ #' to apply function on. 
 
  exp_idx <- colnames(data) %in% except
  exp_data <- data[, exp_idx]; not_exp_data <- data[, !exp_idx]
  not_exp_data[not_exp_data == 0] <- NA; 
- data <- cbind(not_exp_data, exp_data); data
+ data <- cbind(not_exp_data, exp_data); 
+ return(data)
 }
 
+# ----------------------------------------------------------- #
 move_columns <- function(from_mat, to_mat, column_name){
  #' Move one column from one matric to another. 
  #' 
- #' @description This function moves one column with name column_name
- #' from matrix called from_mat to matrix called to_mat.
+ #' @description This function moves one column with name 
+ #' column_name from matrix called from_mat to matrix called 
+ #' to_mat.
  #' 
  #' @param from_mat matrix. Matrix to move column from
  #' @param to_mat matrix. Matric to move column to 
  #' @param column_name character. Name of column to be moved
 
-  to_mat <- cbind(to_mat,from_mat[, colnames(from_mat) == column_name])
+  to_mat <- cbind(to_mat,from_mat[, colnames(from_mat) == 
+                                    column_name])
   colnames(to_mat)[ncol(to_mat)] <- column_name
   from_mat <- from_mat[, colnames(from_mat) != column_name]
   outp <- list(from_mat, to_mat)
   names(outp) <- c('from_mat','to_mat')
   outp
 }
+
+# ----------------------------------------------------------- #

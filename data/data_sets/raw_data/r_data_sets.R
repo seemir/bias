@@ -41,7 +41,7 @@ colnames(HFmrEF_matrix) <- c('patientid',
                                data_set_HFmrEF$Varnames)))
 
 # ----------------------------------------------------------- #
-# Consolidate naming convensions for some variables
+# Consolidate naming conventions for some variables
 # ----------------------------------------------------------- #
 # In the HFmrEF matrix
 # ----------------------------------------------------------- #
@@ -132,8 +132,8 @@ HFpEF_outcomes_matrix <- cbind(patient_id_HFpEF,
 # Add colnames to matrices
 # ----------------------------------------------------------- #
 colnames(HFmrEF_outcomes_matrix) <- 
-  colnames(HFpEF_outcomes_matrix)<- 
-  c("patientid", "patientgroup", "deceased", "readmitted")
+colnames(HFpEF_outcomes_matrix) <- 
+c("patientid", "patientgroup", "deceased", "readmitted")
 
 # ----------------------------------------------------------- #
 # Save the matrices as .Rdat file

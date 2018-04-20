@@ -35,21 +35,21 @@ HFmrEF_matrix_ind_var <- HFmrEF_rm_ind$indicator
 # Move some variables between matrices in HFmrEF dataset
 # Change RVfunction from non-indicator to indicator variable
 HFmrEF_RV <- move_columns(HFmrEF_matrix_not_ind, HFmrEF_matrix_ind_var, 
-                          "RVfunction")
+                          "rvfunction")
 HFmrEF_matrix_ind_var<- HFmrEF_RV$to_mat
 HFmrEF_matrix_not_ind <- HFmrEF_RV$from_mat
 
 # Change BmIadmission from indicator variable to non_indicator variables
 HFmrEF_BMI <- move_columns(HFmrEF_matrix_ind_var, HFmrEF_matrix_not_ind, 
-                           "BmIadmission")
+                           "bmiadmission")
 HFmrEF_matrix_ind_var<- HFmrEF_BMI$from_mat
 HFmrEF_matrix_not_ind <- HFmrEF_BMI$to_mat
 
 # Convert zeros to missings, the following variables are not to be converted.
 not_zeros_HFpEF <- c("comorbidities", "weightchange", "daysfollowupdischarge", 
-                     "Timetonextadm")
-not_zeros_HFmrEF <- c("numbercomorditiesnoIDA", "comorbidities", "Timetoadmission",
-                      "Timetoecho", "timetofollowupfromBNP", 
+                     "timetonextadm")
+not_zeros_HFmrEF <- c("numbercomorditiesnoida", "comorbidities", "timetoadmission",
+                      "timetoecho", "timetofollowupfrombnp", 
                       "timetofollowupfromdischarge",
                       "timetofirstcardiachospitalisation")
 HFpEF_matrix_not_ind <- zero_to_na(HFpEF_matrix_not_ind, not_zeros_HFpEF)
