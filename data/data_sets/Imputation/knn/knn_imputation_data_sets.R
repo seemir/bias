@@ -4,7 +4,7 @@
 bio_conductor <- "https://bioconductor.org/biocLite.R"
 source(bio_conductor)
 Packages <- c("reporttools", "VIM", "tikzDevice", "Hmisc",
-              "impute")
+              "impute", "ggplot2", "reshape2")
 # install.packages(Packages)
 # ----------------------------------------------------------- #
 # Load relevant packages and source helper functions
@@ -92,7 +92,7 @@ aggr(cbind(HFpEF_matrix_not_ind, HFpEF_matrix_ind_var),
      ylabs = "", cex.axis = 0.7)
 dev.off()
 
-pdf(file = paste(c(path_to_images, "HFmr_miss_dist.pdf"),
+pdf(file = paste(c(path_to_images, "HFmrEF_miss_dist.pdf"),
                  collapse = ""))
 aggr(cbind(HFmrEF_matrix_not_ind, HFmrEF_matrix_ind_var), 
      plot = T, sortVars = T, bars = F, combined = T, 
