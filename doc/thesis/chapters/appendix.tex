@@ -7,7 +7,39 @@
 \chapter{Data Description}
 \label{chap:data_desc}
 
+\noindent In this appendix we present a descriptive overview of the data used in this thesis. This includes: an overview and explanation of the variables used (\ref{sec:variables}), the \texttt{R}-packages (\ref{sec:r_pack}) used and some relevant plots (\ref{sec:rel_plots}) to support the finding in the thesis. The source code used to produce the relevant plots can be found in appendix (\ref{chap:souce_code}).  
+
+\section{Variables}
+\label{sec:variables}
+
+\section{\texttt{R}-packages}
+\label{sec:r_pack}
+
 \section{Descriptive Statistics}
+\label{sec:desc_stat}
+
+
+
+\newpage
+
+\section{Relevant Plots}
+\label{sec:rel_plots}
+
+\begin{figure}[h!]
+    \centering
+    \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFpEF_miss_dist.pdf}
+    \caption[Missing values in HFpEF data set]{\textit{Missing values in HFpEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (blue) values in the HFpEF data set.}}
+    \label{fig:HFpEF_missing}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+    \centering
+    \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFmrEF_miss_dist.pdf}
+    \caption[Missing values in HFmrEF data set]{\textit{Missing values in HFmrEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (blue) values in the HFmrEF data set.}}
+    \label{fig:HFmrEF_missing}
+\end{figure}
 
 \chapter{Source Code}
 \label{chap:souce_code}
@@ -17,7 +49,7 @@
 \section{Helper Functions}
 \label{sec:helper_func}
 
-\lstinputlisting[language=R]{../../data/data_sets/Imputation/_helper_func.R}
+\lstinputlisting[language=R]{../../data/data_sets/imputation/_helper_func.R}
 
 \section{Loading Data and Label Extraction}
 \label{sec:load_data}
@@ -25,6 +57,5 @@
 \lstinputlisting[language=R]{../../data/data_sets/raw_data/r_data_sets.R}
 
 \section{Imputation}
-
 
 \end{document}
