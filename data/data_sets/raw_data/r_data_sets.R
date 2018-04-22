@@ -49,20 +49,21 @@ setnames(as.data.frame(HFmrEF_matrix),
          old=c("Admissionweight","BMI","Numberofcomorbidities",
                "Afrocaribbean", "Caucasian","Pulse","NtproBNP",
                "E", "ECGRhythm_other", "LVHand_orLAE", 
-               "ECGQRS_other"), 
+               "ECGQRS_other", "iron", "Timetoadmission"), 
          new = c("admissionwgt","BmIadmission","comorbidities",
                  "Black","White","pulse","NTproBNP", "Ewave",
                  "ECGRhythmother", "LVHandorLAE", 
-                 "ECGQRSother"))
+                 "ECGQRSother", "Ironlevels", "TimetoHFadm"))
 
 # ----------------------------------------------------------- #
 # In the HFpEF matrix
 # ----------------------------------------------------------- #
 setnames(as.data.frame(HFpEF_matrix), 
          old = c("E_e","LVfunction", "ECGRhythm_other", 
-                 "ECGQRS_other", "Other_ethnicity"), 
+                 "ECGQRS_other", "Other_ethnicity", "Plt",
+                 "COPD"), 
          new = c("Ee", "LVEF", "ECGRhythmother", "ECGQRSother", 
-                 "Otherethnicity"))
+                 "Otherethnicity", "Plts", "COPDasthma"))
 
 # ----------------------------------------------------------- #
 # Lowercase letters for all the colnames
