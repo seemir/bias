@@ -4,7 +4,7 @@
 bio_conductor <- "https://bioconductor.org/biocLite.R"
 source(bio_conductor)
 Packages <- c("reporttools", "VIM", "tikzDevice", "Hmisc",
-              "impute", "ggplot2", "reshape2")
+              "impute")
 # install.packages(Packages)
 # ----------------------------------------------------------- #
 # Load relevant packages and source helper functions
@@ -17,6 +17,12 @@ source("../_helper_func.R")
 # ----------------------------------------------------------- #
 load("../../raw_data/data_use_HFpEF_matrix.Rdat") 
 load("../../raw_data/data_use_HFmrEF_matrix.Rdat") 
+
+# ----------------------------------------------------------- #
+# Rename dupblicate names in variables af and ar
+# ----------------------------------------------------------- #
+colnames(HFmrEF_matrix)[c(3,5)] <- c("a-fib", "ai")
+colnames(HFpEF_matrix)[c(4,8)] <- c("a-fib", "ai")
 
 # ----------------------------------------------------------- #
 # Replace NaN values with NA using the make_na function
@@ -104,60 +110,50 @@ dev.off()
 # ----------------------------------------------------------- #
 # Reorder data matrix by phenotype domains
 # ----------------------------------------------------------- #
-# HFpEF matrix
+# In HFpEF matrix
 # ----------------------------------------------------------- #
 id_HFpEF <- c("patientid")
-
 demo_HFpEF <- c("age", "gender", "white", "asian", "black", 
                 "otherethnicity")
-
 adm_symp_HFpEF <- c("breathless", "chestpain", "orthopnoea",
                     "peripheraloedema", "palpdizzyfalls", 
                     "pnd")
-  
 adm_sign_HFpEF <- c("sbp", "dbp", "map", "admissionwgt", 
                     "height", "bmiadmission", "weightchange",
                     "admissionsbnp", "pulse", "bp",
                     "asympthf", "devicetherapy")
-
-risk_fact_HFpEF <- c("af", "copd", "irondef", "obesity", 
+risk_fact_HFpEF <- c("a-fib", "copdasthma", "irondef", "obesity", 
                      "obesitybmi30", "nyhaclass", "dm",
                      "copdasthma", "ihd", "osa")
-
 comor_HFpEF <- c("comorbidities")
-
 ecg_HFpEF <- c( "ecgblock", "ecgblockcomment", 
                 "ecgqrsduration", "ecgqrsother", "ecgrate",
                 "ecgrhythmother", "twi", "lvh", 
                 "normalecgqrs", "lbbb", "rbbb", "lvhlev",
                 "sr")
-
 lab_test_HFpEF <- c("albumin", "hb", "hba1c", "wbc", "tsat",
                     "glucose", "plts", "pcv", "ferritin",
                     "k", "ironlevels", "chol", "ntprobnp",
                     "gfr", "mcv", "na")
-
 echo_HFpEF <- c("lvef","ewave", "pasp", "tapse", "ea", "ee", 
                 "laterals", "mr", "tr", "as", "awave", 
-                "dilatedlv", "ladiameter", "ar", "laarea",
+                "dilatedlv", "ladiameter", "ai", "laarea",
                 "raarea", "rwma", "calculatede", "rvfunction",
                 "edeceltime")
-
 outcomes_HFpEF <- c("alive", "timefromprevadm", "timetohfadm",
                     "timetonextadm", "daysfollowupdischarge",
                     "hfhospitalisation", "daysfollowupbnp",
                     "los")
-
-HFpEF_df_names <- c(id_HFpEF, demo_HFpEF, adm_symp_HFpEF,
-                    adm_sign_HFpEF, risk_fact_HFpEF)
-
-HFpEF_matrix[, HFpEF_df_names]
-
+df_HFpEF_names <- c(id_HFpEF, demo_HFpEF, adm_symp_HFpEF,
+                    adm_sign_HFpEF, risk_fact_HFpEF,
+                    comor_HFpEF, ecg_HFpEF, lab_test_HFpEF,
+                    echo_HFpEF, outcomes_HFpEF)
+df_HFpEF <- as.data.frame(HFpEF_matrix[,df_HFpEF_names])
 cap_desc_HFpEF <- "Patient characteristics: HFpEF variables"
 lab_desc_HFpEF <- "tab:desc_stat_HFpEF_variables"
 tableContinuous(df_HFpEF, 
-                stats = c("n", "na", "min", "max", "mean", "median", "s", 
-                          "q1", "q3"),
+                stats = c("n", "na", "min", "max", "mean", 
+                          "median", "s", "q1", "q3"),
                 cap = cap_desc_HFpEF, lab = lab_desc_HFpEF)
 
 # Inpute missing indicator variables and non-indicator variables (k = 10)
