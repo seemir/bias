@@ -21,8 +21,17 @@ load("../../raw_data/data_use_HFmrEF_matrix.Rdat")
 # ----------------------------------------------------------- #
 # Rename dupblicate names in variables af and ar
 # ----------------------------------------------------------- #
-colnames(HFmrEF_matrix)[c(3,5)] <- c("a-fib", "ai")
-colnames(HFpEF_matrix)[c(4,8)] <- c("a-fib", "ai")
+if(all(colnames(HFmrEF_matrix)[c(3,5)] == c("af", "ar"))){
+  colnames(HFmrEF_matrix)[c(3,5)] <- c("a-fib", "ai")  
+}
+if(all(colnames(HFpEF_matrix)[c(4,8)] == c("af", "ar"))){
+  colnames(HFpEF_matrix)[c(4,8)] <- c("a-fib", "ai")
+}
+
+# ----------------------------------------------------------- #
+# Address error in HFmrEF - lvef data point nr. 1
+# ----------------------------------------------------------- #
+HFmrEF_matrix[1, "lvef"] <- 40.45
 
 # ----------------------------------------------------------- #
 # Replace NaN values with NA using the make_na function
@@ -122,14 +131,13 @@ adm_sign_HFpEF <- c("sbp", "dbp", "map", "admissionwgt",
                     "height", "bmiadmission", "weightchange",
                     "admissionsbnp", "pulse", "bp",
                     "asympthf", "devicetherapy")
-risk_fact_HFpEF <- c("a-fib", "copdasthma", "irondef", "obesity", 
-                     "obesitybmi30", "nyhaclass", "dm",
-                     "copdasthma", "ihd", "osa")
+risk_fact_HFpEF <- c("a-fib", "copdasthma", "irondef", 
+                     "obesity", "obesitybmi30", "nyhaclass", 
+                     "dm","ihd", "osa")
 comor_HFpEF <- c("comorbidities")
-ecg_HFpEF <- c( "ecgblock", "ecgblockcomment", 
-                "ecgqrsduration", "ecgqrsother", "ecgrate",
-                "ecgrhythmother", "twi", "lvh", 
-                "normalecgqrs", "lbbb", "rbbb", "lvhlev",
+ecg_HFpEF <- c( "ecgblock","ecgblockcomment","ecgqrsduration", 
+                "ecgqrsother","ecgrate","ecgrhythmother","twi", 
+                "lvh","normalecgqrs", "lbbb", "rbbb", "lvhlev",
                 "sr")
 lab_test_HFpEF <- c("albumin", "hb", "hba1c", "wbc", "tsat",
                     "glucose", "plts", "pcv", "ferritin",
@@ -139,15 +147,54 @@ echo_HFpEF <- c("lvef","ewave", "pasp", "tapse", "ea", "ee",
                 "laterals", "mr", "tr", "as", "awave", 
                 "dilatedlv", "ladiameter", "ai", "laarea",
                 "raarea", "rwma", "calculatede", "rvfunction",
-                "edeceltime")
+                "edeceltime", "af")
 outcomes_HFpEF <- c("alive", "timefromprevadm", "timetohfadm",
                     "timetonextadm", "daysfollowupdischarge",
                     "hfhospitalisation", "daysfollowupbnp",
                     "los")
+# ----------------------------------------------------------- #
+# In HFmrEF matrix
+# ----------------------------------------------------------- #
+id_HFmrEF <- c("patientid")
+demo_HFmrEF <- c("age", "gender", "white", "asian", "black", 
+                 "other", "mixed")
+adm_symp_HFmrEF <- c("breathless", "st")
+adm_sign_HFmrEF <- c("sbp", "dbp", "admissionwgt", "bp", 
+                    "bmiadmission", "pulse", "sympthf",
+                    "symptlvhf", "symptlvunder", 
+                    "symptomatichfmref", "pathway")
+risk_fact_HFmrEF <- c("a-fib", "copdasthma", "irondef", "dm", 
+                      "obesity", "copdasthma", "ihd", 
+                      "ar", "both", "cva", "sb", "procedures")
+comor_HFmrEF <- c("comorbidities", "numbercomorditiesnoida")
+ecg_HFmrEF <- c("ecgqrsduration", "ecgqrsother", "ecgrate",
+                "ecgrhythmother", "lvh", "normalecgqrs","nsr", 
+                "lbbb", "rbbb", "sr")
+lab_test_HFmrEF <- c("hb", "wbc", "tsat", "plts", "pcv","crp", 
+                     "ferritin", "k", "ironlevels", "chol", 
+                     "ntprobnp", "gfr","mcv","na","troponin")
+echo_HFmrEF <- c("lvef","ewave", "pasp", "ee", "mr", "tr", 
+                 "as", "ai", "rvfunction", "checkedee", 
+                 "timetoecho", "ee13diastolic", "af", 
+                 "eagroup", "edecelgroup", "finalla",
+                 "lvhgroup", "lvhandorlae", "e9cms")
+outcomes_HFmrEF <- c("timetohfadm", "hfhospitalisation", 
+                     "los", "dischargeweight", "cardiachosp",
+                     "truehf", "timetofollowupfromdischarge",
+                     "timetofirstcardiachospitalisation",
+                     "timetofollowupfrombnp", "newhf")
+# ----------------------------------------------------------- #
+# Descriptive statistics
+# ----------------------------------------------------------- #
 df_HFpEF_names <- c(id_HFpEF, demo_HFpEF, adm_symp_HFpEF,
                     adm_sign_HFpEF, risk_fact_HFpEF,
                     comor_HFpEF, ecg_HFpEF, lab_test_HFpEF,
                     echo_HFpEF, outcomes_HFpEF)
+df_HFmrEF_names <- c(id_HFmrEF, demo_HFmrEF, adm_symp_HFmrEF,
+                    adm_sign_HFmrEF, risk_fact_HFmrEF,
+                    comor_HFmrEF, ecg_HFmrEF, lab_test_HFmrEF,
+                    echo_HFmrEF, outcomes_HFmrEF)
+# ----------------------------------------------------------- #
 df_HFpEF <- as.data.frame(HFpEF_matrix[,df_HFpEF_names])
 cap_desc_HFpEF <- "Patient characteristics: HFpEF variables"
 lab_desc_HFpEF <- "tab:desc_stat_HFpEF_variables"
@@ -155,6 +202,21 @@ tableContinuous(df_HFpEF,
                 stats = c("n", "na", "min", "max", "mean", 
                           "median", "s", "q1", "q3"),
                 cap = cap_desc_HFpEF, lab = lab_desc_HFpEF)
+# ----------------------------------------------------------- #
+df_HFmrEF <- as.data.frame(HFmrEF_matrix[,df_HFmrEF_names])
+cap_desc_HFmrEF <- "Patient characteristics: HFmrEF variables"
+lab_desc_HFmrEF <- "tab:desc_stat_HFmrEF_variables"
+tableContinuous(df_HFmrEF, 
+                stats = c("n", "na", "min", "max", "mean", 
+                          "median", "s", "q1", "q3"),
+                cap = cap_desc_HFmrEF, lab = lab_desc_HFmrEF)
+# ----------------------------------------------------------- #
+
+
+
+
+
+
 
 # Inpute missing indicator variables and non-indicator variables (k = 10)
 K = 10
