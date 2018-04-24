@@ -152,6 +152,7 @@ outcomes_HFpEF <- c("alive", "timefromprevadm", "timetohfadm",
                     "timetonextadm", "daysfollowupdischarge",
                     "hfhospitalisation", "daysfollowupbnp",
                     "los")
+
 # ----------------------------------------------------------- #
 # In HFmrEF matrix
 # ----------------------------------------------------------- #
@@ -183,8 +184,9 @@ outcomes_HFmrEF <- c("timetohfadm", "hfhospitalisation",
                      "truehf", "timetofollowupfromdischarge",
                      "timetofirstcardiachospitalisation",
                      "timetofollowupfrombnp", "newhf")
+
 # ----------------------------------------------------------- #
-# Descriptive statistics
+# Long Descriptive statistics
 # ----------------------------------------------------------- #
 df_HFpEF_names <- c(id_HFpEF, demo_HFpEF, adm_symp_HFpEF,
                     adm_sign_HFpEF, risk_fact_HFpEF,
@@ -194,6 +196,7 @@ df_HFmrEF_names <- c(id_HFmrEF, demo_HFmrEF, adm_symp_HFmrEF,
                     adm_sign_HFmrEF, risk_fact_HFmrEF,
                     comor_HFmrEF, ecg_HFmrEF, lab_test_HFmrEF,
                     echo_HFmrEF, outcomes_HFmrEF)
+
 # ----------------------------------------------------------- #
 df_HFpEF <- as.data.frame(HFpEF_matrix[,df_HFpEF_names])
 cap_desc_HFpEF <- "Patient characteristics: HFpEF variables"
@@ -202,6 +205,7 @@ tableContinuous(df_HFpEF,
                 stats = c("n", "na", "min", "max", "mean", 
                           "median", "s", "q1", "q3"),
                 cap = cap_desc_HFpEF, lab = lab_desc_HFpEF)
+
 # ----------------------------------------------------------- #
 df_HFmrEF <- as.data.frame(HFmrEF_matrix[,df_HFmrEF_names])
 cap_desc_HFmrEF <- "Patient characteristics: HFmrEF variables"
@@ -210,13 +214,42 @@ tableContinuous(df_HFmrEF,
                 stats = c("n", "na", "min", "max", "mean", 
                           "median", "s", "q1", "q3"),
                 cap = cap_desc_HFmrEF, lab = lab_desc_HFmrEF)
+
 # ----------------------------------------------------------- #
+# Tables of top 10 missing values variables in both data sets
+# ----------------------------------------------------------- #
+# In HFpEF 
+# ----------------------------------------------------------- #
+HFpEF_miss <- summary_missing(cbind(HFpEF_matrix_ind_var, 
+                              HFpEF_matrix_not_ind))
+count_HFpEF_miss <- HFpEF_miss$num_na_vec
+perc_HFpEF_miss <- HFpEF_miss$pmv_vec
+relp_HFpEF_miss <- HFpEF_miss$rel_pmv_vec
+HFpEF_miss <- cbind(count_HFpEF_miss, perc_HFpEF_miss, 
+                    relp_HFpEF_miss)
+HFpEF_miss <- apply(as.matrix(HFpEF_miss), 2, sort, 
+                    decreasing = T)[1:10,]
+colnames(HFpEF_miss) <- c("#NA", "%NA", "%TOT")
 
+# ----------------------------------------------------------- #
+# In HFmrEF 
+# ----------------------------------------------------------- #
+HFmrEF_miss <- summary_missing(cbind(HFmrEF_matrix_ind_var, 
+                                     HFmrEF_matrix_not_ind))
+count_HFmrEF_miss <- HFmrEF_miss$num_na_vec
+perc_HFmrEF_miss <- HFmrEF_miss$pmv_vec
+relp_HFmrEF_miss <- HFmrEF_miss$rel_pmv_vec
+HFmrEF_miss <- cbind(count_HFmrEF_miss, perc_HFmrEF_miss, 
+                    relp_HFmrEF_miss)
+HFmrEF_miss <- apply(as.matrix(HFmrEF_miss), 2, sort, 
+                    decreasing = T)[1:10,]
+colnames(HFmrEF_miss) <- c("#NA", "%NA", "%TOT")
 
-
-
-
-
+# ----------------------------------------------------------- #
+# Combine missing values table and convert to Latex code
+# ----------------------------------------------------------- #
+xtable(cbind(round(HFpEF_miss,3), rownames(HFmrEF_miss), 
+       round(HFmrEF_miss,3)))
 
 # Inpute missing indicator variables and non-indicator variables (k = 10)
 K = 10
