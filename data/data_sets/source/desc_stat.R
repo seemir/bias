@@ -1,22 +1,20 @@
 # ----------------------------------------------------------- #
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
-bio_conductor <- "https://bioconductor.org/biocLite.R"
-source(bio_conductor)
-Packages <- c("reporttools", "VIM", "tikzDevice", "Hmisc",
-              "impute")
+Packages <- c("reporttools", "VIM", "tikzDevice", "Hmisc")
 # install.packages(Packages)
+
 # ----------------------------------------------------------- #
 # Load relevant packages and source helper functions
 # ----------------------------------------------------------- #
 lapply(Packages, library, character.only = T)
-source("../_helper_func.R")
+source("_helper_func.R")
 
 # ----------------------------------------------------------- #
 # Load HFpEF and HFmrEF datafiles
 # ----------------------------------------------------------- #
-load("../../raw_data/data_use_HFpEF_matrix.Rdat") 
-load("../../raw_data/data_use_HFmrEF_matrix.Rdat") 
+load("../raw_data/data_use_HFpEF_matrix.Rdat") 
+load("../raw_data/data_use_HFmrEF_matrix.Rdat") 
 
 # ----------------------------------------------------------- #
 # Rename dupblicate names in variables af and ar
@@ -98,7 +96,7 @@ HFmrEF_matrix_not_ind <- zero_to_na(HFmrEF_matrix_not_ind,
 # ----------------------------------------------------------- #
 # Plot of missing values distribution
 # ----------------------------------------------------------- #
-path_to_images <- "../../../../doc/thesis/images/"
+path_to_images <- "../../../doc/thesis/images/"
 
 pdf(file=paste(c(path_to_images,"HFpEF_miss_dist.pdf"), 
                collapse = ""))
@@ -216,6 +214,39 @@ tableContinuous(df_HFmrEF,
                 cap = cap_desc_HFmrEF, lab = lab_desc_HFmrEF)
 
 # ----------------------------------------------------------- #
+# Outcomes table
+# ----------------------------------------------------------- #
+load("../raw_data/outcomes_HFpEF_matrix.Rdat") 
+load("../raw_data/outcomes_HFmrEF_matrix.Rdat") 
+
+cap_outcomes <- "Clinical outcome classes"
+lab_outcomes <- "tab:outcomes_class"
+
+uniq_HFpEF_out <- unique(HFpEF_outcomes_matrix[
+  order(HFpEF_outcomes_matrix[,2]),-1])
+tab_out_HFpEF <- table(HFpEF_outcomes_matrix[,2])
+tab_out_HFpEF <- cbind(uniq_HFpEF_out, tab_out_HFpEF,
+                       round(tab_out_HFpEF/sum(tab_out_HFpEF), 
+                             3))
+tab_out_HFpEF <- rbind(tab_out_HFpEF, rep("", 5), rep("", 5))
+colnames(tab_out_HFpEF) <- c("Group", "Dead?", "Readm?",
+                              "n", "% tot")
+
+uniq_HFmrEF_out <- unique(HFmrEF_outcomes_matrix[
+  order(HFmrEF_outcomes_matrix[,2]),-1])
+tab_out_HFmrEF <- table(HFmrEF_outcomes_matrix[,2])
+tab_out_HFmrEF <- cbind(uniq_HFmrEF_out, tab_out_HFmrEF,
+                       round(tab_out_HFmrEF/
+                             sum(tab_out_HFmrEF), 3))
+colnames(tab_out_HFmrEF) <- c("Group", "Dead?", "Readm?",
+                              "n", "% tot")
+
+print(xtable(cbind(tab_out_HFpEF[order(tab_out_HFpEF[,5],
+                                       decreasing = T),],
+tab_out_HFmrEF[order(tab_out_HFmrEF[,5], decreasing = T),]), 
+digits = 3), include.rownames = F)
+
+# ----------------------------------------------------------- #
 # Tables of top 10 missing values variables in both data sets
 # ----------------------------------------------------------- #
 # In HFpEF 
@@ -251,18 +282,17 @@ colnames(HFmrEF_miss) <- c("#NA", "%NA", "%TOT")
 xtable(cbind(round(HFpEF_miss,3), rownames(HFmrEF_miss), 
        round(HFmrEF_miss,3)))
 
-# Inpute missing indicator variables and non-indicator variables (k = 10)
-K = 10
-HFpEF_matrix_ind_var <- round(impute.knn(HFpEF_matrix_ind_var, k = K, colmax = 1)$data)
-HFpEF_matrix_no_ind <- impute.knn(HFpEF_matrix_no_ind, k = K, colmax = 1)$data
+# ----------------------------------------------------------- #
+# Save indicator variables and non indicator variables
+# for later imputation
+# ----------------------------------------------------------- #
+save(HFpEF_matrix_ind_var, 
+     file="data_files/HFpEF_matrix_ind_var.Rdat")
+save(HFmrEF_matrix_ind_var, 
+     file="data_files/HFmrEF_matrix_ind_var.Rdat")
+save(HFpEF_matrix_not_ind, 
+     file="data_files/HFpEF_matrix_not_ind.Rdat")
+save(HFmrEF_matrix_not_ind, 
+     file="data_files/HFmrEF_matrix_not_ind.Rdat")
 
-# Merge the imputed indicator variables with non-indicator variables
-HFpEF_matrix <- cbind(HFpEF_matrix_no_ind, HFpEF_matrix_ind_var)
-
-# Save the data as .Rdat
-filename <- paste(c(deparse(substitute(HFpEF_matrix)), '_k_', 
-                    as.character(K), '.Rdat'), collapse = "")
-
-save(HFpEF_matrix, file=filename) 
-rm(HFpEF_matrix_ind_var, HFpEF_matrix_no_ind, not_zeros, filename, K, cap_desc_HFpEF,
-   lab_desc_HFpEF)
+# ----------------------------------------------------------- #
