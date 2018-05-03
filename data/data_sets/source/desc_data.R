@@ -230,7 +230,7 @@ tab_out_HFpEF <- cbind(uniq_HFpEF_out, tab_out_HFpEF,
                              3))
 tab_out_HFpEF <- rbind(tab_out_HFpEF, rep("", 5), rep("", 5))
 colnames(tab_out_HFpEF) <- c("Group", "Dead?", "Readm?",
-                              "n", "% tot")
+                              "n", "%tot")
 
 uniq_HFmrEF_out <- unique(HFmrEF_outcomes_matrix[
   order(HFmrEF_outcomes_matrix[,2]),-1])
@@ -239,42 +239,27 @@ tab_out_HFmrEF <- cbind(uniq_HFmrEF_out, tab_out_HFmrEF,
                        round(tab_out_HFmrEF/
                              sum(tab_out_HFmrEF), 3))
 colnames(tab_out_HFmrEF) <- c("Group", "Dead?", "Readm?",
-                              "n", "% tot")
+                              "n", "%tot")
 
 print(xtable(cbind(tab_out_HFpEF[order(tab_out_HFpEF[,5],
                                        decreasing = T),],
 tab_out_HFmrEF[order(tab_out_HFmrEF[,5], decreasing = T),]), 
 digits = 3), include.rownames = F)
 
+
 # ----------------------------------------------------------- #
 # Tables of top 10 missing values variables in both data sets
 # ----------------------------------------------------------- #
 # In HFpEF 
 # ----------------------------------------------------------- #
-HFpEF_miss <- summary_missing(cbind(HFpEF_matrix_ind_var, 
-                              HFpEF_matrix_not_ind))
-count_HFpEF_miss <- HFpEF_miss$num_na_vec
-perc_HFpEF_miss <- HFpEF_miss$pmv_vec
-relp_HFpEF_miss <- HFpEF_miss$rel_pmv_vec
-HFpEF_miss <- cbind(count_HFpEF_miss, perc_HFpEF_miss, 
-                    relp_HFpEF_miss)
-HFpEF_miss <- apply(as.matrix(HFpEF_miss), 2, sort, 
-                    decreasing = T)[1:10,]
-colnames(HFpEF_miss) <- c("#NA", "%NA", "%TOT")
+HFpEF_miss <- top_n_missing(cbind(HFpEF_matrix_ind_var, 
+                              HFpEF_matrix_not_ind), 10)
 
 # ----------------------------------------------------------- #
 # In HFmrEF 
 # ----------------------------------------------------------- #
-HFmrEF_miss <- summary_missing(cbind(HFmrEF_matrix_ind_var, 
-                                     HFmrEF_matrix_not_ind))
-count_HFmrEF_miss <- HFmrEF_miss$num_na_vec
-perc_HFmrEF_miss <- HFmrEF_miss$pmv_vec
-relp_HFmrEF_miss <- HFmrEF_miss$rel_pmv_vec
-HFmrEF_miss <- cbind(count_HFmrEF_miss, perc_HFmrEF_miss, 
-                    relp_HFmrEF_miss)
-HFmrEF_miss <- apply(as.matrix(HFmrEF_miss), 2, sort, 
-                    decreasing = T)[1:10,]
-colnames(HFmrEF_miss) <- c("#NA", "%NA", "%TOT")
+HFmrEF_miss <- top_n_missing(cbind(HFmrEF_matrix_ind_var,
+                                   HFmrEF_matrix_not_ind),10)
 
 # ----------------------------------------------------------- #
 # Combine missing values table and convert to Latex code

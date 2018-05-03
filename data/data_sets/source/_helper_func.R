@@ -141,3 +141,25 @@ move_columns <- function(from_mat, to_mat, column_name){
 }
 
 # ----------------------------------------------------------- #
+top_n_missing <- function(data, n, decreasing=T){
+  #' Summary of top n missing variables in data set.
+  #' 
+  #' @description This function produces a summary table of the
+  #' top n missing variables in an inputed dataset.
+  #' 
+  #' @param data matrix. Matrix like object
+  #' @param n integer. Top n highest missing variables 
+  #' @param decreasing logical. Logical argument indicating 
+  #' wheater values should be sorted in decreasing order.
+
+  missing <- summary_missing(data)
+  count <- missing$num_na_vec
+  perc <- missing$pmv_vec
+  relp <- missing$rel_pmv_vec
+  outp <- apply(as.matrix(cbind(count, perc, relp)), 2,
+                   sort, decreasing)[1:n,]
+  colnames(outp) <- c("#Na", "%Na", "%Tot")
+  return(outp)
+}
+
+# ----------------------------------------------------------- #
