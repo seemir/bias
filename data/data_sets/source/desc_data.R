@@ -218,34 +218,15 @@ tableContinuous(df_HFmrEF,
 # ----------------------------------------------------------- #
 load("../raw_data/outcomes_HFpEF_matrix.Rdat") 
 load("../raw_data/outcomes_HFmrEF_matrix.Rdat") 
-
-cap_outcomes <- "Clinical outcome classes"
-lab_outcomes <- "tab:outcomes_class"
-
-uniq_HFpEF_out <- unique(HFpEF_outcomes_matrix[
-  order(HFpEF_outcomes_matrix[,2]),-1])
-tab_out_HFpEF <- table(HFpEF_outcomes_matrix[,2])
-tab_out_HFpEF <- cbind(uniq_HFpEF_out, tab_out_HFpEF,
-                       round(tab_out_HFpEF/sum(tab_out_HFpEF), 
-                             3))
-tab_out_HFpEF <- rbind(tab_out_HFpEF, rep("", 5), rep("", 5))
-colnames(tab_out_HFpEF) <- c("Group", "Dead?", "Readm?",
-                              "n", "%tot")
-
-uniq_HFmrEF_out <- unique(HFmrEF_outcomes_matrix[
-  order(HFmrEF_outcomes_matrix[,2]),-1])
-tab_out_HFmrEF <- table(HFmrEF_outcomes_matrix[,2])
-tab_out_HFmrEF <- cbind(uniq_HFmrEF_out, tab_out_HFmrEF,
-                       round(tab_out_HFmrEF/
-                             sum(tab_out_HFmrEF), 3))
-colnames(tab_out_HFmrEF) <- c("Group", "Dead?", "Readm?",
-                              "n", "%tot")
-
-print(xtable(cbind(tab_out_HFpEF[order(tab_out_HFpEF[,5],
-                                       decreasing = T),],
-tab_out_HFmrEF[order(tab_out_HFmrEF[,5], decreasing = T),]), 
-digits = 3), include.rownames = F)
-
+r <- rep("", 5)
+tab_out_HFpEF <- rbind(label_summary(HFpEF_outcomes_matrix, 2, 
+                               c("Group", "Dead?", "Readm?", 
+                                 "n", "% Tot"), 3, 5), r, r) 
+tab_out_HFmrEF <- label_summary(HFmrEF_outcomes_matrix, 2,
+                                c("Group", "Dead?", "Readm?", 
+                                  "n", "% Tot"), 3, 5)
+print(xtable(cbind(tab_out_HFpEF, tab_out_HFmrEF)), 
+                   include.rownames = F)
 
 # ----------------------------------------------------------- #
 # Tables of top 10 missing values variables in both data sets

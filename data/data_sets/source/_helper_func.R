@@ -163,3 +163,32 @@ top_n_missing <- function(data, n, decreasing=T){
 }
 
 # ----------------------------------------------------------- #
+label_summary <- function(labels, label_col, col_names, digits,
+                          sort_col, ignore_id_col = T, 
+                          decr = T){
+  #' Summary of class labels in data set
+  #' 
+  #' @description The function returns a table with the number
+  #' unique labels in a labels matrix and the percentage of
+  #' all the labels that occure.
+  #' 
+  #'  @param label matrix. Matrix like object of characters
+  #'  @param label_col integer. Column number of primary labels
+  #'  @param col_names charachter vector. Vector of column 
+  #'  names
+  #'  @param digits integer. Integer indicating the number of 
+  #'  decimal places to be used.
+  #'  @param sort_col integer. Column number to sort
+  #'  @param ignore_id_col logical. Boolean indicating whether
+  #'  first column of id numbers should be ignored.
+  #'  @param decr logical. Boolean indicating if values in
+  #'  sort_col should be sorted in decreasing order.
+
+  uniq <- unique(if(ignore_id_col){
+    labels[order(labels[, label_col]),-1]}else{labels})
+  tabl <- table(labels[, label_col])
+  perc <- round(tabl/sum(tabl), digits)
+  outp <- cbind(uniq, tabl, perc)
+  colnames(outp) <- col_names 
+  return(outp[order(outp[, sort_col], decreasing = decr),])
+}

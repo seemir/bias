@@ -3,6 +3,15 @@
 # ----------------------------------------------------------- #
 bio_conductor <- "https://bioconductor.org/biocLite.R"
 source(bio_conductor); biocLite("impute")
+# ----------------------------------------------------------- #
+# Load indicator and non indicator variables
+# ----------------------------------------------------------- #
+all_data_files <- c("HFpEF_matrix_ind_var", 
+                    "HFmrEF_matrix_ind_var",
+                    "HFpEF_matrix_not_ind",
+                    "HFmrEF_matrix_not_ind")
+lapply(gsub(" ", "", paste("data_files/", all_data_files, 
+                           ".Rdat")), load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
 # Inpute missing indicator variables and non-indicator variables (k = 10)
