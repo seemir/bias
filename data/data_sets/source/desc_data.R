@@ -184,7 +184,7 @@ outcomes_HFmrEF <- c("timetohfadm", "hfhospitalisation",
                      "timetofollowupfrombnp", "newhf")
 
 # ----------------------------------------------------------- #
-# Long Descriptive statistics
+# Long descriptive statistics
 # ----------------------------------------------------------- #
 df_HFpEF_names <- c(id_HFpEF, demo_HFpEF, adm_symp_HFpEF,
                     adm_sign_HFpEF, risk_fact_HFpEF,

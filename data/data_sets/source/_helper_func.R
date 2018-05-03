@@ -39,7 +39,7 @@ summary_missing <- function(data){
   num_na <- sum(is.na(data))
   tot_pmv <- num_na/prod(dim(data))
   num_na_vec <- apply(data, 2, function(col) sum(is.na(col)))
-  pmv_vec <- num_na_vec / nrow(data) 
+  pmv_vec <- num_na_vec / prod(dim(data)) 
   rel_pmv_vec <- num_na_vec / num_na
   
   outp <- list(num_na, tot_pmv, num_na_vec, pmv_vec, 
@@ -158,7 +158,9 @@ top_n_missing <- function(data, n, decreasing=T){
   relp <- missing$rel_pmv_vec
   outp <- apply(as.matrix(cbind(count, perc, relp)), 2,
                    sort, decreasing)[1:n,]
-  colnames(outp) <- c("#Na", "%Na", "%Tot")
+  grand_tot <- c(missing$num_na, missing$tot_pmv, sum(relp))
+  outp <- rbind(grand_tot, outp)  
+  colnames(outp) <- c("# Na", "% n", "% Na")
   return(outp)
 }
 

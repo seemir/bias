@@ -2,7 +2,8 @@
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
 bio_conductor <- "https://bioconductor.org/biocLite.R"
-source(bio_conductor); biocLite("impute")
+source(bio_conductor)
+biocLite("impute")
 # ----------------------------------------------------------- #
 # Load indicator and non indicator variables
 # ----------------------------------------------------------- #
