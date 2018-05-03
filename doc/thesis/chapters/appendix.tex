@@ -18,7 +18,9 @@
 \section{Descriptive Statistics}
 \label{sec:desc_stat}
 
+\input{doc/thesis/tables/HFpEF_desc_stat.tex}
 
+\input{doc/thesis/tables/HFmrEF_desc_stat.tex}
 
 \newpage
 
@@ -46,16 +48,22 @@
 
 \noindent The following appendix presents all the relevant \texttt{R}-code used in this thesis. We have organized the chapter in accordance with the various steps in the machine learning procedure adopted in this thesis, see figure (\ref{fig:ML_proc_thesis}). We have tried to comment as much of the source code in order to ensure that an eventual re-examination of the results can be as easy and smooth as possible. Inquires about the code can be forwarded to the author on request.
 
-\section{Helper Functions}
+\section{Helper Functions, \texttt{\_helper\_func.R}}
 \label{sec:helper_func}
 
-\lstinputlisting[language=R]{../../data/data_sets/imputation/_helper_func.R}
+\lstinputlisting[language=R]{../../data/data_sets/source/_helper_func.R}
 
-\section{Loading Data and Label Extraction}
+\section{Load Data and Labeling, \texttt{r\_data\_sets.R}}
 \label{sec:load_data}
 
 \lstinputlisting[language=R]{../../data/data_sets/raw_data/r_data_sets.R}
 
-\section{Imputation}
+\section{Data Description, \texttt{desc\_data.R}}
+\label{sec:app_desc_stat}
+
+\lstinputlisting[language=R]{../../data/data_sets/source/desc_data.R}
+
+\section{Imputation, \texttt{imputation.R}}
+\label{sec:app_impu}
 
 \end{document}
