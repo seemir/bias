@@ -1,7 +1,8 @@
 # ----------------------------------------------------------- #
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
-Packages <- c("reporttools", "VIM", "tikzDevice", "Hmisc")
+Packages <- c("reporttools", "VIM", "tikzDevice", "Hmisc",
+              "xtable")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -57,7 +58,7 @@ HFpEF_matrix_ind_var <- HFpEF_rm_ind$indicator
 HFmrEF_matrix_ind_var <- HFmrEF_rm_ind$indicator
 
 # ----------------------------------------------------------- #
-# Move some variables between matrices in HFmrEF dataset
+# Move some variables between matrices
 # ----------------------------------------------------------- #
 # Change RVfunction from non-indicator to indicator variable
 # ----------------------------------------------------------- #
@@ -66,6 +67,12 @@ HFmrEF_RV <- move_columns(HFmrEF_matrix_not_ind,
                           "rvfunction")
 HFmrEF_matrix_ind_var<- HFmrEF_RV$to_mat
 HFmrEF_matrix_not_ind <- HFmrEF_RV$from_mat
+
+HFpEF_RV <- move_columns(HFpEF_matrix_not_ind,
+                         HFpEF_matrix_ind_var,
+                         "rvfunction")
+HFpEF_matrix_ind_var <- HFpEF_RV$to_mat
+HFpEF_matrix_not_ind <- HFpEF_RV$from_mat
 
 # ----------------------------------------------------------- #
 # Change BmIadmission from indicator variable to non_indicator 

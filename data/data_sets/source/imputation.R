@@ -1,9 +1,15 @@
 # ----------------------------------------------------------- #
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
-bio_conductor <- "https://bioconductor.org/biocLite.R"
-source(bio_conductor)
-biocLite("impute")
+Packages <- c("BaylorEdPsych", "mvnmle", "xtable")
+# install.packages(Packages)
+
+# ----------------------------------------------------------- #
+# Load relevant packages
+# ----------------------------------------------------------- #
+lapply(Packages, library, character.only = TRUE)
+source("_helper_func.R")
+
 # ----------------------------------------------------------- #
 # Load indicator and non indicator variables
 # ----------------------------------------------------------- #
@@ -15,19 +21,46 @@ lapply(gsub(" ", "", paste("data_files/", all_data_files,
                            ".Rdat")), load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
-# Inpute missing indicator variables and non-indicator variables (k = 10)
+# Little's test to assess for missing completely at random
 # ----------------------------------------------------------- #
-K = 10
-HFpEF_matrix_ind_var <- round(impute.knn(HFpEF_matrix_ind_var, k = K, colmax = 1)$data)
-HFpEF_matrix_no_ind <- impute.knn(HFpEF_matrix_no_ind, k = K, colmax = 1)$data
+# In HFpEF 
+# ----------------------------------------------------------- #
+HFpEF_ind <- HFpEF_matrix_ind_var
+HFpEF_ind <- HFpEF_ind[, !colnames(HFpEF_ind) %in% 
+                         c("obesitybmi30","osa")]
+HFpEF_con <- HFpEF_matrix_not_ind
+HFpEF_lis <- list(HFpEF_ind, HFpEF_con[,1:16], 
+                  HFpEF_con[,17:32], HFpEF_con[,32:48])
+HFpEF_mcar_res <- do.call(rbind, lapply(HFpEF_lis, 
+                                        little_mcar))
+HFpEF_mcar_names <- c("indicator", "continuous_1", 
+                      "continuous_2", "continuous_3")
+rownames(HFpEF_mcar_res) <- HFpEF_mcar_names
 
-# Merge the imputed indicator variables with non-indicator variables
-HFpEF_matrix <- cbind(HFpEF_matrix_no_ind, HFpEF_matrix_ind_var)
+# ----------------------------------------------------------- #
+# In HFmrEF 
+# ----------------------------------------------------------- #
+HFmrEF_ind <- HFmrEF_matrix_ind_var
+HFmrEF_ind <- HFmrEF_ind[, !colnames(HFmrEF_ind) %in% 
+                           c("cva", "e9cms")]
+HFmrEF_con <- HFmrEF_matrix_not_ind
+HFmrEF_con <- HFmrEF_con[, !colnames(HFmrEF_con) %in%
+                     c("bmiadmission",
+                       "dischargeweight",
+                       "admissionwgt",
+                       "procedures", "troponin", 
+                       "timetofirstcardiachospitalisation",
+                       "ferritin")]
+HFmrEF_lis <- list(HFmrEF_ind, HFmrEF_con[,1:15], 
+                   HFmrEF_con[,16:30])
+HFmrEF_mcar_res <- do.call(rbind, lapply(HFmrEF_lis,
+                                         little_mcar))
+HFmrEF_mcar_names <- c("indicator", "continuous_1", 
+                       "continuous_2")
+rownames(HFmrEF_mcar_res) <- HFmrEF_mcar_names
+xtable(rbind(HFpEF_mcar_res, HFmrEF_mcar_res), 
+       digits = c(0,0,0,4,0,5))
 
-# Save the data as .Rdat
-filename <- paste(c(deparse(substitute(HFpEF_matrix)), '_k_', 
-                    as.character(K), '.Rdat'), collapse = "")
-
-save(HFpEF_matrix, file=filename) 
-rm(HFpEF_matrix_ind_var, HFpEF_matrix_no_ind, not_zeros, filename, K, cap_desc_HFpEF,
-   lab_desc_HFpEF)
+# ----------------------------------------------------------- #
+# Inpute missing values
+# ----------------------------------------------------------- #

@@ -1,12 +1,13 @@
 # ----------------------------------------------------------- #
 # Install packages (if not already installed)
 # ----------------------------------------------------------- #
-# install.packages("docstring")
+Packages <- c("docstring")
+# install.packages(Packages)
 
 # ----------------------------------------------------------- #
 # Load package for docstring
 # ----------------------------------------------------------- #
-library(docstring)
+lapply(Packages, library, character.only = TRUE)
 
 # ----------------------------------------------------------- #
 # Helper function used in this thesis
@@ -41,11 +42,12 @@ summary_missing <- function(data){
   num_na_vec <- apply(data, 2, function(col) sum(is.na(col)))
   pmv_vec <- num_na_vec / prod(dim(data)) 
   rel_pmv_vec <- num_na_vec / num_na
+  rel_pmv_v <- num_na_vec / dim(data)[1]
   
   outp <- list(num_na, tot_pmv, num_na_vec, pmv_vec, 
-               rel_pmv_vec)
-  names(outp) <- c('num_na', 'tot_pmv', 'num_na_vec', 
-                   'pmv_vec', 'rel_pmv_vec') 
+               rel_pmv_vec, rel_pmv_v)
+  names(outp) <- c("num_na", "tot_pmv", "num_na_vec", 
+                   "pmv_vec", "rel_pmv_vec", "rel_pmv_v") 
   return(outp)
 }
 
@@ -69,8 +71,8 @@ summary_zeros <- function(data){
   
   outp <- list(num_zeros, tot_pzv, num_zeros_vec, pzv_vec, 
                rel_pzv_vec)
-  names(outp) <- c('num_zeros', 'tot_pzv', 'num_zeros_vec', 
-                   'pzv_vec', 'rel_pzv_vec')
+  names(outp) <- c("num_zeros", "tot_pzv", "num_zeros_vec", 
+                   "pzv_vec", "rel_pzv_vec")
   return(outp)
 }
 
@@ -95,7 +97,7 @@ rm_indicator <- function(data, n_uniq){
   indicator <- data[, ind_var_idx]
   
   outp <- list(non_indicator, indicator)
-  names(outp) <- c('non_indicator', 'indicator')
+  names(outp) <- c("non_indicator", "indicator")
   return(outp)
 }
 
@@ -136,7 +138,7 @@ move_columns <- function(from_mat, to_mat, column_name){
   colnames(to_mat)[ncol(to_mat)] <- column_name
   from_mat <- from_mat[, colnames(from_mat) != column_name]
   outp <- list(from_mat, to_mat)
-  names(outp) <- c('from_mat','to_mat')
+  names(outp) <- c("from_mat","to_mat")
   outp
 }
 
@@ -156,11 +158,13 @@ top_n_missing <- function(data, n, decreasing=T){
   count <- missing$num_na_vec
   perc <- missing$pmv_vec
   relp <- missing$rel_pmv_vec
-  outp <- apply(as.matrix(cbind(count, perc, relp)), 2,
+  relv <- missing$rel_pmv_v
+  outp <- apply(as.matrix(cbind(count, perc, relp, relv)), 2,
                    sort, decreasing)[1:n,]
-  grand_tot <- c(missing$num_na, missing$tot_pmv, sum(relp))
+  grand_tot <- c(missing$num_na, missing$tot_pmv, sum(relp), 
+                 NA)
   outp <- rbind(grand_tot, outp)  
-  colnames(outp) <- c("# Na", "% n", "% Na")
+  colnames(outp) <- c("#Na", "%N", "%Na", "%V")
   return(outp)
 }
 
@@ -174,17 +178,17 @@ label_summary <- function(labels, label_col, col_names, digits,
   #' unique labels in a labels matrix and the percentage of
   #' all the labels that occure.
   #' 
-  #'  @param label matrix. Matrix like object of characters
-  #'  @param label_col integer. Column number of primary labels
-  #'  @param col_names charachter vector. Vector of column 
-  #'  names
-  #'  @param digits integer. Integer indicating the number of 
-  #'  decimal places to be used.
-  #'  @param sort_col integer. Column number to sort
-  #'  @param ignore_id_col logical. Boolean indicating whether
-  #'  first column of id numbers should be ignored.
-  #'  @param decr logical. Boolean indicating if values in
-  #'  sort_col should be sorted in decreasing order.
+  #' @param label matrix. Matrix like object of characters
+  #' @param label_col integer. Column number of primary labels
+  #' @param col_names charachter vector. Vector of column 
+  #' names
+  #' @param digits integer. Integer indicating the number of 
+  #' decimal places to be used.
+  #' @param sort_col integer. Column number to sort
+  #' @param ignore_id_col logical. Boolean indicating whether
+  #' first column of id numbers should be ignored.
+  #' @param decr logical. Boolean indicating if values in
+  #' sort_col should be sorted in decreasing order.
 
   uniq <- unique(if(ignore_id_col){
     labels[order(labels[, label_col]),-1]}else{labels})
@@ -194,3 +198,31 @@ label_summary <- function(labels, label_col, col_names, digits,
   colnames(outp) <- col_names 
   return(outp[order(outp[, sort_col], decreasing = decr),])
 }
+
+# ----------------------------------------------------------- #
+little_mcar <- function(data){
+  #' Little's test to assess for missing completely at 
+  #' random.
+  #' 
+  #' @description This function uses Little's test (from 
+  #' BaylorEdPsych package) to assess for missing completely at 
+  #' random for multivariate data with missing values. It
+  #' return the chi.squared test statistics, df and p.value.
+  #'
+  #' @param data matrix like object. Matrix or data frame with
+  #' values that are missing.
+  #'
+  #' @note This function cannot accept data with more than 50 
+  #' variables, and may in some cases take long time to 
+  #' complete.
+
+  l <- LittleMCAR(data[, summary_missing(data)$num_na_vec > 0])
+  outp <- c(dim(data)[2],l$missing.patterns, l$chi.square, 
+            l$df, l$p.value)
+  names(outp) <- c("n var","missing.patterns", "chi.square", "df", 
+                   "p.value")
+  outp[1:2] <- round(outp[1:2])
+  return(outp)
+}
+
+# ----------------------------------------------------------- #
