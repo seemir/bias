@@ -1,7 +1,7 @@
 # ----------------------------------------------------------- #
 # Install packages (if not already installed)
 # ----------------------------------------------------------- #
-Packages <- c("docstring")
+Packages <- c("docstring", "plotrix")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -21,6 +21,7 @@ make_na <- function(data){
   #' The correct syntax is NA ("not available").
   #' 
   #' @param data matrix. Matrix containing NaN values
+
   data[is.nan(data)] <- NA 
   return(data)
 }
@@ -223,6 +224,39 @@ little_mcar <- function(data){
                    "p.value")
   outp[1:2] <- round(outp[1:2])
   return(outp)
+}
+
+# ----------------------------------------------------------- #
+pca_var_plot <- function(pca, n_comp=NA, digits=4, title = NA){
+  #' Plot the explained and cumulative variance from a
+  #' principal component analysis (PCA).
+  #' 
+  #' @description This function produces a plot of the 
+  #' explained and cumulative variance extracted from a 
+  #' principal component analysis. 
+  #' 
+  #' @param pca princomp object. 
+  #' @param n_comp integer. Number of components to be plotted
+  #' @param digits integer. Integer indicating the number of 
+  #' decimal places to be used.
+  #' @param title character. Name of title.
+
+  if(class(pca) != "princomp"){
+    stop("first argument is not of 'princomp' class!")
+  }
+  
+  sd <- pca$sdev
+  n <- 1:ifelse(is.na(n_comp), length(sd), n_comp)
+  vr <- (sd^2/sum(sd^2))[n]
+  cm <- cumsum(vr)
+  colfunc <- colorRampPalette(c("green", "black"))
+  twoord.plot(n, vr, n, cm, type = c("bar", "s"),
+              lcol = colfunc(length(n)), main = title)
+  axis(1, labels = F)
+  grid()
+  leg <- c(paste("Number comp:", length(n)),
+           paste("Cum.variance:", round(sum(vr),digits)))
+  legend("right", legend = leg, bty = "n")
 }
 
 # ----------------------------------------------------------- #

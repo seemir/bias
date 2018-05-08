@@ -3,7 +3,7 @@
 # ----------------------------------------------------------- #
 Packages <- c("BaylorEdPsych", "mvnmle", "xtable", "Amelia",
               "rlist", "mice")
-install.packages(Packages)
+# install.packages(Packages)
 
 # ----------------------------------------------------------- #
 # Load relevant packages
@@ -30,7 +30,7 @@ HFpEF_ind <- HFpEF_matrix_ind_var
 HFpEF_ind <- HFpEF_ind[, !colnames(HFpEF_ind) %in% 
                          c("obesitybmi30","osa")]
 HFpEF_con <- HFpEF_matrix_not_ind
-HFpEF_lis <- list(HFpEF_ind, HFpEF_con[,1:15], 
+HFpEF_lis <- list(HFpEF_ind, HFpEF_con[,2:15], 
                   HFpEF_con[,16:33], HFpEF_con[,34:47])
 HFpEF_mcar_res <- do.call(rbind, lapply(HFpEF_lis, 
                                         little_mcar))
@@ -52,7 +52,7 @@ HFmrEF_con <- HFmrEF_con[, !colnames(HFmrEF_con) %in%
                        "procedures", "troponin", 
                        "timetofirstcardiachospitalisation",
                        "ferritin")]
-HFmrEF_lis <- list(HFmrEF_ind, HFmrEF_con[,1:15], 
+HFmrEF_lis <- list(HFmrEF_ind, HFmrEF_con[,2:15], 
                    HFmrEF_con[,16:30])
 HFmrEF_mcar_res <- do.call(rbind, lapply(HFmrEF_lis,
                                          little_mcar))
@@ -89,7 +89,7 @@ HFmrEF <- cbind(HFmrEF_con_imp_em, HFmrEF_ind_imp_cart)
 # ----------------------------------------------------------- #
 # Save the data files
 # ----------------------------------------------------------- #
-save(HFpEF, file = "data_files/HFpEF")
-save(HFmrEF, file = "data_files/HFmrEF")
+save(HFpEF, file = "data_files/HFpEF.Rdat")
+save(HFmrEF, file = "data_files/HFmrEF.Rdat")
 
 # ----------------------------------------------------------- #
