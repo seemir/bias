@@ -251,12 +251,12 @@ pca_var_plot <- function(pca, n_comp=NA, digits=4, title = NA){
   cm <- cumsum(vr)
   colfunc <- colorRampPalette(c("green", "black"))
   twoord.plot(n, vr, n, cm, type = c("bar", "s"),
-              lcol = colfunc(length(n)), main = title)
-  axis(1, labels = F)
+              lcol = colfunc(length(n)), main = title,
+              cex.axis = 0.5)
   grid()
   leg <- c(paste("Number comp:", length(n)),
            paste("Cum.variance:", round(sum(vr),digits)))
-  legend("right", legend = leg, bty = "n")
+  legend("right", legend = leg, bty = "o", box.lty = "dashed")
 }
 
 # ----------------------------------------------------------- #
