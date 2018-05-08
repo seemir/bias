@@ -85,6 +85,15 @@ HFmrEF_matrix_ind_var<- HFmrEF_BMI$from_mat
 HFmrEF_matrix_not_ind <- HFmrEF_BMI$to_mat
 
 # ----------------------------------------------------------- #
+# Change nyhaclass from non-indicator to indicator variable
+# ----------------------------------------------------------- #
+HFpEF_nyhaclass <- move_columns(HFpEF_matrix_not_ind,
+                                HFpEF_matrix_ind_var,
+                                "nyhaclass")
+HFpEF_matrix_ind_var <- HFpEF_nyhaclass$to_mat
+HFpEF_matrix_not_ind <- HFpEF_nyhaclass$from_mat
+
+# ----------------------------------------------------------- #
 # Convert zeros to missings, the following variables are not to 
 # be converted.
 # ----------------------------------------------------------- #
