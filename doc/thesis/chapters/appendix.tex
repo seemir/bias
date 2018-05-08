@@ -30,7 +30,7 @@
 \begin{figure}[h!]
     \centering
     \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFpEF_miss_dist.pdf}
-    \caption[Missing values in HFpEF data set]{\textit{Missing values in HFpEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (blue) values in the HFpEF data set.}}
+    \caption[Missing values in HFpEF data set]{\textit{Missing values in HFpEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (green) values in the HFpEF data set.}}
     \label{fig:HFpEF_missing}
 \end{figure}
 
@@ -39,9 +39,16 @@
 \begin{figure}[h!]
     \centering
     \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFmrEF_miss_dist.pdf}
-    \caption[Missing values in HFmrEF data set]{\textit{Missing values in HFmrEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (blue) values in the HFmrEF data set.}}
+    \caption[Missing values in HFmrEF data set]{\textit{Missing values in HFmrEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (green) values in the HFmrEF data set.}}
     \label{fig:HFmrEF_missing}
 \end{figure}
+
+\newpage
+\begin{figure}[h!]
+    \centering
+    \input{doc/thesis/images/pca_var_plot_HFpEF.tex}
+\end{figure}
+
 
 \chapter{Source Code}
 \label{chap:souce_code}
@@ -65,5 +72,11 @@
 
 \section{Imputation, \texttt{imputation.R}}
 \label{sec:app_impu}
+
+\lstinputlisting[language=R]{../../data/data_sets/source/imputation.R}
+
+\section{Dimensional Reduction, \texttt{dim\_reduc.R}}
+\label{sec:dim_red}
+
 
 \end{document}
