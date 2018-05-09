@@ -26,9 +26,9 @@ HFmrEF_pca <- princomp(as.matrix(HFmrEF), cor = T)
 # ----------------------------------------------------------- #
 # Explained variance plot
 # ----------------------------------------------------------- #
-tikz(file="../../../doc/thesis/images/pca_var_plot_HFpEF.tex")
+pdf(file="../../../doc/thesis/images/pca_var_plot_HFpEF.pdf")
 pca_var_plot(HFpEF_pca, 59, title = "PCA variance plot HFpEF")
 dev.off()
-tikz(file="../../../doc/thesis/images/pca_var_plot_HFmrEF.tex")
+pdf(file="../../../doc/thesis/images/pca_var_plot_HFmrEF.pdf")
 pca_var_plot(HFmrEF_pca, 51, title = "PCA variance plot HFmrEF")
 dev.off()
