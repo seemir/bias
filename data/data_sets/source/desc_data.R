@@ -117,14 +117,14 @@ pdf(file=paste(c(path_to_images,"HFpEF_miss_dist.pdf"),
                collapse = ""))
 aggr(cbind(HFpEF_matrix_not_ind, HFpEF_matrix_ind_var), 
      plot = T, sortVars = T, bars = F, combined = T, 
-     ylabs = "", cex.axis = 0.7, col = c("limegreen", "red"))
+     ylabs = "", cex.axis = 0.7)
 dev.off()
 
 pdf(file = paste(c(path_to_images, "HFmrEF_miss_dist.pdf"),
                  collapse = ""))
 aggr(cbind(HFmrEF_matrix_not_ind, HFmrEF_matrix_ind_var), 
      plot = T, sortVars = T, bars = F, combined = T, 
-     ylabs = "", cex.axis = 0.7, col = c("limegreen", "red"))
+     ylabs = "", cex.axis = 0.7)
 dev.off()
 
 # ----------------------------------------------------------- #
