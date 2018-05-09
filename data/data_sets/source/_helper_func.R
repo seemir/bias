@@ -255,7 +255,7 @@ pca_var_plot <- function(pca, n_comp=NA, digits=4, title = NA){
               cex.axis = 0.5); grid()
   leg <- c(paste("Number comp:", length(n)),
            paste("Cum.variance:", round(sum(vr),digits)))
-  legend("top", legend = leg, bty = "o", box.lty = "dashed")
+  legend("top", legend = leg, bty = "n")
 }
 
 # ----------------------------------------------------------- #
