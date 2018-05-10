@@ -47,7 +47,7 @@
 \noindent The last type of missing value can only be speculated and thus never determined, see e.g. \cite{rubin1976inference}, \cite{schafer2002missing} and \cite{moons2006using}. In our data, we assume that the missing data is at least missing at random (MAR). This is an assumption that many in the literature place on their data without an attempt at supplying some arguments to support such an assumption. To this we have carried out Little's MCAR test \citep{little1988test} on our data (separately on indicator and continuous variables). The test is structured with the following three steps : 
 \begin{enumerate}[label=(\roman*)]
     \item First the test starts by using the expectation-maximization (EM) algorithm \citep{dempster1977maximum} to estimate the maximum likelihood of the population mean $\bm{\tilde{\mu}}_{obs, j}$ and variance-covariance matrix $\bm{\tilde{\Sigma}}_{obs,j}$. Here one enters the $Y:N\times p$ matrix of data into the EM algorithm.
-    \item Next step is to create a set of matrices $S_j$ for $j = 1, \hdots, J$ where each matrix of the dataset consists of all cases that are identified with particular missing patterns (0 = missing and 1 = not-missing). Define $m_j$ to be the number of cases that belong to a given missing response pattern in $S_j$. From these $J-1$ cases, calculate the \textit{observed} vector of means $\bm{\hat{y}}_{obs, j}$ for each random response pattern. 
+    \item Next step is to create a set of matrices $S_j$ for $j = 1, \hdots, J$ where each matrix of the dataset consists of all cases that are identified with particular missing patterns (0 = not-missing and 1 = missing). Define $m_j$ to be the number of cases that belong to a given missing response pattern in $S_j$. From these $J-1$ cases, calculate the \textit{observed} vector of means $\bm{\hat{y}}_{obs, j}$ for each random response pattern. 
     \item The final step comprises of calculating the difference between the observed means in step 2 with the estimated EM-means from step 1 weighted by $m_j$ and the inverse variance-covariance matrix to obtain the the following test statistics:
     \begin{align}
         d^2 = \sum_{j=1}^J m_j \left(\bm{\hat{y}}_{obs, j} -  \bm{\tilde{\mu}}_{obs, j}\right)\bm{\tilde{\Sigma}}_{obs,j}^{-1}\left(\bm{\hat{y}}_{obs, j} -  \bm{\tilde{\mu}}_{obs, j}\right)^T
@@ -62,7 +62,9 @@
 \subsection{Imputation}
 \label{subsec:impu}
 
-\noindent 
+\noindent There exists a wide variety of methods that fall under the class of imputation. In general all methods that attempt to replace each missing value in a dataset with an estimate or a guess are typically classified as being an imputation method \citep{allison1999missing}. A very populate and conventional method of imputing missing values is through the use of mean imputation. This methods implies swapping each missing value with the mean on the observed values in the given variable. 
+
+
 
 
 \subsection{Dimensional Reduction}
