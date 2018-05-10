@@ -12,40 +12,48 @@ lapply(Packages, library, character.only = TRUE)
 # ----------------------------------------------------------- #
 # Read matlab files into R
 # ----------------------------------------------------------- #
-data_set_HFpEF <- readMat('data_use_HFpEF.mat')
-data_set_HFmrEF <- readMat('data_use_HFmrEF.mat')
+dataSetHFpEF <- readMat('data_use_HFpEF.mat')
+dataSetHFmrEF <- readMat('data_use_HFmrEF.mat')
 
 # ----------------------------------------------------------- #
 # Extract the data matrix from matlab files
 # ----------------------------------------------------------- #
-HFpEF_matrix <- data_set_HFpEF$All.data
-HFmrEF_matrix <- data_set_HFmrEF$All.data
+HFpEFmat <- dataSetHFpEF$All.data
+HFmrEFmat <- dataSetHFmrEF$All.data
 
 # ----------------------------------------------------------- #
 # Get patient ids 
 # ----------------------------------------------------------- #
-patient_id_HFpEF <- data_set_HFpEF$patientID
-patient_id_HFmrEF <- data_set_HFmrEF$patientID
+patientIdHFpEF <- dataSetHFpEF$patientID
+patientIdHFmrEF <- dataSetHFmrEF$patientID
 
 # ----------------------------------------------------------- #
 # Add patient ids to HF_matrices and all column names
 # ----------------------------------------------------------- #
-HFpEF_matrix <- cbind(patient_id_HFpEF, HFpEF_matrix)
-HFmrEF_matrix <- cbind(patient_id_HFmrEF, HFmrEF_matrix)
+HFpEFmat <- cbind(patientIdHFpEF, HFpEFmat)
+HFmrEFmat <- cbind(patientIdHFmrEF, HFmrEFmat)
 
-colnames(HFpEF_matrix) <- c('patientid', 
-                            as.vector(unlist(
-                              data_set_HFpEF$Varnames)))
-colnames(HFmrEF_matrix) <- c('patientid', 
-                             as.vector(unlist(
-                               data_set_HFmrEF$Varnames)))
+colnames(HFpEFmat) <- c('patientid', as.vector(unlist(
+                        dataSetHFpEF$Varnames)))
+colnames(HFmrEFmat) <- c('patientid', as.vector(unlist(
+                         dataSetHFmrEF$Varnames)))
 
 # ----------------------------------------------------------- #
 # Consolidate naming conventions for some variables
 # ----------------------------------------------------------- #
+# In the HFpEF matrix
+# ----------------------------------------------------------- #
+setnames(as.data.frame(HFpEFmat), 
+         old = c("E_e","LVfunction", "ECGRhythm_other", 
+                 "ECGQRS_other", "Other_ethnicity", "Plt",
+                 "COPD"), 
+         new = c("Ee", "LVEF", "ECGRhythmother", "ECGQRSother", 
+                 "Otherethnicity", "Plts", "COPDasthma"))
+
+# ----------------------------------------------------------- #
 # In the HFmrEF matrix
 # ----------------------------------------------------------- #
-setnames(as.data.frame(HFmrEF_matrix), 
+setnames(as.data.frame(HFmrEFmat), 
          old=c("Admissionweight","BMI","Numberofcomorbidities",
                "Afrocaribbean", "Caucasian","Pulse","NtproBNP",
                "E", "ECGRhythm_other", "LVHand_orLAE", 
@@ -56,90 +64,75 @@ setnames(as.data.frame(HFmrEF_matrix),
                  "ECGQRSother", "Ironlevels", "TimetoHFadm"))
 
 # ----------------------------------------------------------- #
-# In the HFpEF matrix
-# ----------------------------------------------------------- #
-setnames(as.data.frame(HFpEF_matrix), 
-         old = c("E_e","LVfunction", "ECGRhythm_other", 
-                 "ECGQRS_other", "Other_ethnicity", "Plt",
-                 "COPD"), 
-         new = c("Ee", "LVEF", "ECGRhythmother", "ECGQRSother", 
-                 "Otherethnicity", "Plts", "COPDasthma"))
-
-# ----------------------------------------------------------- #
 # Lowercase letters for all the colnames
 # ----------------------------------------------------------- #
-colnames(HFmrEF_matrix) <- tolower(colnames(HFmrEF_matrix))
-colnames(HFpEF_matrix) <- tolower(colnames(HFpEF_matrix))
+colnames(HFpEFmat) <- tolower(colnames(HFpEFmat))
+colnames(HFmrEFmat) <- tolower(colnames(HFmrEFmat))
 
 # ----------------------------------------------------------- #
 # Save the matrices as .Rdat
 # ----------------------------------------------------------- #
-save(HFpEF_matrix, file='data_use_HFpEF_matrix.Rdat')
-save(HFmrEF_matrix, file='data_use_HFmrEF_matrix.Rdat')
+save(HFpEFmat, file='data_use_HFpEF.Rdat')
+save(HFmrEFmat, file='data_use_HFmrEF.Rdat')
 
 # ----------------------------------------------------------- #
 # Re-code patient group labels
 # ----------------------------------------------------------- #
 # Get patient groups
 # ----------------------------------------------------------- #
-patient_groups_HFpEF <- as.matrix(unlist(
-                        data_set_HFpEF$Patient.group))
-patient_groups_HFmrEF <- as.matrix(unlist(
-                        data_set_HFmrEF$Patient.group))
+patientGroupsHFpEF <- as.matrix(unlist(
+                      dataSetHFpEF$Patient.group))
+patientGroupsHFmrEF <- as.matrix(unlist(
+                      dataSetHFmrEF$Patient.group))
 
 # ----------------------------------------------------------- #
 # Labels of clinical outcomes
 # ----------------------------------------------------------- #
 deceased <- c("IN", "Z", "Y", "X")
-re_admission <- c("V", "U")
+reAdmission <- c("V", "U")
 
 # ----------------------------------------------------------- #
 # Split labels 
 # ----------------------------------------------------------- #
-HFmrEF_split <- str_split_fixed(patient_groups_HFmrEF,", ",n=2)
-HFpEF_split <- str_split_fixed(patient_groups_HFpEF,", ", n=2)
+HFpEFsplit <- str_split_fixed(patientGroupsHFpEF,", ", n=2)
+HFmrEFsplit <- str_split_fixed(patientGroupsHFmrEF,", ",n=2)
 
 # ----------------------------------------------------------- #
 # Re-coding mortality labels
 # ----------------------------------------------------------- #
-is_deceased_HFmrEF <- HFmrEF_split[,1] %in% deceased
-is_deceased_HFpEF <- HFpEF_split[,1] %in% deceased
-deceased_HFmrEF <- ifelse(is_deceased_HFmrEF, "yes", "no")
-deceased_HFpEF <- ifelse(is_deceased_HFpEF, "yes", "no")
+isDeceasedHFpEF <- HFpEFsplit[,1] %in% deceased
+isDeceasedHFmrEF <- HFmrEFsplit[,1] %in% deceased
+deceasedHFpEF <- ifelse(isDeceasedHFpEF, "yes", "no")
+deceasedHFmrEF <- ifelse(isDeceasedHFmrEF, "yes", "no")
 
 # ----------------------------------------------------------- #
 # Re-coding re-admission labels
 # ----------------------------------------------------------- #
-is_re_admitted_HFmrEF <- HFmrEF_split[,1] %in% re_admission | 
-                         HFmrEF_split[,2] %in% re_admission
-is_re_admitted_HFpEF <- HFpEF_split[,1] %in% re_admission | 
-                        HFpEF_split[,2] %in% re_admission
-re_admission_HFmrEF <- ifelse(is_re_admitted_HFmrEF,"yes","no")
-re_admission_HFpEF <- ifelse(is_re_admitted_HFpEF,"yes","no")
+isReAdmittedHFpEF <- HFpEFsplit[,1] %in% reAdmission | 
+                     HFpEFsplit[,2] %in% reAdmission
+isReAdmittedHFmrEF <- HFmrEFsplit[,1] %in% reAdmission | 
+                      HFmrEFsplit[,2] %in% reAdmission
+reAdmissionHFpEF <- ifelse(isReAdmittedHFpEF,"yes","no")
+reAdmissionHFmrEF <- ifelse(isReAdmittedHFmrEF,"yes","no")
 
 # ----------------------------------------------------------- #
 # Add outcomes to matrix
 # ----------------------------------------------------------- #
-HFmrEF_outcomes_matrix <- cbind(patient_id_HFmrEF,
-                                patient_groups_HFmrEF,
-                                deceased_HFmrEF,
-                                re_admission_HFmrEF)
-HFpEF_outcomes_matrix <- cbind(patient_id_HFpEF,
-                               patient_groups_HFpEF,
-                               deceased_HFpEF,
-                               re_admission_HFpEF)
+HFpEFoutcomes <- cbind(patientIdHFpEF, patientGroupsHFpEF,
+                       deceasedHFpEF, reAdmissionHFpEF)
+HFmrEFoutcomes <- cbind(patientIdHFmrEF, patientGroupsHFmrEF,
+                        deceasedHFmrEF, reAdmissionHFmrEF)
 
 # ----------------------------------------------------------- #
 # Add colnames to matrices
 # ----------------------------------------------------------- #
-colnames(HFmrEF_outcomes_matrix) <- 
-colnames(HFpEF_outcomes_matrix) <- 
+colnames(HFpEFoutcomes) <- colnames(HFmrEFoutcomes) <- 
 c("patientid", "patientgroup", "deceased", "readmitted")
 
 # ----------------------------------------------------------- #
 # Save the matrices as .Rdat file
 # ----------------------------------------------------------- #
-save(HFpEF_outcomes_matrix, file='outcomes_HFpEF_matrix.Rdat')
-save(HFmrEF_outcomes_matrix,file='outcomes_HFmrEF_matrix.Rdat')
+save(HFpEFoutcomes, file='outcomes_HFpEF.Rdat')
+save(HFmrEFoutcomes,file='outcomes_HFmrEF.Rdat')
 
 # ----------------------------------------------------------- #

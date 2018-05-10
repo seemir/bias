@@ -14,11 +14,9 @@ source("_helper_func.R")
 # ----------------------------------------------------------- #
 # Load indicator and non indicator variables
 # ----------------------------------------------------------- #
-all_data_files <- c("HFpEF_matrix_ind_var", 
-                    "HFmrEF_matrix_ind_var",
-                    "HFpEF_matrix_not_ind",
-                    "HFmrEF_matrix_not_ind")
-lapply(gsub(" ", "", paste("data_files/", all_data_files, 
+allDataFiles <- c("HFpEF_ind_var", "HFmrEF_ind_var",
+                  "HFpEF_not_ind", "HFmrEF_not_ind")
+lapply(gsub(" ", "", paste("data_files/", allDataFiles, 
                            ".Rdat")), load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
@@ -26,65 +24,62 @@ lapply(gsub(" ", "", paste("data_files/", all_data_files,
 # ----------------------------------------------------------- #
 # In HFpEF 
 # ----------------------------------------------------------- #
-HFpEF_ind <- HFpEF_matrix_ind_var
-HFpEF_ind <- HFpEF_ind[, !colnames(HFpEF_ind) %in% 
-                         c("obesitybmi30","osa")]
-HFpEF_con <- HFpEF_matrix_not_ind
-HFpEF_lis <- list(HFpEF_ind, HFpEF_con[,2:15], 
-                  HFpEF_con[,16:33], HFpEF_con[,34:47])
-HFpEF_mcar_res <- do.call(rbind, lapply(HFpEF_lis, 
-                                        little_mcar))
-HFpEF_mcar_names <- c("indicator", "continuous_1", 
-                      "continuous_2", "continuous_3")
-rownames(HFpEF_mcar_res) <- HFpEF_mcar_names
+HFpEFind <- HFpEFmatInd
+HFpEFind <- HFpEFind[, !colnames(HFpEFind) %in% 
+                       c("obesitybmi30","osa")]
+HFpEFcon <- HFpEFmatNoInd
+HFpEFlis <- list(HFpEFind, HFpEFcon[,2:15], HFpEFcon[,16:33], 
+                 HFpEFcon[,34:47])
+HFpEFmcar <- do.call(rbind, lapply(HFpEFlis, little.mcar))
+HFpEFmcarNames <- c("indicator", "continuous_1", 
+                    "continuous_2", "continuous_3")
+rownames(HFpEFmcar) <- HFpEFmcarNames
 
 # ----------------------------------------------------------- #
 # In HFmrEF 
 # ----------------------------------------------------------- #
-HFmrEF_ind <- HFmrEF_matrix_ind_var
-HFmrEF_ind <- HFmrEF_ind[, !colnames(HFmrEF_ind) %in% 
-                           c("cva", "e9cms")]
-HFmrEF_con <- HFmrEF_matrix_not_ind
-HFmrEF_con <- HFmrEF_con[, !colnames(HFmrEF_con) %in%
-                     c("bmiadmission",
-                       "dischargeweight",
-                       "admissionwgt",
-                       "procedures", "troponin", 
-                       "timetofirstcardiachospitalisation",
-                       "ferritin")]
-HFmrEF_lis <- list(HFmrEF_ind, HFmrEF_con[,2:15], 
-                   HFmrEF_con[,16:30])
-HFmrEF_mcar_res <- do.call(rbind, lapply(HFmrEF_lis,
-                                         little_mcar))
-HFmrEF_mcar_names <- c("indicator", "continuous_1", 
-                       "continuous_2")
-rownames(HFmrEF_mcar_res) <- HFmrEF_mcar_names
-xtable(rbind(HFpEF_mcar_res, HFmrEF_mcar_res), 
-       digits = c(0,0,0,4,0,5))
+HFmrEFind <- HFmrEFmatInd
+HFmrEFind <- HFmrEFind[, !colnames(HFmrEFind) %in% 
+                         c("cva", "e9cms")]
+HFmrEFcon <- HFmrEFmatNoInd
+HFmrEFcon <- HFmrEFcon[, !colnames(HFmrEFcon) %in%
+                         c("bmiadmission",
+                           "dischargeweight",
+                           "admissionwgt",
+                           "procedures", "troponin", 
+                           "timetofirstcardiachospitalisation",
+                           "ferritin")]
+HFmrEFlis <- list(HFmrEFind, HFmrEFcon[,2:15],
+                  HFmrEFcon[,16:30])
+HFmrEFmcar <- do.call(rbind, lapply(HFmrEFlis, little.mcar))
+HFmrEFmcarNames <- c("indicator", "continuous_1", 
+                     "continuous_2")
+rownames(HFmrEFmcar) <- HFmrEFmcarNames
+xtable(rbind(HFpEFmcar, HFmrEFmcar), digits = c(0,0,0,4,0,5))
 
 # ----------------------------------------------------------- #
 # Impute missing values
 # ----------------------------------------------------------- #
 # Impute the non-indicator variables with the EM algorithm 
 # ----------------------------------------------------------- #
-HFpEF_con_imp_em <- list.cbind(lapply(lapply(lapply(
-  HFpEF_lis[2:4], amelia, m = 1, boot.type="none"),"[[", 1), 
+HFpEFconImpEm <- list.cbind(lapply(lapply(lapply(
+  HFpEFlis[2:4], amelia, m = 1, boot.type="none"),"[[", 1), 
   "[[", 1))
-HFmrEF_con_imp_em <- list.cbind(lapply(lapply(lapply(
-  HFmrEF_lis[2:3], amelia, m = 1, boot.type="none"),"[[", 1), 
+HFmrEFconImpEm <- list.cbind(lapply(lapply(lapply(
+  HFmrEFlis[2:3], amelia, m = 1, boot.type="none"),"[[", 1), 
   "[[", 1))
 # ----------------------------------------------------------- #
-# Impute the indicator variables with the classification and 
+# Impute the indicator variables with classification and 
 # regression trees algorithm 
 # ----------------------------------------------------------- #
-HFpEF_ind_imp_cart <- complete(mice(HFpEF_ind, method ="cart"))
-HFmrEF_ind_imp_cart <-complete(mice(HFmrEF_ind,method ="cart"))
+HFpEFindImpCart <- complete(mice(HFpEFind, method ="cart"))
+HFmrEFindImpCart <- complete(mice(HFmrEFind,method ="cart"))
 
 # ----------------------------------------------------------- #
 # Merge imputed data into one data file
 # ----------------------------------------------------------- #
-HFpEF <- cbind(HFpEF_con_imp_em, HFpEF_ind_imp_cart)
-HFmrEF <- cbind(HFmrEF_con_imp_em, HFmrEF_ind_imp_cart)
+HFpEF <- cbind(HFpEFconImpEm, HFpEFindImpCart)
+HFmrEF <- cbind(HFmrEFconImpEm, HFmrEFindImpCart)
 
 # ----------------------------------------------------------- #
 # Save the data files
