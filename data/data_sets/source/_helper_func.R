@@ -1,7 +1,9 @@
 # ----------------------------------------------------------- #
 # Install packages (if not already installed)
 # ----------------------------------------------------------- #
-Packages <- c("docstring", "plotrix")
+Packages <- c("docstring", "plotrix", "FactoMineR", 
+              "factoextra", "gridExtra", "NbClust",
+              "ggpubr")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -12,6 +14,19 @@ lapply(Packages, library, character.only = TRUE)
 # ----------------------------------------------------------- #
 # Helper function used in this thesis
 # ----------------------------------------------------------- #
+if.not.class <- function(var, class){
+  #' Utility function for error messages 
+  #' 
+  #' @description Utility function for error messages given 
+  #' wrong input class as function argument.
+  
+  if (!any(class(var) %in% class)){
+    stop(paste("first argument must be a class of ", 
+               class, "!", sep = ""))
+  }
+}
+# ----------------------------------------------------------- #
+
 make.na <- function(data){
   #' Converts all the NaN in a matrix to NA
   #' 
@@ -22,6 +37,7 @@ make.na <- function(data){
   #' 
   #' @param data matrix. Matrix containing NaN values
 
+  if.not.class(data, "matrix")
   data[is.nan(data)] <- NA 
   return(data)
 }
@@ -38,6 +54,7 @@ summary.missing <- function(data){
   #' 
   #' @param data matrix. Matrix containing missing values
 
+  if.not.class(data, "matrix")
   num.na <- sum(is.na(data))
   tot.pmv <- num.na/prod(dim(data))
   num.na.vec <- apply(data, 2, function(col) sum(is.na(col)))
@@ -64,6 +81,7 @@ summary.zeros <- function(data){
   #' 
   #' @param data matrix. Matrix containing zero values
 
+  if.not.class(data, "matrix")
   num.zeros <- sum(colSums(data == 0, na.rm = T))
   tot.pzv <- num.zeros / prod(dim(data))
   num.zeros.vec <- colSums(data == 0, na.rm = T)
@@ -92,6 +110,7 @@ rm.indicator <- function(data, n.uniq){
   #' column needed for that column to be defined as a indicator 
   #' variable column.
   
+  if.not.class(data, "matrix")
   non.indicator <- data[, apply(data, 2, function(col) 
     length(unique(col)) > n.uniq)]
   ind.var.idx <- !(colnames(data) %in% colnames(non.indicator))
@@ -115,6 +134,7 @@ zero.to.na <- function(data, except=NULL){
  #' @param except character vector. Names of matrix column not 
  #' to apply function on. 
 
+  if.not.class(data, "matrix")
  exp.idx <- colnames(data) %in% except
  exp.data <- data[, exp.idx]; not.exp.data <- data[, !exp.idx]
  not.exp.data[not.exp.data == 0] <- NA
@@ -134,6 +154,8 @@ move.columns <- function(from.mat, to.mat, column.name){
  #' @param to.mat matrix. Matrix to move column to 
  #' @param column.name character. Name of column to be moved
 
+  if.not.class(from.mat, "matrix")
+  if.not.class(to.mat, "matrix")
   to.mat <- cbind(to.mat,from.mat[, colnames(from.mat) == 
                                     column.name])
   colnames(to.mat)[ncol(to.mat)] <- column.name
@@ -155,6 +177,7 @@ top.n.missing <- function(data, n, decreasing=T){
   #' @param decreasing logical. Logical argument indicating 
   #' wheater values should be sorted in decreasing order.
 
+  if.not.class(data, "matrix")
   missing <- summary.missing(data)
   count <- missing$num.na.vec
   perc <- missing$pmv.vec
@@ -191,6 +214,7 @@ label.summary <- function(labels, label.col, col.names, digits,
   #' @param decr logical. Boolean indicating if values in
   #' sort.col should be sorted in decreasing order.
 
+  if.not.class(labels, "matrix")
   uniq <- unique(if(ignore.id.col){
     labels[order(labels[, label.col]),-1]}else{labels})
   tabl <- table(labels[, label.col])
@@ -217,6 +241,7 @@ little.mcar <- function(data){
   #' variables, and may in some cases take long time to 
   #' complete.
 
+  if.not.class(data, "matrix")
   l <- LittleMCAR(data[, summary.missing(data)$num.na.vec > 0])
   outp <- c(dim(data)[2],l$missing.patterns, l$chi.square, 
             l$df, l$p.value)
@@ -241,10 +266,7 @@ pca.var.plot <- function(pca, n.comp=NA, digits=4, title = NA){
   #' decimal places to be used.
   #' @param title character. Name of title.
 
-  if(class(pca) != "princomp"){
-    stop("first argument is not of 'princomp' class!")
-  }
-  
+  if.not.class(pca, "princomp")
   sd <- pca$sdev
   n <- 1:ifelse(is.na(n.comp), length(sd), n.comp)
   vr <- (sd^2/sum(sd^2))[n]
@@ -257,6 +279,65 @@ pca.var.plot <- function(pca, n.comp=NA, digits=4, title = NA){
   leg <- c(paste("Number comp:", length(n)),
            paste("Cum.variance:", round(sum(vr),digits)))
   legend("top", legend = leg, bty = "n")
+}
+
+# ----------------------------------------------------------- #
+pca.cluster.plot <- function(pca, ncp, km.clust = 2, 
+                             hc.clust = -1, digits = 5,
+                             ellipse = T, 
+                             ellipse.type = "convex",
+                             ggtheme = theme_gray()){
+  #' Two side-by-side cluster plots with Hierarchical 
+  #' Clustering and kMeans clustering on principal components.
+  #' 
+  #' @description This function runs Hierarchical and kMeans 
+  #' clustering on a predefined number of principal components.
+  #' The results are two scatterplots with the results from
+  #' the clustering.
+  #' 
+  #' @param pca princomp object.
+  #' @param ncp numeric. Number of principal components
+  #' @param km.clust numeric. Number of clusters to be used
+  #' in the kMeans algorithm.
+  #' @param hc.clust numeric. Number of clusters to be used 
+  #' in the Hierarchical clustering.
+  #' @param digits numeric. Number of decimal places for 
+  #' cumulative variance in plot title.
+  #' @param ellipse logical value. Boolean indicating if 
+  #' ellipse around clusters should be drawn.
+  #' @param ellipse.type. Type of ellipse to be drawn. 
+  #' See ggscatter for more information.
+  #' @param ggtheme. function, ggplot2 theme name.
+
+  if.not.class(pca, "princomp")
+  data <- as.data.frame(pca$scores[,1:ncp])
+  sdev <- pca$sdev 
+  cdev <- cumsum(sdev^2 / sum(sdev^2))
+  
+  subt <- paste("Cumulative variance: ", 
+                round(cdev[ncp], digits))
+  hc.title <- labs(title = paste("Hierarchical Clustering on",
+                                 ncp, "Principle Components"), 
+                   subtitle = subt) 
+  km.title <- labs(title = paste("kMeans (k = ", km.clust, 
+                                 ") Clustering on ", ncp, 
+                                 " Principle Components", 
+                                 sep = ""), subtitle = subt)
+  hc <- fviz_cluster(HCPC(data, nb.clust = hc.clust, 
+                          graph = F), main = hc.title, 
+                     ellipse = ellipse, 
+                     ellipse.type = ellipse.type, 
+                     ggtheme = ggtheme)
+  cluster <- as.factor(kmeans(data, km.clust)$cluster)
+  data <- cbind(data[, 1:2], cluster)
+  km <- ggscatter(data, "Comp.1", "Comp.2", 
+                  color = rev("cluster"), 
+                  shape = "cluster", ellipse = ellipse, 
+                  ellipse.type = ellipse.type, 
+                  ggtheme = ggtheme, mean.point = T, 
+                  label = seq(nrow(data)),ylab = hc$labels$y,
+                  xlab = hc$labels$x) + km.title
+  grid.arrange(hc, km, nrow=1)
 }
 
 # ----------------------------------------------------------- #
