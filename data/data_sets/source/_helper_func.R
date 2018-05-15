@@ -21,7 +21,7 @@ if.not.class <- function(var, class){
   #' wrong input class as function argument.
   
   if (!any(class(var) %in% class)){
-    stop(paste("first argument must be a class of ", 
+    stop(paste("first argument must be of class(es) ", 
                class, "!", sep = ""))
   }
 }
@@ -37,7 +37,6 @@ make.na <- function(data){
   #' 
   #' @param data matrix. Matrix containing NaN values
 
-  if.not.class(data, "matrix")
   data[is.nan(data)] <- NA 
   return(data)
 }
@@ -54,7 +53,6 @@ summary.missing <- function(data){
   #' 
   #' @param data matrix. Matrix containing missing values
 
-  if.not.class(data, "matrix")
   num.na <- sum(is.na(data))
   tot.pmv <- num.na/prod(dim(data))
   num.na.vec <- apply(data, 2, function(col) sum(is.na(col)))
@@ -81,7 +79,6 @@ summary.zeros <- function(data){
   #' 
   #' @param data matrix. Matrix containing zero values
 
-  if.not.class(data, "matrix")
   num.zeros <- sum(colSums(data == 0, na.rm = T))
   tot.pzv <- num.zeros / prod(dim(data))
   num.zeros.vec <- colSums(data == 0, na.rm = T)
@@ -110,7 +107,6 @@ rm.indicator <- function(data, n.uniq){
   #' column needed for that column to be defined as a indicator 
   #' variable column.
   
-  if.not.class(data, "matrix")
   non.indicator <- data[, apply(data, 2, function(col) 
     length(unique(col)) > n.uniq)]
   ind.var.idx <- !(colnames(data) %in% colnames(non.indicator))
@@ -134,7 +130,6 @@ zero.to.na <- function(data, except=NULL){
  #' @param except character vector. Names of matrix column not 
  #' to apply function on. 
 
-  if.not.class(data, "matrix")
  exp.idx <- colnames(data) %in% except
  exp.data <- data[, exp.idx]; not.exp.data <- data[, !exp.idx]
  not.exp.data[not.exp.data == 0] <- NA
@@ -154,8 +149,6 @@ move.columns <- function(from.mat, to.mat, column.name){
  #' @param to.mat matrix. Matrix to move column to 
  #' @param column.name character. Name of column to be moved
 
-  if.not.class(from.mat, "matrix")
-  if.not.class(to.mat, "matrix")
   to.mat <- cbind(to.mat,from.mat[, colnames(from.mat) == 
                                     column.name])
   colnames(to.mat)[ncol(to.mat)] <- column.name
@@ -177,9 +170,11 @@ top.n.missing <- function(data, n, decreasing=T){
   #' @param decreasing logical. Logical argument indicating 
   #' wheater values should be sorted in decreasing order.
 
-  if.not.class(data, "matrix")
   missing <- summary.missing(data)
   count <- missing$num.na.vec
+  if (sum(count) == 0){
+    stop("no missing values!")
+  }
   perc <- missing$pmv.vec
   relp <- missing$rel.pmv.vec
   relv <- missing$rel.pmv.v
@@ -214,7 +209,6 @@ label.summary <- function(labels, label.col, col.names, digits,
   #' @param decr logical. Boolean indicating if values in
   #' sort.col should be sorted in decreasing order.
 
-  if.not.class(labels, "matrix")
   uniq <- unique(if(ignore.id.col){
     labels[order(labels[, label.col]),-1]}else{labels})
   tabl <- table(labels[, label.col])
@@ -241,7 +235,6 @@ little.mcar <- function(data){
   #' variables, and may in some cases take long time to 
   #' complete.
 
-  if.not.class(data, "matrix")
   l <- LittleMCAR(data[, summary.missing(data)$num.na.vec > 0])
   outp <- c(dim(data)[2],l$missing.patterns, l$chi.square, 
             l$df, l$p.value)

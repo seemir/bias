@@ -2,7 +2,7 @@
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
 Packages <- c("BaylorEdPsych", "mvnmle", "xtable", "Amelia",
-              "rlist", "mice")
+              "rlist", "mice", "caret")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -21,12 +21,13 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 
 # ----------------------------------------------------------- #
 # Little's test to assess for missing completely at random
+# Remove variables with more than 70% missing values
 # ----------------------------------------------------------- #
 # In HFpEF 
 # ----------------------------------------------------------- #
 HFpEFind <- HFpEFmatInd
 HFpEFind <- HFpEFind[, !colnames(HFpEFind) %in% 
-                       c("obesitybmi30","osa")]
+                       c("osa", "obesitybmi30")]
 HFpEFcon <- HFpEFmatNoInd
 HFpEFlis <- list(HFpEFind, HFpEFcon[,2:15], HFpEFcon[,16:33], 
                  HFpEFcon[,34:47])
@@ -60,14 +61,24 @@ xtable(rbind(HFpEFmcar, HFmrEFmcar), digits = c(0,0,0,4,0,5))
 # ----------------------------------------------------------- #
 # Impute missing values
 # ----------------------------------------------------------- #
-# Impute the non-indicator variables with the EM algorithm 
+# Impute the non-indicator variables with the Bootstrap
+# EM algorithm 
 # ----------------------------------------------------------- #
-HFpEFconImpEm <- list.cbind(lapply(lapply(lapply(
-  HFpEFlis[2:4], amelia, m = 1, boot.type="none"),"[[", 1), 
-  "[[", 1))
-HFmrEFconImpEm <- list.cbind(lapply(lapply(lapply(
-  HFmrEFlis[2:3], amelia, m = 1, boot.type="none"),"[[", 1), 
-  "[[", 1))
+m <- 20 # number of bootstrap samples
+HFpEFconImpEmlis <- list() 
+HFmrEFconImpEmlis <- list()
+for (i in 1:m){
+  print(paste("Bootstrap: ", i, " ", i/m*100,"% ",sep =""))
+  HFpEFconImpEmlis[[i]] <- list.cbind(lapply(lapply(lapply(
+    HFpEFlis[2:4], amelia, m = 1, boot.type="none", p2s = 0)
+    ,"[[", 1), "[[", 1))
+  HFmrEFconImpEmlis[[i]] <- list.cbind(lapply(lapply(lapply(
+    HFmrEFlis[2:3], amelia, m = 1, boot.type="none", p2s = 0),
+    "[[", 1), "[[", 1))
+}  
+HFpEFconImpEm <- Reduce("+", HFpEFconImpEmlis) / m
+HFmrEFconImpEm <- Reduce("+", HFmrEFconImpEmlis) / m
+
 # ----------------------------------------------------------- #
 # Impute the indicator variables with classification and 
 # regression trees algorithm 

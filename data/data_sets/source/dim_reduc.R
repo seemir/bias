@@ -28,11 +28,11 @@ HFmrEFpca <- princomp(as.matrix(HFmrEF), cor = T)
 # ----------------------------------------------------------- #
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFpEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFpEFpca, 59, title = "HFpEF")
+pca.var.plot(HFpEFpca, 58, title = "HFpEF")
 dev.off()
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFmrEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFmrEFpca, 51, title = "HFmrEF")
+pca.var.plot(HFmrEFpca, 50, title = "HFmrEF")
 dev.off()
 
 # ----------------------------------------------------------- #
