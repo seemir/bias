@@ -66,6 +66,7 @@ HFpEFrv <- move.columns(HFpEFmatNoInd, HFpEFmatInd,
                         "rvfunction")
 HFpEFmatInd <- HFpEFrv$to.mat
 HFpEFmatNoInd <- HFpEFrv$from.mat
+
 # ----------------------------------------------------------- #
 HFmrEFrv <- move.columns(HFmrEFmatNoInd, HFmrEFmatInd, 
                          "rvfunction")

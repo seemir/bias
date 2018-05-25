@@ -94,8 +94,8 @@ reAdmission <- c("V", "U")
 # ----------------------------------------------------------- #
 # Split labels 
 # ----------------------------------------------------------- #
-HFpEFsplit <- str_split_fixed(patientGroupsHFpEF,", ", n=2)
-HFmrEFsplit <- str_split_fixed(patientGroupsHFmrEF,", ",n=2)
+HFpEFsplit <- str_split_fixed(patientGroupsHFpEF,", ", n = 2)
+HFmrEFsplit <- str_split_fixed(patientGroupsHFmrEF,", ",n = 2)
 
 # ----------------------------------------------------------- #
 # Re-coding mortality labels

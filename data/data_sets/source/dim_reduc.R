@@ -32,7 +32,19 @@ pca.var.plot(HFpEFpca, 58, title = "HFpEF")
 dev.off()
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFmrEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFmrEFpca, 50, title = "HFmrEF")
+pca.var.plot(HFmrEFpca, 52, title = "HFmrEF")
 dev.off()
+
+# ----------------------------------------------------------- #
+pca.cluster.plot(HFmrEFpca, ncp = 52)
+pca.cluster.plot(HFpEFpca, ncp = 58, km.clust = 3)
+
+NbClust(as.data.frame(HFmrEFpca$scores[, 1:52]), 
+        distance = "euclidean", min.nc = 2,
+        max.nc = 10, method = "kmeans")
+
+NbClust(as.data.frame(HFpEFpca$scores[, 1:58]), 
+        distance = "euclidean", min.nc = 2,
+        max.nc = 10, method = "kmeans")
 
 # ----------------------------------------------------------- #

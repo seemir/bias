@@ -64,7 +64,7 @@ xtable(rbind(HFpEFmcar, HFmrEFmcar), digits = c(0,0,0,4,0,5))
 # Impute the non-indicator variables with the Bootstrap
 # EM algorithm 
 # ----------------------------------------------------------- #
-m <- 20 # number of bootstrap samples
+m <- 30 # number of bootstrap samples
 HFpEFconImpEmlis <- list() 
 HFmrEFconImpEmlis <- list()
 for (i in 1:m){
