@@ -25,8 +25,8 @@ if.not.class <- function(var, class){
                class, "!", sep = ""))
   }
 }
-# ----------------------------------------------------------- #
 
+# ----------------------------------------------------------- #
 make.na <- function(data){
   #' Converts all the NaN in a matrix to NA
   #' 
@@ -118,6 +118,34 @@ rm.indicator <- function(data, n.uniq){
 }
 
 # ----------------------------------------------------------- #
+rm.missing <- function(data, cut.off = 0.8, near.zero.var = T){
+  #' Remove variables with near zero variance or more missing
+  #' values than a percentage threshold.
+  #' 
+  #' @description This function removes all variables in a 
+  #' matrix or dataframe with suspected of having near zero
+  #' variance or more missing values than a given percentage
+  #' threshold.
+  #' 
+  #' @param data matrix. Matrix like object
+  #' @param cut.off integer. Percentage threshold for missing
+  #' values.
+  #' @param near.zero.var logical. Boolean indicating if 
+  #' criteria for near zero variance is to be used. 
+  
+  if (near.zero.var){
+    near.zero <- nearZeroVar(data)
+    if (length(near.zero) != 0){
+      data <- data[, -near.zero]
+    }    
+  }
+  miss.col <- summary.missing(data)$rel.pmv.v
+  miss.cut <- miss.col < cut.off
+  data <- data[, miss.cut]
+  data
+}
+
+# ----------------------------------------------------------- #
 zero.to.na <- function(data, except=NULL){
  #' Convert zero datapoints to na in a dataset. 
  #' 
@@ -155,6 +183,50 @@ move.columns <- function(from.mat, to.mat, column.name){
   from.mat <- from.mat[, colnames(from.mat) != column.name]
   outp <- list(from.mat, to.mat)
   names(outp) <- c("from.mat","to.mat")
+  outp
+}
+
+# ----------------------------------------------------------- #
+split.matrix <- function(data){
+  #' Split matrix in two at a defined column number. 
+  #' 
+  #' @description This function splits a matrix into two at a
+  #' predefined column number. Both halfs can be accessed by 
+  #' the user as an output.
+  #' 
+  #' @param data matrix. Matrix like object
+  #' matrix.
+  #' @note The function assumes that the input matrix has more
+  #' than one column.
+
+  if (ncol(data)==1){
+    stop("data must have more than one column!")
+  }
+  mid <- trunc(ncol(data)/2); end <- ncol(data)
+  first.half <- data[, 1:mid]
+  second.half <- data[, (mid+1):end]
+  outp <- list(first.half, second.half)
+  names(outp) <- c("first.half", "second.half")
+  outp
+}
+
+# ----------------------------------------------------------- #
+data.bounds <- function(data, lower.bound, upper.bound){
+  #' Generate an Amelia compatible bound matrix
+  #' 
+  #' @description This function produces a three column matrix 
+  #' to hold logical bounds on the imputations done in Amelia 
+  #' II. Each row of the matrix is of the form c(column.number, 
+  #' lower.bound,upper.bound).
+  #' 
+  #' @param data matrix. Matrix like object
+  #' @param lower.bound numeric. 
+  #' @param upper.bound numeric.
+
+  len <- ncol(data); column.number <- seq(1, len)
+  lower <- rep(lower.bound, len)
+  upper <- rep(upper.bound, len)
+  outp <- cbind(column.number, lower, upper)
   outp
 }
 

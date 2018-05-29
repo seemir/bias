@@ -28,23 +28,33 @@ HFmrEFpca <- princomp(as.matrix(HFmrEF), cor = T)
 # ----------------------------------------------------------- #
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFpEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFpEFpca, 58, title = "HFpEF")
+pca.var.plot(HFpEFpca, 66, title = "HFpEF")
 dev.off()
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFmrEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFmrEFpca, 52, title = "HFmrEF")
+pca.var.plot(HFmrEFpca, 54, title = "HFmrEF")
 dev.off()
 
 # ----------------------------------------------------------- #
-pca.cluster.plot(HFmrEFpca, ncp = 52)
-pca.cluster.plot(HFpEFpca, ncp = 58, km.clust = 3)
-
-NbClust(as.data.frame(HFmrEFpca$scores[, 1:52]), 
+# Optimal number of clusters
+# ----------------------------------------------------------- #
+# In HFpEF
+# ----------------------------------------------------------- #
+NbClust(as.data.frame(HFpEFpca$scores[, 1:66]), 
         distance = "euclidean", min.nc = 2,
         max.nc = 10, method = "kmeans")
 
-NbClust(as.data.frame(HFpEFpca$scores[, 1:58]), 
+# ----------------------------------------------------------- #
+# In HFmrEF
+# ----------------------------------------------------------- #
+NbClust(as.data.frame(HFmrEFpca$scores[, 1:54]), 
         distance = "euclidean", min.nc = 2,
         max.nc = 10, method = "kmeans")
+
+# ----------------------------------------------------------- #
+# Plot pca clusters
+# ----------------------------------------------------------- #
+pca.cluster.plot(HFpEFpca, ncp = 66,km.clust = 3,hc.clust = 2)
+pca.cluster.plot(HFmrEFpca, ncp = 54, km.clust = 2, hc.clust=2)
 
 # ----------------------------------------------------------- #
