@@ -188,14 +188,13 @@ move.columns <- function(from.mat, to.mat, column.name){
 
 # ----------------------------------------------------------- #
 split.matrix <- function(data){
-  #' Split matrix in two at a defined column number. 
+  #' Split matrix in two parts. 
   #' 
-  #' @description This function splits a matrix into two at a
-  #' predefined column number. Both halfs can be accessed by 
-  #' the user as an output.
+  #' @description This function splits a matrix into two parts. 
+  #' Both halfs can be accessed by the user as an output.
   #' 
   #' @param data matrix. Matrix like object
-  #' matrix.
+  #' 
   #' @note The function assumes that the input matrix has more
   #' than one column.
 
@@ -228,6 +227,33 @@ data.bounds <- function(data, lower.bound, upper.bound){
   upper <- rep(upper.bound, len)
   outp <- cbind(column.number, lower, upper)
   outp
+}
+
+# ----------------------------------------------------------- #
+boot.em.impute <- function(data, bounds, n.boot = 30){
+  #' Impute data using a mean collapsing bootstrapped EM 
+  #' algorithm.
+  #' 
+  #' @description This function imputes a data matrix using the
+  #' bootstrapped EM algorihm from the Amalie II package. The 
+  #' algorithm creates n.boot number of bootstrapped datasets 
+  #' after which the datasets are collapsed into one dataset
+  #' using the mean of all imputted values as final estimate 
+  #' of the given missing value.
+  #' 
+  #' @param data matrix. Matrix like object
+  #' @param bounds matrix. Three column matrix of the form 
+  #' c(column.number, lower.bound,upper.bound).
+  #' @param n.boot numeric. Number of bootstrapped datasets 
+  #' to create.
+
+  data.em = list()
+  for (i in 1:n.boot){
+    print(paste("Bootstrap: ", i, " (", i/m*100, " %)",sep=""))
+    data.em[[i]] <- amelia(data, m = 1, p2s = 0, 
+                           bounds = bounds)$imputations$imp1
+  }
+  Reduce("+", data.em) / n.boot
 }
 
 # ----------------------------------------------------------- #
@@ -378,21 +404,15 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
   data <- as.data.frame(pca$scores[,1:ncp])
   sdev <- pca$sdev 
   cdev <- cumsum(sdev^2 / sum(sdev^2))
-  
-  subt <- paste("Cumulative variance: ", 
-                round(cdev[ncp], digits))
-  hc.title <- labs(title = paste("Hierarchical Clustering on",
-                                 ncp, "Principle Components"), 
-                   subtitle = subt) 
+  subt <- paste("Cum.variance: ",round(cdev[ncp], digits))
+  hc.title <- labs(title=paste("Hierarchical Clustering on",
+              ncp,"Principle Components"),subtitle= subt) 
   km.title <- labs(title = paste("kMeans (k = ", km.clust, 
-                                 ") Clustering on ", ncp, 
-                                 " Principle Components", 
-                                 sep = ""), subtitle = subt)
+              ") Clustering on ", ncp," Principle Components",
+              sep = ""),subtitle = subt)
   hc <- fviz_cluster(HCPC(data, nb.clust = hc.clust, 
-                          graph = F), main = hc.title, 
-                     ellipse = ellipse, 
-                     ellipse.type = ellipse.type, 
-                     ggtheme = ggtheme)
+        graph = F), main = hc.title, ellipse = ellipse, 
+        ellipse.type = ellipse.type,ggtheme = ggtheme)
   cluster <- as.factor(kmeans(data, km.clust)$cluster)
   data <- cbind(data[, 1:2], cluster)
   km <- ggscatter(data, "Comp.1", "Comp.2", 

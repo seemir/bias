@@ -26,30 +26,28 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 # ----------------------------------------------------------- #
 # In HFpEF 
 # ----------------------------------------------------------- #
-cf <- 0.6 # cut.off percentage
-HFpEFind <- rm.missing(HFpEFmatInd, cut.off = cf, 
+CutOff <- 0.52 # cut.off percentage
+HFpEFind <- rm.missing(HFpEFmatInd, cut.off = CutOff, 
                        near.zero.var = F)
-HFpEFcon <- rm.missing(HFpEFmatNoInd, cut.off = cf)
-HFpEFconFirstHalf <- split.matrix(HFpEFcon)$first.half
-HFpEFconSecondHalf <- split.matrix(HFpEFcon)$second.half
-HFpEFlis <- list(HFpEFind, HFpEFconFirstHalf, 
-                 HFpEFconSecondHalf)
-HFpEFmcar <- do.call(rbind, lapply(HFpEFlis, little.mcar))
+HFpEFcon <- rm.missing(HFpEFmatNoInd, cut.off = CutOff)
+FirstHFpEFcon <- split.matrix(HFpEFcon)$first.half
+SecondHFpEFcon <- split.matrix(HFpEFcon)$second.half
+HFpEFlist <- list(HFpEFind, FirstHFpEFcon, SecondHFpEFcon)
+HFpEFmcar <- do.call(rbind, lapply(HFpEFlist, little.mcar))
 HFpEFmcarNames <- c("indicator","continuous_1", "continuous_2")
 rownames(HFpEFmcar) <- HFpEFmcarNames
 
 # ----------------------------------------------------------- #
 # In HFmrEF 
 # ----------------------------------------------------------- #
-HFmrEFind <- rm.missing(HFmrEFmatInd, cut.off = cf,
+HFmrEFind <- rm.missing(HFmrEFmatInd, cut.off = CutOff,
                         near.zero.var = F)
-HFmrEFcon <- rm.missing(HFmrEFmatNoInd, cut.off = cf)
-HFmrEFconFirstHalf <- split.matrix(HFmrEFcon)$first.half
-HFmrEFconSecondHalf <- split.matrix(HFmrEFcon)$second.half
-HFmrEFlis <- list(HFmrEFind, HFmrEFconFirstHalf, 
-                  HFmrEFconSecondHalf)
-HFmrEFmcar <- do.call(rbind, lapply(HFmrEFlis, little.mcar))
-HFmrEFmcarNames <-c("indicator","continuous_1","continuous_2")
+HFmrEFcon <- rm.missing(HFmrEFmatNoInd, cut.off = CutOff)
+FirstHFmrEFcon <- split.matrix(HFmrEFcon)$first.half
+SecondHFmrEFcon <- split.matrix(HFmrEFcon)$second.half
+HFmrEFlist <- list(HFmrEFind, FirstHFmrEFcon, SecondHFmrEFcon)
+HFmrEFmcar <- do.call(rbind, lapply(HFmrEFlist, little.mcar))
+HFmrEFmcarNames <- c("indicator","continuous_1","continuous_2")
 rownames(HFmrEFmcar) <- HFmrEFmcarNames
 xtable(rbind(HFpEFmcar, HFmrEFmcar), digits = c(0,0,0,4,0,5))
 
@@ -65,29 +63,22 @@ top.n.missing(cbind(HFmrEFcon, HFmrEFind), n = 10)
 # Impute the non-indicator variables with the Bootstrap
 # EM algorithm. 
 # ----------------------------------------------------------- #
-m <- 30 # number of bootstrap samples
-HFpEFconImpEmlis <- list() 
-HFmrEFconImpEmlis <- list()
-HFpEFconFirstBound <- data.bounds(HFpEFconFirstHalf, 0, Inf)
-HFpEFconSecondBound <- data.bounds(HFpEFconSecondHalf, 0, Inf)
-HFmrEFconFirstBound <- data.bounds(HFmrEFconFirstHalf, 0, Inf)
-HFmrEFconSecondBound<-data.bounds(HFmrEFconSecondHalf, 0, Inf)
-
-for (i in 1:m){
-  print(paste("Bootstrap: ", i, " (", i/m*100," %)",sep =""))
-  HFpEFfirstEM <- amelia(HFpEFconFirstHalf, m = 1, p2s = 0, 
-                bounds = HFpEFconFirstBound)$imputations$imp1
-  HFpEFsecondEM <-amelia(HFpEFconSecondHalf, m = 1, p2s = 0,
-                bounds = HFpEFconSecondBound)$imputations$imp1
-  HFmrEFfirstEM <-amelia(HFmrEFconFirstHalf, m = 1, p2s = 0, 
-                bounds = HFmrEFconFirstBound)$imputations$imp1
-  HFmrEFsecondEM<-amelia(HFmrEFconSecondHalf, m = 1, p2s = 0,
-                bounds = HFmrEFconSecondBound)$imputations$imp1  
-  HFpEFconImpEmlis[[i]] <- cbind(HFpEFfirstEM, HFpEFsecondEM)  
-  HFmrEFconImpEmlis[[i]]<-cbind(HFmrEFfirstEM, HFmrEFsecondEM)  
-}
-HFpEFconImpEm <- Reduce("+", HFpEFconImpEmlis) / m
-HFmrEFconImpEm <- Reduce("+", HFmrEFconImpEmlis) / m
+m <- 50 # number of bootstrap samples
+HFpEFconImpEmList <- HFmrEFconImpEmList <- list()
+FirstHFpEFBound   <- data.bounds(FirstHFpEFcon, 0, Inf)
+SecondHFpEFBound  <- data.bounds(SecondHFpEFcon, 0, Inf)
+FirstHFmrEFBound  <- data.bounds(FirstHFmrEFcon, 0, Inf)
+SecondHFmrEFBound <- data.bounds(SecondHFmrEFcon, 0, Inf)
+HFpEFfirstEM <- boot.em.impute(FirstHFpEFcon, 
+                bounds = FirstHFpEFBound, n.boot = m)
+HFpEFsecondEM <- boot.em.impute(SecondHFpEFcon, 
+                 bounds = SecondHFpEFBound, n.boot = m)
+HFmrEFfirstEM <- boot.em.impute(FirstHFmrEFcon, 
+                 bounds = FirstHFmrEFBound, n.boot = m)
+HFmrEFsecondEM <- boot.em.impute(SecondHFmrEFcon, 
+                  bounds = SecondHFmrEFBound, n.boot = m)
+HFpEFconImpEm <- cbind(HFpEFfirstEM, HFpEFsecondEM)
+HFmrEFconImpEm <- cbind(HFmrEFfirstEM, HFmrEFsecondEM)
 
 # ----------------------------------------------------------- #
 # Impute the indicator variables with classification and 

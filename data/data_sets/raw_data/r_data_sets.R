@@ -8,6 +8,7 @@ Packages <- c("R.matlab", "data.table","stringr")
 # Load relevant packages
 # ----------------------------------------------------------- #
 lapply(Packages, library, character.only = TRUE)
+source("../source/_helper_func.R")
 
 # ----------------------------------------------------------- #
 # Read matlab files into R
@@ -135,4 +136,9 @@ c("patientid", "patientgroup", "deceased", "readmitted")
 save(HFpEFoutcomes, file='outcomes_HFpEF.Rdat')
 save(HFmrEFoutcomes,file='outcomes_HFmrEF.Rdat')
 
+# ----------------------------------------------------------- #
+# Create one file with all the common variables in both 
+# HFpEF and HFmrEF data sets.
+# ----------------------------------------------------------- #
+# Add syndrome class as variable
 # ----------------------------------------------------------- #

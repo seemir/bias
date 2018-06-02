@@ -143,10 +143,10 @@ riskFactHFpEF <- c("a-fib", "copdasthma", "irondef",
                    "obesity", "obesitybmi30", "nyhaclass", 
                    "dm","ihd", "osa")
 comorHFpEF <- c("comorbidities")
-ecgHFpEF <- c( "ecgblock","ecgblockcomment","ecgqrsduration", 
-                "ecgqrsother","ecgrate","ecgrhythmother","twi", 
-                "lvh","normalecgqrs", "lbbb", "rbbb", "lvhlev",
-                "sr")
+ecgHFpEF <- c("ecgblock","ecgblockcomment","ecgqrsduration", 
+              "ecgqrsother","ecgrate","ecgrhythmother","twi", 
+              "lvh","normalecgqrs", "lbbb", "rbbb", "lvhlev",
+              "sr")
 labTestHFpEF <- c("albumin", "hb", "hba1c", "wbc", "tsat",
                   "glucose", "plts", "pcv", "ferritin",
                   "k", "ironlevels", "chol", "ntprobnp",
@@ -245,13 +245,13 @@ print(xtable(cbind(tabOutHFpEF, tabOutHFmrEF)),
 # In HFpEF 
 # ----------------------------------------------------------- #
 HFpEFmiss <- top.n.missing(cbind(HFpEFmatInd, 
-                                 HFpEFmatNoInd), 10)
+                                 HFpEFmatNoInd), 11)
 
 # ----------------------------------------------------------- #
 # In HFmrEF 
 # ----------------------------------------------------------- #
 HFmrEFmiss <- top.n.missing(cbind(HFmrEFmatInd,
-                                  HFmrEFmatNoInd),10)
+                                  HFmrEFmatNoInd),11)
 
 # ----------------------------------------------------------- #
 # Combine missing values table and convert to Latex code
