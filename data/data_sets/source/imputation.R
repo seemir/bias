@@ -26,7 +26,7 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 # ----------------------------------------------------------- #
 # In HFpEF 
 # ----------------------------------------------------------- #
-CutOff <- 0.52 # cut.off percentage
+CutOff <- 0.6 # cut.off percentage
 HFpEFind <- rm.missing(HFpEFmatInd, cut.off = CutOff, 
                        near.zero.var = F)
 HFpEFcon <- rm.missing(HFpEFmatNoInd, cut.off = CutOff)

@@ -28,7 +28,7 @@ HFmrEFpca <- princomp(as.matrix(HFmrEF), cor = T)
 # ----------------------------------------------------------- #
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFpEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFpEFpca, 56, title = "HFpEF")
+pca.var.plot(HFpEFpca, 57, title = "HFpEF")
 dev.off()
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFmrEF.tex",
     width = 10, height = 9)
@@ -54,9 +54,7 @@ NbClust(as.data.frame(HFmrEFpca$scores[, 1:47]),
 # ----------------------------------------------------------- #
 # Plot pca clusters
 # ----------------------------------------------------------- #
-pca.cluster.plot(HFpEFpca, ncp = 2, km.clust = 3,hc.clust = 3,
-                 ellipse = F)
-pca.cluster.plot(HFmrEFpca, ncp = 2, km.clust = 3, hc.clust=2,
-                 ellipse = F)
+pca.cluster.plot(HFpEFpca, ncp = 2, km.clust = 3,hc.clust = 3)
+pca.cluster.plot(HFmrEFpca, ncp = 2, km.clust = 3, hc.clust=2)
 
 # ----------------------------------------------------------- #

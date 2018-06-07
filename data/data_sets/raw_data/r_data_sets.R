@@ -71,10 +71,115 @@ colnames(HFpEFmat) <- tolower(colnames(HFpEFmat))
 colnames(HFmrEFmat) <- tolower(colnames(HFmrEFmat))
 
 # ----------------------------------------------------------- #
-# Save the matrices as .Rdat
+# Rename dupblicate names in variables af and ar
 # ----------------------------------------------------------- #
-save(HFpEFmat, file='data_use_HFpEF.Rdat')
-save(HFmrEFmat, file='data_use_HFmrEF.Rdat')
+if(all(colnames(HFmrEFmat)[c(3,5)] == c("af", "ar"))){
+  colnames(HFmrEFmat)[c(3,5)] <- c("a-fib", "ai")  
+}
+# ----------------------------------------------------------- #
+if(all(colnames(HFpEFmat)[c(4,8)] == c("af", "ar"))){
+  colnames(HFpEFmat)[c(4,8)] <- c("a-fib", "ai")
+}
+
+# ----------------------------------------------------------- #
+# Address error in HFmrEF - lvef data point nr. 1
+# ----------------------------------------------------------- #
+HFmrEFmat[1, "lvef"] <- 40.45
+
+# ----------------------------------------------------------- #
+# Replace NaN values with NA using the make_na function
+# ----------------------------------------------------------- #
+HFpEFmat <- make.na(HFpEFmat)
+HFmrEFmat <- make.na(HFmrEFmat)
+
+# ----------------------------------------------------------- #
+# Store indicator and non-indicator variables in seperate
+# variables using the rm_indicator function
+# ----------------------------------------------------------- #
+HFpEFrmInd <- rm.indicator(HFpEFmat, n.uniq = 5)
+HFmrEFrmInd <- rm.indicator(HFmrEFmat, n.uniq = 5)
+
+# ----------------------------------------------------------- #
+# Store the non-indicator variables for later
+# ----------------------------------------------------------- #
+HFpEFmatNoInd <- HFpEFrmInd$non.indicator
+HFmrEFmatNoInd <- HFmrEFrmInd$non.indicator
+
+# ----------------------------------------------------------- #
+# Store the indicator variables for later
+# ----------------------------------------------------------- #
+HFpEFmatInd <- HFpEFrmInd$indicator
+HFmrEFmatInd <- HFmrEFrmInd$indicator
+
+# ----------------------------------------------------------- #
+# Move some variables between matrices
+# ----------------------------------------------------------- #
+# Change RVfunction from non-indicator to indicator variable
+# ----------------------------------------------------------- #
+HFpEFrv <- move.columns(HFpEFmatNoInd, HFpEFmatInd,
+                        "rvfunction")
+HFpEFmatInd <- HFpEFrv$to.mat
+HFpEFmatNoInd <- HFpEFrv$from.mat
+
+# ----------------------------------------------------------- #
+HFmrEFrv <- move.columns(HFmrEFmatNoInd, HFmrEFmatInd, 
+                         "rvfunction")
+HFmrEFmatInd<- HFmrEFrv$to.mat
+HFmrEFmatNoInd <- HFmrEFrv$from.mat
+
+# ----------------------------------------------------------- #
+# Change BmIadmission from indicator variable to non_indicator 
+# variable
+# ----------------------------------------------------------- #
+HFmrEFbmi <- move.columns(HFmrEFmatInd, HFmrEFmatNoInd, 
+                          "bmiadmission")
+HFmrEFmatInd <- HFmrEFbmi$from.mat
+HFmrEFmatNoInd <- HFmrEFbmi$to.mat
+
+# ----------------------------------------------------------- #
+# Change nyhaclass from non-indicator to indicator variable
+# ----------------------------------------------------------- #
+HFpEFnyhaClass <- move.columns(HFpEFmatNoInd, HFpEFmatInd,
+                               "nyhaclass")
+HFpEFmatInd <- HFpEFnyhaClass$to.mat
+HFpEFmatNoInd <- HFpEFnyhaClass$from.mat
+
+# ----------------------------------------------------------- #
+# Convert zeros to missings, the following variables are not to 
+# be converted.
+# ----------------------------------------------------------- #
+notZerosHFpEF <- c("comorbidities", "weightchange", 
+                   "daysfollowupdischarge", "timetonextadm")
+notZerosHFmrEF <- c("numbercomorditiesnoida","comorbidities", 
+                    "timetoadmission", "timetoecho", 
+                    "timetofollowupfrombnp", 
+                    "timetofollowupfromdischarge",
+                    "timetofirstcardiachospitalisation")
+HFpEFmatNoInd <- zero.to.na(HFpEFmatNoInd, notZerosHFpEF)
+HFmrEFmatNoInd <- zero.to.na(HFmrEFmatNoInd, notZerosHFmrEF)
+
+# ----------------------------------------------------------- #
+# Concatinate the indicator and non-indicator variables
+# ----------------------------------------------------------- #
+HFpEFmat <- cbind(HFpEFmatNoInd, HFpEFmatInd)
+HFmrEFmat <- cbind(HFmrEFmatNoInd, HFmrEFmatInd)
+
+# ----------------------------------------------------------- #
+# Save all matrices as .Rdat in data_files folder
+# ----------------------------------------------------------- #
+save(HFpEFmat,
+     file='../source/data_files/data_use_HFpEF.Rdat')
+save(HFpEFmatInd, 
+     file = '../source/data_files/HFpEF_ind_var.Rdat')
+save(HFpEFmatNoInd, 
+     file = '../source/data_files/HFpEF_not_ind.Rdat')
+# ----------------------------------------------------------- #
+save(HFmrEFmat,
+     file='../source/data_files/data_use_HFmrEF.Rdat')
+save(HFmrEFmatInd, 
+     file = '../source/data_files/HFmrEF_ind_var.Rdat')
+save(HFmrEFmatNoInd, 
+     file = '../source/data_files/HFmrEF_not_ind.Rdat')
 
 # ----------------------------------------------------------- #
 # Re-code patient group labels
@@ -133,12 +238,53 @@ c("patientid", "patientgroup", "deceased", "readmitted")
 # ----------------------------------------------------------- #
 # Save the matrices as .Rdat file
 # ----------------------------------------------------------- #
-save(HFpEFoutcomes, file='outcomes_HFpEF.Rdat')
-save(HFmrEFoutcomes,file='outcomes_HFmrEF.Rdat')
+save(HFpEFoutcomes,
+     file='../source/data_files/outcomes_HFpEF.Rdat')
+save(HFmrEFoutcomes,
+     file='../source/data_files/outcomes_HFmrEF.Rdat')
 
 # ----------------------------------------------------------- #
 # Create one file with all the common variables in both 
 # HFpEF and HFmrEF data sets.
 # ----------------------------------------------------------- #
+# Find common columns in both data sets
+# ----------------------------------------------------------- #
+HFpEFcol <- colnames(HFpEFmat) %in% colnames(HFmrEFmat)
+HFmrEFcol <- colnames(HFmrEFmat) %in% colnames(HFpEFmat)
+
+HFpEFsame <- HFpEFmat[, HFpEFcol]
+HFmrEFsame  <- HFmrEFmat[, HFmrEFcol]
+rm(HFpEFcol, HFmrEFcol)
+
+# ----------------------------------------------------------- #
+# Sort columns
+# ----------------------------------------------------------- #
+HFpEFsame <- HFpEFsame[, sort(colnames(HFpEFsame[,-1]))]
+HFmrEFsame <- HFmrEFsame[, sort(colnames(HFmrEFsame[,-1]))]
+
+# ----------------------------------------------------------- #
 # Add syndrome class as variable
+# ----------------------------------------------------------- #
+HFpEFcol <- as.matrix(rep("HFpEF", nrow(HFpEFsame)))
+colnames(HFpEFcol) <- "syndrome"
+HFpEFsame <- cbind(HFpEFcol, HFpEFsame[,-1])
+
+HFmrEFcol <- as.matrix(rep("HFmrEF", nrow(HFmrEFsame)))
+colnames(HFmrEFcol) <- "syndrome"
+HFmrEFsame <- cbind(HFmrEFcol, HFmrEFsame[,-1])
+rm(HFpEFcol, HFmrEFcol)
+
+# ----------------------------------------------------------- #
+# Add patient id and create full data set
+# ----------------------------------------------------------- #
+HFfullDataSet <- rbind(HFpEFsame, HFmrEFsame)
+IdCol <- seq(1, nrow(HFfullDataSet))
+HFfullDataSet <- cbind(IdCol, HFfullDataSet)
+
+# ----------------------------------------------------------- #
+# Save full data set
+# ----------------------------------------------------------- #
+save(HFfullDataSet, 
+     file='../source/data_files/HF_full_data_set.Rdat')
+
 # ----------------------------------------------------------- #

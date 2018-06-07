@@ -13,96 +13,8 @@ source("_helper_func.R")
 # ----------------------------------------------------------- #
 # Load HFpEF and HFmrEF datafiles
 # ----------------------------------------------------------- #
-load("../raw_data/data_use_HFpEF.Rdat") 
-load("../raw_data/data_use_HFmrEF.Rdat") 
-
-# ----------------------------------------------------------- #
-# Rename dupblicate names in variables af and ar
-# ----------------------------------------------------------- #
-if(all(colnames(HFmrEFmat)[c(3,5)] == c("af", "ar"))){
-  colnames(HFmrEFmat)[c(3,5)] <- c("a-fib", "ai")  
-}
-# ----------------------------------------------------------- #
-if(all(colnames(HFpEFmat)[c(4,8)] == c("af", "ar"))){
-  colnames(HFpEFmat)[c(4,8)] <- c("a-fib", "ai")
-}
-
-# ----------------------------------------------------------- #
-# Address error in HFmrEF - lvef data point nr. 1
-# ----------------------------------------------------------- #
-HFmrEFmat[1, "lvef"] <- 40.45
-
-# ----------------------------------------------------------- #
-# Replace NaN values with NA using the make_na function
-# ----------------------------------------------------------- #
-HFpEFmat <- make.na(HFpEFmat)
-HFmrEFmat <- make.na(HFmrEFmat)
-
-# ----------------------------------------------------------- #
-# Store indicator and non-indicator variables in seperate
-# variables using the rm_indicator function
-# ----------------------------------------------------------- #
-HFpEFrmInd <- rm.indicator(HFpEFmat, n.uniq = 5)
-HFmrEFrmInd <- rm.indicator(HFmrEFmat, n.uniq = 5)
-
-# ----------------------------------------------------------- #
-# Store the non-indicator variables for later
-# ----------------------------------------------------------- #
-HFpEFmatNoInd <- HFpEFrmInd$non.indicator
-HFmrEFmatNoInd <- HFmrEFrmInd$non.indicator
-
-# ----------------------------------------------------------- #
-# Store the indicator variables for later
-# ----------------------------------------------------------- #
-HFpEFmatInd <- HFpEFrmInd$indicator
-HFmrEFmatInd <- HFmrEFrmInd$indicator
-
-# ----------------------------------------------------------- #
-# Move some variables between matrices
-# ----------------------------------------------------------- #
-# Change RVfunction from non-indicator to indicator variable
-# ----------------------------------------------------------- #
-HFpEFrv <- move.columns(HFpEFmatNoInd, HFpEFmatInd,
-                        "rvfunction")
-HFpEFmatInd <- HFpEFrv$to.mat
-HFpEFmatNoInd <- HFpEFrv$from.mat
-
-# ----------------------------------------------------------- #
-HFmrEFrv <- move.columns(HFmrEFmatNoInd, HFmrEFmatInd, 
-                         "rvfunction")
-HFmrEFmatInd<- HFmrEFrv$to.mat
-HFmrEFmatNoInd <- HFmrEFrv$from.mat
-
-# ----------------------------------------------------------- #
-# Change BmIadmission from indicator variable to non_indicator 
-# variable
-# ----------------------------------------------------------- #
-HFmrEFbmi <- move.columns(HFmrEFmatInd, HFmrEFmatNoInd, 
-                           "bmiadmission")
-HFmrEFmatInd <- HFmrEFbmi$from.mat
-HFmrEFmatNoInd <- HFmrEFbmi$to.mat
-
-# ----------------------------------------------------------- #
-# Change nyhaclass from non-indicator to indicator variable
-# ----------------------------------------------------------- #
-HFpEFnyhaClass <- move.columns(HFpEFmatNoInd, HFpEFmatInd,
-                               "nyhaclass")
-HFpEFmatInd <- HFpEFnyhaClass$to.mat
-HFpEFmatNoInd <- HFpEFnyhaClass$from.mat
-
-# ----------------------------------------------------------- #
-# Convert zeros to missings, the following variables are not to 
-# be converted.
-# ----------------------------------------------------------- #
-notZerosHFpEF <- c("comorbidities", "weightchange", 
-                   "daysfollowupdischarge", "timetonextadm")
-notZerosHFmrEF <- c("numbercomorditiesnoida","comorbidities", 
-                    "timetoadmission", "timetoecho", 
-                    "timetofollowupfrombnp", 
-                    "timetofollowupfromdischarge",
-                    "timetofirstcardiachospitalisation")
-HFpEFmatNoInd <- zero.to.na(HFpEFmatNoInd, notZerosHFpEF)
-HFmrEFmatNoInd <- zero.to.na(HFmrEFmatNoInd, notZerosHFmrEF)
+load("data_files/data_use_HFpEF.Rdat") 
+load("data_files/data_use_HFmrEF.Rdat") 
 
 # ----------------------------------------------------------- #
 # Plot of missing values distribution
@@ -111,13 +23,13 @@ pathToImages <- "../../../doc/thesis/images/"
 
 pdf(file=paste(c(pathToImages,"HFpEF_miss_dist.pdf"), 
                collapse = ""))
-aggr(cbind(HFpEFmatNoInd, HFpEFmatInd), plot = T, sortVars = T, 
+aggr(HFpEFmat, plot = T, sortVars = T, 
      bars = F, combined = T, ylabs = "", cex.axis = 0.7)
 dev.off()
 
 pdf(file = paste(c(pathToImages, "HFmrEF_miss_dist.pdf"),
                  collapse = ""))
-aggr(cbind(HFmrEFmatNoInd, HFmrEFmatInd), plot = T, 
+aggr(HFmrEFmat, plot = T, 
      sortVars = T, bars = F, combined = T, ylabs = "", 
      cex.axis = 0.7)
 dev.off()
@@ -226,8 +138,8 @@ tableContinuous(dfHFmrEF, stats = c("n", "na", "min", "max",
 # ----------------------------------------------------------- #
 # Outcomes table
 # ----------------------------------------------------------- #
-load("../raw_data/outcomes_HFpEF.Rdat") 
-load("../raw_data/outcomes_HFmrEF.Rdat") 
+load("data_files/outcomes_HFpEF.Rdat") 
+load("data_files/outcomes_HFmrEF.Rdat") 
 r <- rep("", 5)
 tabOutHFpEF <- rbind(label.summary(HFpEFoutcomes, 2, 
                                    c("Group", "Dead?", 
@@ -242,30 +154,13 @@ print(xtable(cbind(tabOutHFpEF, tabOutHFmrEF)),
 # ----------------------------------------------------------- #
 # Tables of top 10 missing values variables in both data sets
 # ----------------------------------------------------------- #
-# In HFpEF 
-# ----------------------------------------------------------- #
-HFpEFmiss <- top.n.missing(cbind(HFpEFmatInd, 
-                                 HFpEFmatNoInd), 11)
-
-# ----------------------------------------------------------- #
-# In HFmrEF 
-# ----------------------------------------------------------- #
-HFmrEFmiss <- top.n.missing(cbind(HFmrEFmatInd,
-                                  HFmrEFmatNoInd),11)
+HFpEFmiss <- top.n.missing(HFpEFmat, 11)
+HFmrEFmiss <- top.n.missing(HFmrEFmat, 11)
 
 # ----------------------------------------------------------- #
 # Combine missing values table and convert to Latex code
 # ----------------------------------------------------------- #
 xtable(cbind(round(HFpEFmiss,3), rownames(HFmrEFmiss), 
        round(HFmrEFmiss,3)))
-
-# ----------------------------------------------------------- #
-# Save indicator variables and non indicator variables
-# for later imputation
-# ----------------------------------------------------------- #
-save(HFpEFmatInd, file="data_files/HFpEF_ind_var.Rdat")
-save(HFmrEFmatInd, file="data_files/HFmrEF_ind_var.Rdat")
-save(HFpEFmatNoInd, file="data_files/HFpEF_not_ind.Rdat")
-save(HFmrEFmatNoInd, file="data_files/HFmrEF_not_ind.Rdat")
 
 # ----------------------------------------------------------- #
