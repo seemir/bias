@@ -69,3 +69,58 @@ pca.cluster.plot(HFfullpca, 41, hc.clust = 2,
                  actual = SyndClass[-328, 2])
 
 # ----------------------------------------------------------- #
+# Logistic regression
+# ----------------------------------------------------------- #
+library(caret)
+library(plyr)
+
+syndrome <- ifelse(SyndClass[-328, 2]==2, 1, 0)
+dat <- as.data.frame(cbind(syndrome, HFfullpca[-328,])) 
+
+fpr <- NULL # False positive rate
+fnr <- NULL # False negative rate
+k <- 500 # Number of iterations
+
+# Accuracy
+acc <- NULL
+
+for(i in 1:k)
+{
+  # Train-test splitting
+  # 95% of samples -> fitting
+  # 5% of samples -> testing
+  smp_size <- floor(0.95 * nrow(dat))
+  index <- sample(seq_len(nrow(dat)), size=smp_size)
+  train <- dat[index, ]
+  test <- dat[-index, ]
+
+  # Fitting
+  model <- glm(syndrome~.,family=binomial,data=train)
+  
+  # Predict results
+  results_prob <- predict(model, subset(test, select=c(2:55)), 
+                          type='response')
+  
+  # If prob > 0.5 then 1, else 0
+  results <- as.factor(ifelse(results_prob > 0.5, 1, 0))
+  
+  # Actual answers
+  answers <- as.factor(test$syndrome)
+  
+  # Accuracy calculation
+  misClasificError <- mean(answers != results)
+  
+  # Collecting results
+  acc[i] <- 1-misClasificError
+  
+  # Confusion matrix
+  cm <- confusionMatrix(data=results, reference=answers)
+  fpr[i] <- cm$table[2]/(nrow(dat)-smp_size)
+  fnr[i] <- cm$table[3]/(nrow(dat)-smp_size)
+}
+
+# Average accuracy of the model
+acc <- acc[acc != 1]
+mean(acc)
+
+# ----------------------------------------------------------- #
