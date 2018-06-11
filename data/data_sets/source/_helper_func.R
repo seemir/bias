@@ -249,7 +249,8 @@ boot.em.impute <- function(data, bounds, n.boot = 30){
 
   data.em = list()
   for (i in 1:n.boot){
-    print(paste("Bootstrap: ", i, " (", i/m*100, " %)",sep=""))
+    print(paste("Bootstrap: ", i, " (", i/n.boot*100, " %)",
+                sep=""))
     data.em[[i]] <- amelia(data, m = 1, p2s = 0, 
                            bounds = bounds)$imputations$imp1
   }
@@ -375,7 +376,7 @@ pca.var.plot <- function(pca, n.comp=NA, digits=4, title = NA){
 # ----------------------------------------------------------- #
 pca.cluster.plot <- function(pca, ncp, km.clust = 2, 
                              hc.clust = -1, digits = 5,
-                             ellipse = T, 
+                             ellipse = T, actual = NA,
                              ellipse.type = "convex",
                              ggtheme = theme_gray()){
   #' Two side-by-side cluster plots with Hierarchical 
@@ -414,7 +415,12 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
         graph = F), main = hc.title, ellipse = ellipse, 
         ellipse.type = ellipse.type,ggtheme = ggtheme)
   cluster <- as.factor(kmeans(data, km.clust)$cluster)
-  data <- cbind(data[, 1:2], cluster)
+  if (all(is.na(actual))){
+    data <- cbind(data[, 1:2], cluster)    
+  }else{
+    actual <- as.factor(actual)
+    data <- cbind(data[, 1:2], cluster, actual)    
+  }
   km <- ggscatter(data, "Comp.1", "Comp.2", 
                   color = rev("cluster"), 
                   shape = "cluster", ellipse = ellipse, 
@@ -422,7 +428,17 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
                   ggtheme = ggtheme, mean.point = T, 
                   label = seq(nrow(data)),ylab = hc$labels$y,
                   xlab = hc$labels$x) + km.title
-  grid.arrange(hc, km, nrow=1)
+  if (all(is.na(actual))){
+    grid.arrange(hc, km, nrow = 1)
+  }else{
+    act <- ggscatter(data, "Comp.1", "Comp.2",
+                     color = "actual", shape = "actual",
+                     ggtheme = ggtheme,
+                     label = seq(nrow(data)),ylab=hc$labels$y,
+                     xlab = hc$labels$x) +
+      labs(title = "Actual Clustering", subtitle = "")
+    grid.arrange(act, hc, km, nrow = 1)
+  }
 }
 
 # ----------------------------------------------------------- #

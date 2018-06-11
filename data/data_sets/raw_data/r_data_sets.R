@@ -251,7 +251,7 @@ save(HFmrEFoutcomes,
 # ----------------------------------------------------------- #
 HFpEFcol <- colnames(HFpEFmat) %in% colnames(HFmrEFmat)
 HFmrEFcol <- colnames(HFmrEFmat) %in% colnames(HFpEFmat)
-
+# ----------------------------------------------------------- #
 HFpEFsame <- HFpEFmat[, HFpEFcol]
 HFmrEFsame  <- HFmrEFmat[, HFmrEFcol]
 rm(HFpEFcol, HFmrEFcol)
@@ -263,28 +263,25 @@ HFpEFsame <- HFpEFsame[, sort(colnames(HFpEFsame[,-1]))]
 HFmrEFsame <- HFmrEFsame[, sort(colnames(HFmrEFsame[,-1]))]
 
 # ----------------------------------------------------------- #
-# Add syndrome class as variable
+# Create syndrome class matrix
 # ----------------------------------------------------------- #
-HFpEFcol <- as.matrix(rep("HFpEF", nrow(HFpEFsame)))
-colnames(HFpEFcol) <- "syndrome"
-HFpEFsame <- cbind(HFpEFcol, HFpEFsame[,-1])
-
-HFmrEFcol <- as.matrix(rep("HFmrEF", nrow(HFmrEFsame)))
-colnames(HFmrEFcol) <- "syndrome"
-HFmrEFsame <- cbind(HFmrEFcol, HFmrEFsame[,-1])
-rm(HFpEFcol, HFmrEFcol)
+syndrome <- rep(c(2, 1),
+                times = c(nrow(HFpEFmat), nrow(HFmrEFmat)))
 
 # ----------------------------------------------------------- #
-# Add patient id and create full data set
+# Add patient id, create full data set and syndrome classes
 # ----------------------------------------------------------- #
 HFfullDataSet <- rbind(HFpEFsame, HFmrEFsame)
-IdCol <- seq(1, nrow(HFfullDataSet))
-HFfullDataSet <- cbind(IdCol, HFfullDataSet)
+id <- seq(1, nrow(HFfullDataSet))
+HFfullDataSet <- as.data.frame(cbind(id, HFfullDataSet))
+SyndClass <- as.data.frame(cbind(id, syndrome))
 
 # ----------------------------------------------------------- #
 # Save full data set
 # ----------------------------------------------------------- #
 save(HFfullDataSet, 
      file='../source/data_files/HF_full_data_set.Rdat')
+save(SyndClass,
+     file='../source/data_files/syndromes_HF_full.Rdat')
 
 # ----------------------------------------------------------- #
