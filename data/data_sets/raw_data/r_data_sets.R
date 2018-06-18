@@ -231,7 +231,6 @@ colnames(HFpEFoutcomes) <- colnames(HFmrEFoutcomes) <-
 # ----------------------------------------------------------- #
 HFfullOutcomes <- as.data.frame(rbind(HFpEFoutcomes, 
                                       HFmrEFoutcomes))
-HFfullOutcomes <- cbind(SyndClass, HFfullOutcomes[,-1])
 rownames(HFfullOutcomes) <- HFfullOutcomes[,1]
 # ----------------------------------------------------------- #
 HFpEFoutcomes <- HFfullOutcomes[HFpEFrow,]

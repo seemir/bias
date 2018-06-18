@@ -1,7 +1,8 @@
 # ----------------------------------------------------------- #
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
-Packages <- c("reporttools", "VIM", "Hmisc", "xtable")
+Packages <- c("reporttools", "VIM", "Hmisc", "xtable", 
+              "tikzDevice")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -13,23 +14,28 @@ source("_helper_func.R")
 # ----------------------------------------------------------- #
 # Load HFpEF and HFmrEF datafiles
 # ----------------------------------------------------------- #
-load("data_files/data_use_HFpEF.Rdat") 
-load("data_files/data_use_HFmrEF.Rdat") 
+path <- "data_files/"
+fileNames <- c("HFpEFfullDataSet", "HFmrEFfullDataSet",
+               "HFpEFoutcomes", "HFmrEFoutcomes")
+r <- ".Rdat"
+for (file in fileNames){
+  load(paste(path, file, r, sep = ""))
+}
 
 # ----------------------------------------------------------- #
 # Plot of missing values distribution
 # ----------------------------------------------------------- #
 pathToImages <- "../../../doc/thesis/images/"
 
-pdf(file=paste(c(pathToImages,"HFpEF_miss_dist.pdf"), 
+tikz(file=paste(c(pathToImages,"HFpEF_miss_dist.tex"), 
                collapse = ""))
-aggr(HFpEFmat, plot = T, sortVars = T, 
+aggr(HFpEFfullDataSet, plot = T, sortVars = T, 
      bars = F, combined = T, ylabs = "", cex.axis = 0.7)
 dev.off()
 
-pdf(file = paste(c(pathToImages, "HFmrEF_miss_dist.pdf"),
+tikz(file = paste(c(pathToImages, "HFmrEF_miss_dist.tex"),
                  collapse = ""))
-aggr(HFmrEFmat, plot = T, 
+aggr(HFmrEFfullDataSet, plot = T, 
      sortVars = T, bars = F, combined = T, ylabs = "", 
      cex.axis = 0.7)
 dev.off()
@@ -39,123 +45,57 @@ dev.off()
 # ----------------------------------------------------------- #
 # Reorder data matrix by phenotype domains
 # ----------------------------------------------------------- #
-# In HFpEF matrix
-# ----------------------------------------------------------- #
-idHFpEF <- c("patientid")
-demoHFpEF <- c("age", "gender", "white", "asian", "black", 
-              "otherethnicity")
-admSympHFpEF <- c("breathless", "chestpain", "orthopnoea",
-                  "peripheraloedema", "palpdizzyfalls", 
-                  "pnd")
-admSignHFpEF <- c("sbp", "dbp", "map", "admissionwgt", 
-                  "height", "bmiadmission", "weightchange",
-                  "admissionsbnp", "pulse", "bp",
-                  "asympthf", "devicetherapy")
-riskFactHFpEF <- c("a-fib", "copdasthma", "irondef", 
-                   "obesity", "obesitybmi30", "nyhaclass", 
-                   "dm","ihd", "osa")
-comorHFpEF <- c("comorbidities")
-ecgHFpEF <- c("ecgblock","ecgblockcomment","ecgqrsduration", 
-              "ecgqrsother","ecgrate","ecgrhythmother","twi", 
-              "lvh","normalecgqrs", "lbbb", "rbbb", "lvhlev",
-              "sr")
-labTestHFpEF <- c("albumin", "hb", "hba1c", "wbc", "tsat",
-                  "glucose", "plts", "pcv", "ferritin",
-                  "k", "ironlevels", "chol", "ntprobnp",
-                  "gfr", "mcv", "na")
-echoHFpEF <- c("lvef","ewave", "pasp", "tapse", "ea", "ee", 
-                "laterals", "mr", "tr", "as", "awave", 
-                "dilatedlv", "ladiameter", "ai", "laarea",
-                "raarea", "rwma", "calculatede", "rvfunction",
-                "edeceltime", "af")
-outcomesHFpEF <- c("alive", "timefromprevadm", "timetohfadm",
-                   "timetonextadm", "daysfollowupdischarge",
-                   "hfhospitalisation", "daysfollowupbnp",
-                   "los")
+nameOrder <- c("age", "gender", "white", "asian", "black", 
+               "breathless", "sbp", "dbp", "admissionwgt", 
+               "bp", "bmiadmission", "pulse", "a-fib", 
+               "copdasthma", "irondef", "dm", "obesity", 
+               "copdasthma", "ihd", "comorbidities", 
+               "ecgqrsduration", "ecgqrsother", "ecgrate", 
+               "ecgrhythmother", "lvh", "normalecgqrs", "lbbb", 
+               "rbbb", "sr", "hb", "wbc", "tsat", "plts", "pcv", 
+               "ferritin", "k", "ironlevels", "chol", 
+               "ntprobnp", "gfr", "mcv", "na", "lvef", "ewave", 
+               "pasp", "ee", "mr", "tr", "as", "ai", 
+               "rvfunction", "af", "timetohfadm", 
+               "hfhospitalisation", "los")
 
 # ----------------------------------------------------------- #
-# In HFmrEF matrix
+# Descriptive statistics
 # ----------------------------------------------------------- #
-idHFmrEF <- c("patientid")
-demoHFmrEF <- c("age", "gender", "white", "asian", "black", 
-                "other", "mixed")
-admSympHFmrEF <- c("breathless", "st")
-admSignHFmrEF <- c("sbp", "dbp", "admissionwgt", "bp", 
-                   "bmiadmission", "pulse", "sympthf",
-                   "symptlvhf", "symptlvunder", 
-                   "symptomatichfmref", "pathway")
-riskFactHFmrEF <- c("a-fib", "copdasthma", "irondef", "dm", 
-                    "obesity", "copdasthma", "ihd", 
-                    "ar", "both", "cva", "sb", "procedures")
-comorHFmrEF <- c("comorbidities", "numbercomorditiesnoida")
-ecgHFmrEF <- c("ecgqrsduration", "ecgqrsother", "ecgrate",
-               "ecgrhythmother", "lvh", "normalecgqrs","nsr", 
-               "lbbb", "rbbb", "sr")
-labTestHFmrEF <- c("hb", "wbc", "tsat", "plts", "pcv","crp", 
-                   "ferritin", "k", "ironlevels", "chol", 
-                   "ntprobnp", "gfr","mcv","na","troponin")
-echoHFmrEF <- c("lvef","ewave", "pasp", "ee", "mr", "tr", 
-                 "as", "ai", "rvfunction", "checkedee", 
-                 "timetoecho", "ee13diastolic", "af", 
-                 "eagroup", "edecelgroup", "finalla",
-                 "lvhgroup", "lvhandorlae", "e9cms")
-outcomesHFmrEF <- c("timetohfadm", "hfhospitalisation", 
-                    "los", "dischargeweight", "cardiachosp",
-                    "truehf", "timetofollowupfromdischarge",
-                    "timetofirstcardiachospitalisation",
-                    "timetofollowupfrombnp", "newhf")
+capHFpEF <- "Patient characteristics: HFpEF"
+labHFpEF <- "tab:desc_stat_HFpEF"
+tableContinuous(HFpEFfullDataSet[, nameOrder],  
+                stats = c("n", "na", "min", "max", "mean", 
+                          "median", "s", "q1", "q3"),  
+                cap = capHFpEF, lab = labHFpEF)
 
 # ----------------------------------------------------------- #
-# Long descriptive statistics
-# ----------------------------------------------------------- #
-dsHFpEFnames <- c(idHFpEF, demoHFpEF, admSympHFpEF,
-                    admSignHFpEF, riskFactHFpEF,
-                    comorHFpEF, ecgHFpEF, labTestHFpEF,
-                    echoHFpEF, outcomesHFpEF)
-dsHFmrEFnames <- c(idHFmrEF, demoHFmrEF, admSympHFmrEF,
-                    admSignHFmrEF, riskFactHFmrEF,
-                    comorHFmrEF, ecgHFmrEF, labTestHFmrEF,
-                    echoHFmrEF, outcomesHFmrEF)
-
-# ----------------------------------------------------------- #
-dfHFpEF <- as.data.frame(HFpEFmat[,dsHFpEFnames])
-capDescHFpEF <- "Patient characteristics: HFpEF variables"
-labDescHFpEF <- "tab:desc_stat_HFpEF_variables"
-tableContinuous(dfHFpEF, stats = c("n", "na", "min", "max", 
-                                   "mean", "median", "s", "q1",
-                                   "q3"), cap = capDescHFpEF, 
-                lab = labDescHFpEF)
-
-# ----------------------------------------------------------- #
-dfHFmrEF <- as.data.frame(HFmrEFmat[,dsHFmrEFnames])
-capDescHFmrEF <- "Patient characteristics: HFmrEF variables"
-labDescHFmrEF <- "tab:desc_stat_HFmrEF_variables"
-tableContinuous(dfHFmrEF, stats = c("n", "na", "min", "max", 
-                                    "mean", "median", "s", 
-                                    "q1", "q3"), 
-                cap = capDescHFmrEF, lab = labDescHFmrEF)
+capHFmrEF <- "Patient characteristics: HFmrEF"
+labHFmrEF <- "tab:desc_stat_HFmrEF"
+tableContinuous(HFmrEFfullDataSet[, nameOrder], 
+                stats = c("n", "na", "min", "max", "mean", 
+                          "median", "s", "q1", "q3"),  
+                cap = capHFmrEF, lab = labHFmrEF)
 
 # ----------------------------------------------------------- #
 # Outcomes table
 # ----------------------------------------------------------- #
-load("data_files/outcomes_HFpEF.Rdat") 
-load("data_files/outcomes_HFmrEF.Rdat") 
 r <- rep("", 5)
-tabOutHFpEF <- rbind(label.summary(HFpEFoutcomes, 2, 
-                                   c("Group", "Dead?", 
-                                     "Readm?", "n", "% Tot"), 
-                                   3, 5), r, r) 
-tabOutHFmrEF <- label.summary(HFmrEFoutcomes, 
-                              2, c("Group", "Dead?", "Readm?", 
-                                   "n", "% Tot"), 3, 5)
+tabOutHFpEF <- rbind(label.summary(as.matrix(HFpEFoutcomes), 
+                     2, c("Group", "Dead?", "Readm?", "n", 
+                          "% Tot"), 3, 5), r, r)
+
+tabOutHFmrEF <- label.summary(as.matrix(HFmrEFoutcomes), 
+                2, c("Group", "Dead?", "Readm?", 
+                     "n", "% Tot"), 3, 5)
 print(xtable(cbind(tabOutHFpEF, tabOutHFmrEF)), 
                    include.rownames = F)
 
 # ----------------------------------------------------------- #
 # Tables of top 10 missing values variables in both data sets
 # ----------------------------------------------------------- #
-HFpEFmiss <- top.n.missing(HFpEFmat, 11)
-HFmrEFmiss <- top.n.missing(HFmrEFmat, 11)
+HFpEFmiss <- top.n.missing(HFpEFfullDataSet, 10)
+HFmrEFmiss <- top.n.missing(HFmrEFfullDataSet, 10)
 
 # ----------------------------------------------------------- #
 # Combine missing values table and convert to Latex code
