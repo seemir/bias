@@ -32,7 +32,7 @@ HFfullNoInd <- HFfullRmInd$non.indicator
 # Impute data using Bootstrap EM and CART
 # ----------------------------------------------------------- #
 bnd <- data.bounds(HFfullNoInd[, -1], 0, Inf)
-HFfullEm <- boot.em.impute(HFfullNoInd[, -1], bnd)
+HFfullEm <- boot.em.impute(HFfullNoInd[, -1], bnd, n.boot = 10)
 HFfullCart <- complete(mice(HFfullInd, method = "cart"))
 
 # ----------------------------------------------------------- #
@@ -75,7 +75,7 @@ library(caret)
 library(plyr)
 
 syndrome <- ifelse(SyndClass[-328, 2]==2, 1, 0)
-dat <- as.data.frame(cbind(syndrome, HFfullpca[-328,])) 
+dat <- as.data.frame(cbind(syndrome, HFfullpca$scores)) 
 
 fpr <- NULL # False positive rate
 fnr <- NULL # False negative rate
