@@ -296,7 +296,7 @@ label.summary <- function(labels, label.col, col.names, digits,
   #' unique labels in a labels matrix and the percentage of
   #' all the labels that occure.
   #' 
-  #' @param label matrix. Matrix like object of characters
+  #' @param labels matrix. Matrix like object of characters
   #' @param label.col integer. Column number of primary labels
   #' @param col.names charachter vector. Vector of column 
   #' names
