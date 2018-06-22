@@ -26,13 +26,15 @@ HFmrEFpca <- princomp(as.matrix(HFmrEF), cor = T)
 # ----------------------------------------------------------- #
 # Explained variance plot
 # ----------------------------------------------------------- #
+ncp <- 31
+ncmr <- 23
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFpEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFpEFpca, 57, title = "HFpEF")
+pca.var.plot(HFpEFpca, ncp, title = "HFpEF")
 dev.off()
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFmrEF.tex",
     width = 10, height = 9)
-pca.var.plot(HFmrEFpca, 47, title = "HFmrEF")
+pca.var.plot(HFmrEFpca, ncmr, title = "HFmrEF")
 dev.off()
 
 # ----------------------------------------------------------- #
@@ -40,21 +42,21 @@ dev.off()
 # ----------------------------------------------------------- #
 # In HFpEF
 # ----------------------------------------------------------- #
-NbClust(as.data.frame(HFpEFpca$scores[, 1:56]), 
+NbClust(as.data.frame(HFpEFpca$scores[, 1:ncp]), 
         distance = "euclidean", min.nc = 2,
         max.nc = 10, method = "kmeans")
 
 # ----------------------------------------------------------- #
 # In HFmrEF
 # ----------------------------------------------------------- #
-NbClust(as.data.frame(HFmrEFpca$scores[, 1:47]), 
+NbClust(as.data.frame(HFmrEFpca$scores[, 1:ncmr]), 
         distance = "euclidean", min.nc = 2,
         max.nc = 10, method = "kmeans")
 
 # ----------------------------------------------------------- #
 # Plot pca clusters
 # ----------------------------------------------------------- #
-pca.cluster.plot(HFpEFpca, ncp = 2, km.clust = 3,hc.clust = 3)
-pca.cluster.plot(HFmrEFpca, ncp = 2, km.clust = 3, hc.clust=2)
+pca.cluster.plot(HFpEFpca, ncp = 31, km.clust = 2,hc.clust = 2)
+pca.cluster.plot(HFmrEFpca, ncp = 25, km.clust = 2, hc.clust=2)
 
 # ----------------------------------------------------------- #

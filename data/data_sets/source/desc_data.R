@@ -14,13 +14,11 @@ source("_helper_func.R")
 # ----------------------------------------------------------- #
 # Load HFpEF and HFmrEF datafiles
 # ----------------------------------------------------------- #
-path <- "data_files/"
+path <- "data_files/"; r <- ".Rdat"
 fileNames <- c("HFpEFfullDataSet", "HFmrEFfullDataSet",
                "HFpEFoutcomes", "HFmrEFoutcomes")
-r <- ".Rdat"
-for (file in fileNames){
-  load(paste(path, file, r, sep = ""))
-}
+lapply(gsub(" ", "", paste(path, fileNames, r)), 
+       load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
 # Plot of missing values distribution
@@ -52,7 +50,7 @@ nameOrder <- c("age", "gender", "white", "asian", "black",
                "copdasthma", "ihd", "comorbidities", 
                "ecgqrsduration", "ecgqrsother", "ecgrate", 
                "ecgrhythmother", "lvh", "normalecgqrs", "lbbb", 
-               "rbbb", "sr", "hb", "wbc", "tsat", "plts", "pcv", 
+               "rbbb", "sr", "hb", "wbc", "tsat", "plts","pcv", 
                "ferritin", "k", "ironlevels", "chol", 
                "ntprobnp", "gfr", "mcv", "na", "lvef", "ewave", 
                "pasp", "ee", "mr", "tr", "as", "ai", 
