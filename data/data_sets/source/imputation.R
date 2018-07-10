@@ -14,40 +14,38 @@ source("_helper_func.R")
 # ----------------------------------------------------------- #
 # Load indicator and non indicator variables
 # ----------------------------------------------------------- #
-allDataFiles <- c("HFpEF_ind_var", "HFmrEF_ind_var",
-                  "HFpEF_not_ind", "HFmrEF_not_ind")
+allDataFiles <- c("HFpEFind", "HFmrEFind",
+                  "HFpEFnoInd", "HFmrEFnoInd")
 lapply(gsub(" ", "", paste("data_files/", allDataFiles, 
                            ".Rdat")), load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
 # Little's test to assess for missing completely at random.
-# Remove variables with more than 60% missing values and 
-# that have near zero variance (not for indicator variables).
+# Remove variables with more than a given cut.off missing 
+# values and that have near zero variance (not for indicator 
+# variables).
 # ----------------------------------------------------------- #
 # In HFpEF 
 # ----------------------------------------------------------- #
-CutOff <- 0.6 # cut.off percentage
-HFpEFind <- rm.missing(HFpEFmatInd, cut.off = CutOff, 
+CutOff <- 0.15 # cut.off percentage
+HFpEFind <- rm.missing(HFpEFind, cut.off = CutOff, 
                        near.zero.var = F)
-HFpEFcon <- rm.missing(HFpEFmatNoInd, cut.off = CutOff)
-FirstHFpEFcon <- split.matrix(HFpEFcon)$first.half
-SecondHFpEFcon <- split.matrix(HFpEFcon)$second.half
-HFpEFlist <- list(HFpEFind, FirstHFpEFcon, SecondHFpEFcon)
+HFpEFcon <- rm.missing(HFpEFnoInd, cut.off = CutOff)
+HFpEFlist <- list(HFpEFind, HFpEFcon)
 HFpEFmcar <- do.call(rbind, lapply(HFpEFlist, little.mcar))
-HFpEFmcarNames <- c("indicator","continuous_1", "continuous_2")
+HFpEFmcarNames <- c("indicator","continuous")
 rownames(HFpEFmcar) <- HFpEFmcarNames
 
 # ----------------------------------------------------------- #
 # In HFmrEF 
 # ----------------------------------------------------------- #
-HFmrEFind <- rm.missing(HFmrEFmatInd, cut.off = CutOff,
+CutOff <- 0.25 # cut.off percentage
+HFmrEFind <- rm.missing(HFmrEFind, cut.off = CutOff,
                         near.zero.var = F)
-HFmrEFcon <- rm.missing(HFmrEFmatNoInd, cut.off = CutOff)
-FirstHFmrEFcon <- split.matrix(HFmrEFcon)$first.half
-SecondHFmrEFcon <- split.matrix(HFmrEFcon)$second.half
-HFmrEFlist <- list(HFmrEFind, FirstHFmrEFcon, SecondHFmrEFcon)
+HFmrEFcon <- rm.missing(HFmrEFnoInd, cut.off = CutOff)
+HFmrEFlist <- list(HFmrEFind, HFmrEFcon)
 HFmrEFmcar <- do.call(rbind, lapply(HFmrEFlist, little.mcar))
-HFmrEFmcarNames <- c("indicator","continuous_1","continuous_2")
+HFmrEFmcarNames <- c("indicator","continuous")
 rownames(HFmrEFmcar) <- HFmrEFmcarNames
 xtable(rbind(HFpEFmcar, HFmrEFmcar), digits = c(0,0,0,4,0,5))
 
@@ -63,22 +61,15 @@ top.n.missing(cbind(HFmrEFcon, HFmrEFind), n = 10)
 # Impute the non-indicator variables with the Bootstrap
 # EM algorithm. 
 # ----------------------------------------------------------- #
-m <- 50 # number of bootstrap samples
+m <- 100 # number of bootstrap samples
 HFpEFconImpEmList <- HFmrEFconImpEmList <- list()
-FirstHFpEFBound   <- data.bounds(FirstHFpEFcon, 0, Inf)
-SecondHFpEFBound  <- data.bounds(SecondHFpEFcon, 0, Inf)
-FirstHFmrEFBound  <- data.bounds(FirstHFmrEFcon, 0, Inf)
-SecondHFmrEFBound <- data.bounds(SecondHFmrEFcon, 0, Inf)
-HFpEFfirstEM <- boot.em.impute(FirstHFpEFcon, 
-                bounds = FirstHFpEFBound, n.boot = m)
-HFpEFsecondEM <- boot.em.impute(SecondHFpEFcon, 
-                 bounds = SecondHFpEFBound, n.boot = m)
-HFmrEFfirstEM <- boot.em.impute(FirstHFmrEFcon, 
-                 bounds = FirstHFmrEFBound, n.boot = m)
-HFmrEFsecondEM <- boot.em.impute(SecondHFmrEFcon, 
-                  bounds = SecondHFmrEFBound, n.boot = m)
-HFpEFconImpEm <- cbind(HFpEFfirstEM, HFpEFsecondEM)
-HFmrEFconImpEm <- cbind(HFmrEFfirstEM, HFmrEFsecondEM)
+HFpEFbound   <- data.bounds(HFpEFcon, 0, Inf)
+HFmrEFbound   <- data.bounds(HFmrEFcon, 0, Inf)
+HFpEFconImpEm <- boot.em.impute(HFpEFcon, bounds = HFpEFbound, 
+                                n.boot = m)
+HFmrEFconImpEm <- boot.em.impute(HFmrEFcon, 
+                                 bounds = HFmrEFbound, 
+                                 n.boot = m)
 
 # ----------------------------------------------------------- #
 # Impute the indicator variables with classification and 
@@ -92,6 +83,12 @@ HFmrEFindImpCart <- complete(mice(HFmrEFind,method ="cart"))
 # ----------------------------------------------------------- #
 HFpEF <- cbind(HFpEFconImpEm, HFpEFindImpCart)
 HFmrEF <- cbind(HFmrEFconImpEm, HFmrEFindImpCart)
+
+# ----------------------------------------------------------- #
+# Sort column names
+# ----------------------------------------------------------- #
+HFpEF <- sort.column.names(HFpEF)
+HFmrEF <- sort.column.names(HFmrEF)
 
 # ----------------------------------------------------------- #
 # Save the data files

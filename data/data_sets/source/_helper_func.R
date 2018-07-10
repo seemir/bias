@@ -142,7 +142,7 @@ rm.missing <- function(data, cut.off = 0.8, near.zero.var = T){
   miss.col <- summary.missing(data)$rel.pmv.v
   miss.cut <- miss.col < cut.off
   data <- data[, miss.cut]
-  data
+  return(data)
 }
 
 # ----------------------------------------------------------- #
@@ -183,7 +183,23 @@ move.columns <- function(from.mat, to.mat, column.name){
   from.mat <- from.mat[, colnames(from.mat) != column.name]
   outp <- list(from.mat, to.mat)
   names(outp) <- c("from.mat","to.mat")
-  outp
+  return(outp)
+}
+# ----------------------------------------------------------- #
+sort.column.names <- function(data, id.col = T){
+  #' Sorts columns from data
+  #' 
+  #' @description This function sorts the columns names of an
+  #' matrix like object.
+  #' 
+  #' @param data matrix. Matrix with columns names
+  #' @id.col boolean. Logical indicating if data contains 
+  #' an id column.
+
+  sort.names <- sort(colnames(data))
+  id <- if(id.col){data[,1]}
+  data <- cbind(id, data[, sort.names])
+  return(data)
 }
 
 # ----------------------------------------------------------- #
@@ -206,7 +222,7 @@ split.matrix <- function(data){
   second.half <- data[, (mid+1):end]
   outp <- list(first.half, second.half)
   names(outp) <- c("first.half", "second.half")
-  outp
+  return(outp)
 }
 
 # ----------------------------------------------------------- #
@@ -226,7 +242,7 @@ data.bounds <- function(data, lower.bound, upper.bound){
   lower <- rep(lower.bound, len)
   upper <- rep(upper.bound, len)
   outp <- cbind(column.number, lower, upper)
-  outp
+  return(outp)
 }
 
 # ----------------------------------------------------------- #
@@ -254,7 +270,7 @@ boot.em.impute <- function(data, bounds, n.boot = 30){
     data.em[[i]] <- amelia(data, m = 1, p2s = 0, 
                            bounds = bounds)$imputations$imp1
   }
-  Reduce("+", data.em) / n.boot
+  return(Reduce("+", data.em) / n.boot)
 }
 
 # ----------------------------------------------------------- #
