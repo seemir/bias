@@ -157,8 +157,8 @@ HFfullDataSet <- cbind(id, HFfullDataSet)
 HFpEFrow <- SyndClass[,3] == "HFpEF"
 HFmrEFrow <- SyndClass[,3] == "HFmrEF"
 # ----------------------------------------------------------- #
-HFpEFfullDataSet <- HFfullDataSet[HFpEFrow,]
-HFmrEFfullDataSet <- HFfullDataSet[HFmrEFrow,]
+HFpEFdataSet <- HFfullDataSet[HFpEFrow,]
+HFmrEFdataSet <- HFfullDataSet[HFmrEFrow,]
 
 # ----------------------------------------------------------- #
 # Non-indicator variables
@@ -241,8 +241,8 @@ HFmrEFoutcomes <- HFfullOutcomes[HFmrEFrow,]
 # ----------------------------------------------------------- #
 path <- "../source/data_files/"; r <- ".Rdat"
 fileNames <- c("HFfullDataSet", "HFfullNoInd", "HFfullInd", 
-               "HFpEFfullDataSet", "HFpEFnoInd", "HFpEFind", 
-               "HFmrEFfullDataSet", "HFmrEFnoInd", "HFmrEFind",
+               "HFpEFdataSet", "HFpEFnoInd", "HFpEFind", 
+               "HFmrEFdataSet", "HFmrEFnoInd", "HFmrEFind",
                "HFfullOutcomes", "HFpEFoutcomes", 
                "HFmrEFoutcomes", "SyndClass")
 for (name in fileNames){

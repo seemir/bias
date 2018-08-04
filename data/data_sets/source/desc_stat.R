@@ -15,8 +15,9 @@ source("_helper_func.R")
 # Load HFpEF and HFmrEF datafiles
 # ----------------------------------------------------------- #
 path <- "data_files/"; r <- ".Rdat"
-fileNames <- c("HFpEFfullDataSet", "HFmrEFfullDataSet",
-               "HFpEFoutcomes", "HFmrEFoutcomes")
+fileNames <- c("HFpEFdataSet", "HFmrEFdataSet",
+               "HFpEFoutcomes", "HFmrEFoutcomes",
+               "HFfullDataSet", "HFfullOutcomes")
 lapply(gsub(" ", "", paste(path, fileNames, r)), 
        load,.GlobalEnv)
 
@@ -27,13 +28,13 @@ pathToImages <- "../../../doc/thesis/images/"
 
 tikz(file=paste(c(pathToImages,"HFpEF_miss_dist.tex"), 
                collapse = ""))
-aggr(HFpEFfullDataSet, plot = T, sortVars = T, 
+aggr(HFpEFdataSet, plot = T, sortVars = T, 
      bars = F, combined = T, ylabs = "", cex.axis = 0.7)
 dev.off()
 
 tikz(file = paste(c(pathToImages, "HFmrEF_miss_dist.tex"),
                  collapse = ""))
-aggr(HFmrEFfullDataSet, plot = T, 
+aggr(HFmrEFdataSet, plot = T, 
      sortVars = T, bars = F, combined = T, ylabs = "", 
      cex.axis = 0.7)
 dev.off()
@@ -62,7 +63,7 @@ nameOrder <- c("age", "gender", "white", "asian", "black",
 # ----------------------------------------------------------- #
 capHFpEF <- "Patient characteristics: HFpEF"
 labHFpEF <- "tab:desc_stat_HFpEF"
-tableContinuous(HFpEFfullDataSet[, nameOrder],  
+tableContinuous(HFpEFdataSet[, nameOrder],  
                 stats = c("n", "na", "min", "max", "mean", 
                           "median", "s", "q1", "q3"),  
                 cap = capHFpEF, lab = labHFpEF)
@@ -70,7 +71,7 @@ tableContinuous(HFpEFfullDataSet[, nameOrder],
 # ----------------------------------------------------------- #
 capHFmrEF <- "Patient characteristics: HFmrEF"
 labHFmrEF <- "tab:desc_stat_HFmrEF"
-tableContinuous(HFmrEFfullDataSet[, nameOrder], 
+tableContinuous(HFmrEFdataSet[, nameOrder], 
                 stats = c("n", "na", "min", "max", "mean", 
                           "median", "s", "q1", "q3"),  
                 cap = capHFmrEF, lab = labHFmrEF)
@@ -79,6 +80,11 @@ tableContinuous(HFmrEFfullDataSet[, nameOrder],
 # Outcomes table
 # ----------------------------------------------------------- #
 r <- rep("", 5)
+
+tabOutHFfull <- rbind(label.summary(as.matrix(HFfullOutcomes),
+                      2, cbind("Group", "Dead?", "Readm?", "n",
+                               "%Tot"), 3, 5))
+
 tabOutHFpEF <- rbind(label.summary(as.matrix(HFpEFoutcomes), 
                      2, c("Group", "Dead?", "Readm?", "n", 
                           "% Tot"), 3, 5), r, r)
@@ -86,18 +92,22 @@ tabOutHFpEF <- rbind(label.summary(as.matrix(HFpEFoutcomes),
 tabOutHFmrEF <- label.summary(as.matrix(HFmrEFoutcomes), 
                 2, c("Group", "Dead?", "Readm?", 
                      "n", "% Tot"), 3, 5)
+
+print(xtable(tabOutHFfull), include.rownames = F)
 print(xtable(cbind(tabOutHFpEF, tabOutHFmrEF)), 
                    include.rownames = F)
 
 # ----------------------------------------------------------- #
 # Tables of top 10 missing values variables in both data sets
 # ----------------------------------------------------------- #
-HFpEFmiss <- top.n.missing(HFpEFfullDataSet, 10)
-HFmrEFmiss <- top.n.missing(HFmrEFfullDataSet, 10)
+HFfullMiss <- top.n.missing(HFfullDataSet, 10)
+HFpEFmiss <- top.n.missing(HFpEFdataSet, 10)
+HFmrEFmiss <- top.n.missing(HFmrEFdataSet, 10)
 
 # ----------------------------------------------------------- #
 # Combine missing values table and convert to Latex code
 # ----------------------------------------------------------- #
+xtable(HFfullMiss, digits = c(0,0,3,3,3))
 xtable(cbind(round(HFpEFmiss,3), rownames(HFmrEFmiss), 
        round(HFmrEFmiss,3)))
 

@@ -81,19 +81,19 @@ HFmrEFindImpCart <- complete(mice(HFmrEFind,method ="cart"))
 # ----------------------------------------------------------- #
 # Merge imputed data into one data file
 # ----------------------------------------------------------- #
-HFpEF <- cbind(HFpEFconImpEm, HFpEFindImpCart)
-HFmrEF <- cbind(HFmrEFconImpEm, HFmrEFindImpCart)
+HFpEFimp <- cbind(HFpEFconImpEm, HFpEFindImpCart)
+HFmrEFimp <- cbind(HFmrEFconImpEm, HFmrEFindImpCart)
 
 # ----------------------------------------------------------- #
 # Sort column names
 # ----------------------------------------------------------- #
-HFpEF <- sort.column.names(HFpEF)
-HFmrEF <- sort.column.names(HFmrEF)
+HFpEFimp <- sort.column.names(HFpEFimp)
+HFmrEFimp <- sort.column.names(HFmrEFimp)
 
 # ----------------------------------------------------------- #
 # Save the data files
 # ----------------------------------------------------------- #
-save(HFpEF, file = "data_files/HFpEF.Rdat")
-save(HFmrEF, file = "data_files/HFmrEF.Rdat")
+save(HFpEFimp, file = "data_files/HFpEFimp.Rdat")
+save(HFmrEFimp, file = "data_files/HFmrEFimp.Rdat")
 
 # ----------------------------------------------------------- #
