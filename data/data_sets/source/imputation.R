@@ -9,7 +9,7 @@ Packages <- c("BaylorEdPsych", "mvnmle", "xtable", "Amelia",
 # Load relevant packages
 # ----------------------------------------------------------- #
 lapply(Packages, library, character.only = TRUE)
-source("_helper_func.R")
+source("utilities.R")
 
 # ----------------------------------------------------------- #
 # Load indicator and non indicator variables
@@ -76,7 +76,7 @@ HFmrEFconImpEm <- boot.em.impute(HFmrEFcon,
 # regression trees algorithm 
 # ----------------------------------------------------------- #
 HFpEFindImpCart <- complete(mice(HFpEFind, method ="cart"))
-HFmrEFindImpCart <- complete(mice(HFmrEFind,method ="cart"))
+HFmrEFindImpCart <- complete(mice(HFmrEFind, method ="cart"))
 
 # ----------------------------------------------------------- #
 # Merge imputed data into one data file

@@ -8,7 +8,7 @@ Packages <- c("tikzDevice")
 # Load package for docstring
 # ----------------------------------------------------------- #
 lapply(Packages, library, character.only = TRUE)
-source("_helper_func.R")
+source("utilities.R")
 
 # ----------------------------------------------------------- #
 # Load imputed data
