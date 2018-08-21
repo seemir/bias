@@ -87,8 +87,8 @@ HFmrEFimp <- cbind(HFmrEFconImpEm, HFmrEFindImpCart)
 # ----------------------------------------------------------- #
 # Sort column names
 # ----------------------------------------------------------- #
-HFpEFimp <- sort.column.names(HFpEFimp)
-HFmrEFimp <- sort.column.names(HFmrEFimp)
+HFpEFimp <- sort.column.names(HFpEFimp, id.col = T)
+HFmrEFimp <- sort.column.names(HFmrEFimp, id.col = T)
 
 # ----------------------------------------------------------- #
 # Save the data files

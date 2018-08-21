@@ -20,13 +20,13 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 # ----------------------------------------------------------- #
 # Principal component analysis
 # ----------------------------------------------------------- #
-HFpEFpca <- princomp(as.matrix(HFpEFimp)[-56,], cor = T)
+HFpEFpca <- princomp(as.matrix(HFpEFimp), cor = T)
 HFmrEFpca <- princomp(as.matrix(HFmrEFimp), cor = T)
 
 # ----------------------------------------------------------- #
 # Explained variance plot
 # ----------------------------------------------------------- #
-ncp <- 34; ncmr <- 31
+ncp <- 5; ncmr <- 5
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFpEF.tex",
     width = 10, height = 9)
 pca.var.plot(HFpEFpca, ncp, title = "HFpEF")
@@ -55,7 +55,9 @@ NbClust(as.data.frame(HFmrEFpca$scores[, 1:ncmr]),
 # ----------------------------------------------------------- #
 # Plot pca clusters
 # ----------------------------------------------------------- #
-pca.cluster.plot(HFpEFpca, ncp = ncp, km.clust = 3,hc.clust=3)
-pca.cluster.plot(HFmrEFpca, ncp = ncmr, km.clust=2,hc.clust=2)
+pca.cluster.plot(HFpEFpca, ncp = 2, km.clust = 3,hc.clust=3, 
+                 em.clust = 3)
+pca.cluster.plot(HFmrEFpca, ncp = 2, km.clust=3, hc.clust=3,
+                 em.clust = 3)
 
 # ----------------------------------------------------------- #
