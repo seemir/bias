@@ -8,25 +8,25 @@ Packages <- c("tikzDevice")
 # Load package for docstring
 # ----------------------------------------------------------- #
 lapply(Packages, library, character.only = TRUE)
-source("_helper_func.R")
+source("utilities.R")
 
 # ----------------------------------------------------------- #
 # Load imputed data
 # ----------------------------------------------------------- #
-allDataFiles <- c("HFpEF", "HFmrEF")
+allDataFiles <- c("HFpEFimp", "HFmrEFimp")
 lapply(gsub(" ", "", paste("data_files/", allDataFiles, 
                            ".Rdat")), load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
 # Principal component analysis
 # ----------------------------------------------------------- #
-HFpEFpca <- princomp(as.matrix(HFpEF)[-56,], cor = T)
-HFmrEFpca <- princomp(as.matrix(HFmrEF), cor = T)
+HFpEFpca <- princomp(as.matrix(HFpEFimp), cor = T)
+HFmrEFpca <- princomp(as.matrix(HFmrEFimp), cor = T)
 
 # ----------------------------------------------------------- #
 # Explained variance plot
 # ----------------------------------------------------------- #
-ncp <- 35; ncmr <- 31
+ncp <- 5; ncmr <- 5
 tikz(file="../../../doc/thesis/images/pca_var_plot_HFpEF.tex",
     width = 10, height = 9)
 pca.var.plot(HFpEFpca, ncp, title = "HFpEF")
@@ -55,7 +55,9 @@ NbClust(as.data.frame(HFmrEFpca$scores[, 1:ncmr]),
 # ----------------------------------------------------------- #
 # Plot pca clusters
 # ----------------------------------------------------------- #
-pca.cluster.plot(HFpEFpca, ncp = 33, km.clust = 3,hc.clust=3)
-pca.cluster.plot(HFmrEFpca, ncp = ncmr, km.clust=2,hc.clust=2)
+pca.cluster.plot(HFpEFpca, ncp = 2, km.clust = 3,hc.clust=3, 
+                 em.clust = 3)
+pca.cluster.plot(HFmrEFpca, ncp = 2, km.clust=3, hc.clust=3,
+                 em.clust = 3)
 
 # ----------------------------------------------------------- #

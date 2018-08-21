@@ -1,7 +1,7 @@
 # ----------------------------------------------------------- #
 # Install packages (if not already installed)
 # ----------------------------------------------------------- #
-Packages <- c("Amelia", "mice")
+Packages <- c("Amelia", "mice", "NbClust")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -14,11 +14,15 @@ lapply(Packages, library, character.only = TRUE)
 # ----------------------------------------------------------- #
 load("data_files/HFfullDataSet.Rdat")
 load("data_files/SyndClass.Rdat")
-source("_helper_func.R")
+source("utilities.R")
 
 # ----------------------------------------------------------- #
 # Summary of missing variables
 # ----------------------------------------------------------- #
+if(ncol(HFfullDataSet) == 55){
+  HFfullDataSet <- HFfullDataSet[,-1]  
+}
+
 top.n.missing(HFfullDataSet, 10)
 
 # ----------------------------------------------------------- #
@@ -32,7 +36,7 @@ HFfullNoInd <- HFfullRmInd$non.indicator
 # Impute data using Bootstrap EM and CART
 # ----------------------------------------------------------- #
 bnd <- data.bounds(HFfullNoInd, 0, Inf)
-HFfullEm <- boot.em.impute(HFfullNoInd, bnd, n.boot = 10)
+HFfullEm <- boot.em.impute(HFfullNoInd, bnd, n.boot = 30)
 HFfullCart <- complete(mice(HFfullInd, method = "cart"))
 
 # ----------------------------------------------------------- #
@@ -41,9 +45,18 @@ HFfullCart <- complete(mice(HFfullInd, method = "cart"))
 HFfullImpDataSet <- cbind(HFfullEm, HFfullCart)
 
 # ----------------------------------------------------------- #
-# Sort columns
+# Sort columns and remove 328 outlier
 # ----------------------------------------------------------- #
-HFfullImpDataSet <- sort.column.names(HFfullImpDataSet)
+if(nrow(HFfullImpDataSet) == 375){
+  HFfullImpDataSet<-sort.column.names(HFfullImpDataSet[-328,], 
+                                      id.col = F)  
+}
+
+# ----------------------------------------------------------- #
+# Save full data set
+# ----------------------------------------------------------- #
+save(HFfullImpDataSet, file="data_files/HFfullImpDataSet.Rdat")
+load(file="data_files/HFfullImpDataSet.Rdat")
 
 # ----------------------------------------------------------- #
 # Principal component analysis
@@ -53,17 +66,41 @@ HFfullpca <- princomp(HFfullImpDataSet, cor = T)
 # ----------------------------------------------------------- #
 # Explained variance 
 # ----------------------------------------------------------- #
-pca.var.plot(HFfullpca, 41, title = "HF same variables")
-
-# ----------------------------------------------------------- #
-# Cluster plot
-# ----------------------------------------------------------- #
-pca.cluster.plot(HFfullpca, 41, hc.clust = 2, ellipse = T)
+pca.var.plot(HFfullpca, 35, title = "HF same variables")
 
 # ----------------------------------------------------------- #
 # Actual clustering configuration
 # ----------------------------------------------------------- #
-pca.cluster.plot(HFfullpca, 41, hc.clust = 2, 
-                 actual = SyndClass[, 2])
+act <- SyndClass[-328, 2]
+clust <- pca.cluster.plot(HFfullpca, 35, hc.clust = 2, 
+                          km.clust = 2, em.clust = 2, 
+                          ellipse = T, actual = act, 
+                          return.clust = T)
+
+# ----------------------------------------------------------- #
+# Compare cluster groups
+# ----------------------------------------------------------- #
+# Actual clustering
+# ----------------------------------------------------------- #
+acGroup <- clust$ACT
+dataSet <- cbind(acGroup, if(ncol(HFfullEm==27)){
+  HFfullEm[-328,-4]})
+compare.baseline(dataSet, "acGroup")
+
+# ----------------------------------------------------------- #
+# Hierarcical clustering
+# ----------------------------------------------------------- #
+hCgroup <- clust$HC
+dataSet <- cbind(hCgroup, if(ncol(HFfullEm==27)){
+  HFfullEm[-328,-4]})
+compare.baseline(dataSet, "hCgroup")
+
+# ----------------------------------------------------------- #
+# kmeans ckustering
+# ----------------------------------------------------------- #
+kMgroup <- clust$KM
+dataSet <- cbind(kMgroup, if(ncol(HFfullEm==27)){
+  HFfullEm[-328,-4]})
+compare.baseline(dataSet, "kMgroup")
 
 # ----------------------------------------------------------- #

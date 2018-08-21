@@ -8,7 +8,7 @@ Packages <- c("R.matlab", "data.table","stringr")
 # Load relevant packages
 # ----------------------------------------------------------- #
 lapply(Packages, library, character.only = TRUE)
-source("../source/_helper_func.R")
+source("../source/utilities.R")
 
 # ----------------------------------------------------------- #
 # Read matlab files into R
@@ -65,11 +65,11 @@ colnames(HFmrEFmat) <- tolower(colnames(HFmrEFmat))
 # Rename dupblicate names in variables af and ar
 # ----------------------------------------------------------- #
 if(all(colnames(HFmrEFmat)[c(2,4)] == c("af", "ar"))){
-  colnames(HFmrEFmat)[c(2,4)] <- c("a-fib", "ai")  
+  colnames(HFmrEFmat)[c(2,4)] <- c("afib", "ai")  
 }
 # ----------------------------------------------------------- #
 if(all(colnames(HFpEFmat)[c(3,7)] == c("af", "ar"))){
-  colnames(HFpEFmat)[c(3,7)] <- c("a-fib", "ai")
+  colnames(HFpEFmat)[c(3,7)] <- c("afib", "ai")
 }
 
 # ----------------------------------------------------------- #
@@ -157,8 +157,8 @@ HFfullDataSet <- cbind(id, HFfullDataSet)
 HFpEFrow <- SyndClass[,3] == "HFpEF"
 HFmrEFrow <- SyndClass[,3] == "HFmrEF"
 # ----------------------------------------------------------- #
-HFpEFfullDataSet <- HFfullDataSet[HFpEFrow,]
-HFmrEFfullDataSet <- HFfullDataSet[HFmrEFrow,]
+HFpEFdataSet <- HFfullDataSet[HFpEFrow,]
+HFmrEFdataSet <- HFfullDataSet[HFmrEFrow,]
 
 # ----------------------------------------------------------- #
 # Non-indicator variables
@@ -241,8 +241,8 @@ HFmrEFoutcomes <- HFfullOutcomes[HFmrEFrow,]
 # ----------------------------------------------------------- #
 path <- "../source/data_files/"; r <- ".Rdat"
 fileNames <- c("HFfullDataSet", "HFfullNoInd", "HFfullInd", 
-               "HFpEFfullDataSet", "HFpEFnoInd", "HFpEFind", 
-               "HFmrEFfullDataSet", "HFmrEFnoInd", "HFmrEFind",
+               "HFpEFdataSet", "HFpEFnoInd", "HFpEFind", 
+               "HFmrEFdataSet", "HFmrEFnoInd", "HFmrEFind",
                "HFfullOutcomes", "HFpEFoutcomes", 
                "HFmrEFoutcomes", "SyndClass")
 for (name in fileNames){
