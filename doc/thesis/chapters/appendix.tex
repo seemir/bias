@@ -29,8 +29,7 @@
 
 \begin{figure}[h!]
     \centering
-    \hspace*{-1cm}\resizebox{1.1\textwidth}{!}{\footnotesize\input{doc/thesis/images/HFpEF_miss_dist.tex}}
-    %\hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFpEF_miss_dist.pdf}
+    \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFpEF_miss_dist.pdf}
     \caption[Missing values in HFpEF data set]{\textit{Missing values in HFpEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (blue) values in the HFpEF data set.}}
     \label{fig:HFpEF_missing}
 \end{figure}
@@ -39,39 +38,29 @@
 
 \begin{figure}[h!]
     \centering
-    \hspace*{-1cm}\resizebox{1.1\textwidth}{!}{\footnotesize\input{doc/thesis/images/HFmrEF_miss_dist.tex}}
-    %\hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFmrEF_miss_dist.pdf}
+    \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/HFmrEF_miss_dist.pdf}
     \caption[Missing values in HFmrEF data set]{\textit{Missing values in HFmrEF data set. Top:  the amount of missing values in each variable sorted in ascending order. Bottom: plot of the combinations of missing (red) and non-missing (blue) values in the HFmrEF data set.}}
     \label{fig:HFmrEF_missing}
 \end{figure}
 
 \newpage
 
-\begin{figure}[h!]
-%\centering
-%\hspace*{-1cm}\resizebox{1.1\textwidth}{!}{\input{doc/thesis/images/pca_var_plot_HFpEF.tex}}
-%\caption{\textit{Explained variance (blue) and cumulative explained variance (red) for $n = 59$ principal components in HFpEF data set.}}
-%\resizebox{0.65\textwidth}{!}{\LARGE\input{doc/thesis/images/pca_var_plot_HFmrEF.tex}}
-%\caption{\textit{Explained variance (blue) and cumulative explained variance (red) for $n = 51$ principal components in HFmrEF data set.}}
-\end{figure}
-
-
 \chapter{Source Code}
 \label{chap:souce_code}
 
 \noindent The following appendix presents all the relevant \texttt{R}-code used in this thesis. We have organized the chapter in accordance with the various steps in the machine learning procedure adopted in this thesis, see figure (\ref{fig:ML_proc_thesis}). We have tried to comment as much of the source code in order to ensure that an eventual re-examination of the results can be as easy and smooth as possible. Inquires about the code can be forwarded to the author on request.
 
-\section{Helper Functions, \texttt{\_helper\_func.R}}
+\section{Utilities, \texttt{utilities.R}}
 \label{sec:helper_func}
 
 \lstinputlisting[language=R]{../../data/data_sets/source/_helper_func.R}
 
-\section{Load Data and Labeling, \texttt{r\_data\_sets.R}}
-\label{sec:load_data}
+\section{Consolidation, \texttt{consolidation.R}}
+\label{sec:consolidation}
 
 \lstinputlisting[language=R]{../../data/data_sets/raw_data/r_data_sets.R}
 
-\section{Data Description, \texttt{desc\_data.R}}
+\section{Descriptive Statistics, \texttt{desc\_stat.R}}
 \label{sec:app_desc_stat}
 
 \lstinputlisting[language=R]{../../data/data_sets/source/desc_data.R}
