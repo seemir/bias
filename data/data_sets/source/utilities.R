@@ -505,7 +505,7 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
 }
 
 # ----------------------------------------------------------- #
-compare.baseline <- function(data, grp){
+compare.baseline <- function(data, grp, alpha=0.05){
   #' Compare baseline characteristics between two groups.
   #' 
   #' @description This function compares the baseline charact-
@@ -521,7 +521,14 @@ compare.baseline <- function(data, grp){
   #' statistical inference: the first step delving into data.
   #' Ann Transl Med. 2016 Mar;4(5):91.
 
-  return(twogrps(data, grp, sim=T)$table)
+  if (length(unique(data[, grp]))>2){
+    grp.table <- multigrps(data, grp, sim=T)$table
+  }else{
+    grp.table <- twogrps(data, grp, sim=T)$table
+  }
+  grp.list <- list(sum(grp.table[,ncol(grp.table)]<alpha),
+                   grp.table)
+  return(grp.list)
 }
 
 # ----------------------------------------------------------- #

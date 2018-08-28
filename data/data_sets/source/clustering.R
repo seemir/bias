@@ -32,33 +32,58 @@ NbClust(HFmrEFpca$scores[,1:31], min.nc = 2, max.nc = 4,
 # ----------------------------------------------------------- #
 # PCA cluster plot for all data sets
 # ----------------------------------------------------------- #
-clustFull <- pca.cluster.plot(HFfullpca, 31, km.clust = 2, 
+clustFull <- pca.cluster.plot(HFfullpca, 2, km.clust = 2, 
                               hc.clust = 2, em.clust = 2, 
                               actual = SyndClass[,2], 
                               return.clust = T, ellipse = F)
 
 # ----------------------------------------------------------- #
-# Extract cluster configuration
+# Extract cluster configuration and add to data frame
 # ----------------------------------------------------------- #
-
+ACT <- clustFull$ACT
+HC <- clustFull$HC
+KM <- clustFull$KM
+EM <- clustFull$EM
 
 # ----------------------------------------------------------- #
 # Compare baseline characteristics
 # ----------------------------------------------------------- #
-compare.baseline(HFfullImp, clustFull$ACT)
-compare.baseline(HFfullImp, clustFull$HC)
-compare.baseline(HFfullImp, clustFull$KMC)
-compare.baseline(HFfullImp, clustFull$EMC)
+compare.baseline(cbind(HFfullImp, ACT), "ACT")
+compare.baseline(cbind(HFfullImp, HC), "HC")
+compare.baseline(cbind(HFfullImp, KM), "KM")
+compare.baseline(cbind(HFfullImp, EM), "EM")
 
 # ----------------------------------------------------------- #
 # Assuming clustering by physicians is correct
 # ----------------------------------------------------------- #
-clustPef <- pca.cluster.plot(HFpEFpca, 31, km.clust = 2, 
-                             hc.clust = 2, em.clust = 2, 
+clustPef <- pca.cluster.plot(HFpEFpca, 2, km.clust = 3, 
+                             hc.clust = 3, em.clust = 3, 
                              return.clust = T, ellipse = F)
 
-clustPef <- pca.cluster.plot(HFmrEFpca, 31, km.clust = 2, 
-                             hc.clust = 2, em.clust = 2, 
-                             return.clust = T, ellipse = F)
+clustMf <- pca.cluster.plot(HFmrEFpca, 2, km.clust = 3, 
+                            hc.clust = 3, em.clust = 3, 
+                            return.clust = T, ellipse = F)
+
+# ----------------------------------------------------------- #
+# Compare baseline characteristics HFpEF
+# ----------------------------------------------------------- #
+HC <- clustPef$HC
+KM <- clustPef$KM
+EM <- clustPef$EM
+
+compare.baseline(cbind(HFpEFimp, HC), "HC")
+compare.baseline(cbind(HFpEFimp, KM), "KM")
+compare.baseline(cbind(HFpEFimp, EM), "EM")
+
+# ----------------------------------------------------------- #
+# Compare baseline characteristics HFmrEF
+# ----------------------------------------------------------- #
+HC <- clustMr$HC
+KM <- clustMr$KM
+EM <- clustMr$EM
+
+compare.baseline(cbind(HFmEFimp, HC), "HC")
+compare.baseline(cbind(HFmrEFimp, KM), "KM")
+compare.baseline(cbind(HFmrEFimp, EM), "EM")
 
 # ----------------------------------------------------------- #
