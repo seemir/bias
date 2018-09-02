@@ -82,15 +82,15 @@ tableContinuous(HFmrEFdataSet[, nameOrder],
 r <- rep("", 5)
 
 tabOutHFfull <- rbind(label.summary(as.matrix(HFfullOutcomes),
-                      2, cbind("Group", "Dead?", "Readm?", "n",
+                      2, cbind("Group", "Mort?", "Readm?", "n",
                                "%Tot"), 3, 5))
 
 tabOutHFpEF <- rbind(label.summary(as.matrix(HFpEFoutcomes), 
-                     2, c("Group", "Dead?", "Readm?", "n", 
+                     2, c("Group", "Mort?", "Readm?", "n", 
                           "% Tot"), 3, 5), r, r)
 
 tabOutHFmrEF <- label.summary(as.matrix(HFmrEFoutcomes), 
-                2, c("Group", "Dead?", "Readm?", 
+                2, c("Group", "Mort?", "Readm?", 
                      "n", "% Tot"), 3, 5)
 
 print(xtable(tabOutHFfull), include.rownames = F)
