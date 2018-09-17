@@ -60,7 +60,7 @@ clustPef <- pca.cluster.plot(HFpEFpca, 2, km.clust = 3,
                              hc.clust = 3, em.clust = 3, 
                              return.clust = T, ellipse = F)
 
-clustMf <- pca.cluster.plot(HFmrEFpca, 2, km.clust = 3, 
+clustMr <- pca.cluster.plot(HFmrEFpca, 2, km.clust = 3, 
                             hc.clust = 3, em.clust = 3, 
                             return.clust = T, ellipse = F)
 
@@ -82,8 +82,12 @@ HC <- clustMr$HC
 KM <- clustMr$KM
 EM <- clustMr$EM
 
-compare.baseline(cbind(HFmEFimp, HC), "HC")
+compare.baseline(cbind(HFmrEFimp, HC), "HC")
 compare.baseline(cbind(HFmrEFimp, KM), "KM")
 compare.baseline(cbind(HFmrEFimp, EM), "EM")
 
 # ----------------------------------------------------------- #
+# Assumin clustering by physicians is incorrect
+# ----------------------------------------------------------- #
+
+
