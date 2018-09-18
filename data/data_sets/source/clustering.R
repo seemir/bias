@@ -90,4 +90,3 @@ compare.baseline(cbind(HFmrEFimp, EM), "EM")
 # Assumin clustering by physicians is incorrect
 # ----------------------------------------------------------- #
 
-

@@ -401,13 +401,13 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
                              ellipse.type = "convex",
                              ggtheme = theme_gray(),
                              return.clust=F){
-  #' Two side-by-side cluster plots with Hierarchical 
-  #' Clustering and kMeans clustering on principal components.
+  #' Side-by-side cluster plots with Hierarchical Clustering, 
+  #' kMeans and EM clustering on principal components.
   #' 
-  #' @description This function runs Hierarchical and kMeans 
-  #' clustering on a predefined number of principal components.
-  #' The results are two scatterplots with the results from
-  #' the clustering.
+  #' @description This function runs Hierarchical, kMeans and 
+  #' EM clustering on a predefined number of principal 
+  #' components. The results are scatterplots with the 
+  #' results from the clustering.
   #' 
   #' @param pca princomp object.
   #' @param ncp numeric. Number of principal components
@@ -415,6 +415,8 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
   #' in the kMeans algorithm.
   #' @param hc.clust numeric. Number of clusters to be used 
   #' in the Hierarchical clustering.
+  #' @param em.clust numeric. Number of clusters to be used
+  #' in the expectation maximization algorithm.
   #' @param digits numeric. Number of decimal places for 
   #' cumulative variance in plot title.
   #' @param ellipse logical value. Boolean indicating if 
