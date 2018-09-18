@@ -450,8 +450,8 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
   hc.cluster <- HCPC(data, nb.clust = hc.clust, 
                      graph = F)$data.clust$clust
   km.cluster <- as.factor(kmeans(data, km.clust)$cluster)
-  em.cluster <- as.factor(Mclust(data[,1:ncp], 
-                                 em.clust)$classification)
+  em.cluster <- as.factor(rev(Mclust(data[,1:ncp], 
+                                 em.clust)$classification))
   if (all(is.na(actual))){
     data <- cbind(data[, fcp:scp], hc.cluster, km.cluster, 
                   em.cluster)
