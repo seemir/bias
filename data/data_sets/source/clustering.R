@@ -11,7 +11,7 @@ lapply(Packages, library, character.only = TRUE)
 source("utilities.R")
 
 # ----------------------------------------------------------- #
-# Load pca objects and source utility functions
+# Load pca objects and data files
 # ----------------------------------------------------------- #
 allDataFiles <- c("HFfullpca", "HFpEFpca", "HFmrEFpca",
                   "HFfullImp","HFpEFimp", "HFmrEFimp", 
