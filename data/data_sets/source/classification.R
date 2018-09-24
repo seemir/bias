@@ -1,7 +1,7 @@
 # ----------------------------------------------------------- #
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
-Packages <- c("mlbench", "caret", "elasticnet")
+Packages <- c("mlbench", "caret", "elasticnet", "klarR")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -20,10 +20,9 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 # ----------------------------------------------------------- #
 # Add cross validation configuration
 # ----------------------------------------------------------- #
-kfold <- trainControl(method = "cv", number = 10, 
-                      returnResamp = "all")
-loocv <- trainControl(method = "LOOCV")
-seed <- 90210; metric <- "Accuracy"
+kfold <- trainControl(method = "cv", number = 5)
+seed <- 902109
+metric <- "Accuracy"
 
 # ----------------------------------------------------------- #
 # Train and evaluate the classification algorithms with kfold
@@ -37,74 +36,74 @@ readmission <- HFfullOutcomes[,4]
 # ----------------------------------------------------------- #
 # kfold CV evaluation of classifiers
 # ----------------------------------------------------------- #
+set.seed(seed)
 fitKnnKfoldMort <- train(dataset, mortality, method="knn", 
                          metric=metric, trControl=kfold)
 
+set.seed(seed)
+fitLLKfoldMort <- train(dataset, mortality, method = "glm",
+                        metric=metric, trControl = kfold)
+
+set.seed(seed)
+fitLDAKfoldMort <- train(dataset, mortality, method = "lda",
+                         metric = metric, trControl = kfold)
+
+set.seed(seed)
+fitNbKfoldMort <- train(dataset, mortality, method = "nb",
+                        metric = metric, trControl = kfold)
+
+set.seed(seed)
 fitSvmKfoldMort <- train(dataset, mortality,method="svmRadial", 
                          metric=metric, trControl=kfold)
 
+set.seed(seed)
 fitRfKfoldMort <- train(dataset, mortality, method="rf", 
                         metric = metric, trControl = kfold)
-
-# ----------------------------------------------------------- #
-# loocv CV evaluation of classifiers
-# ----------------------------------------------------------- #
-fitKnnLoocvMort <- train(dataset, mortality, method="knn", 
-                         metric=metric, trControl=loocv)
-
-fitSvmLoocvMort <- train(dataset, mortality,method="svmRadial", 
-                         metric=metric, trControl=loocv)
-
-fitRfLoocvMort <- train(dataset, mortality, method="rf", 
-                        metric = metric, trControl = loocv)
 
 # ----------------------------------------------------------- #
 # Produce summary statistics and plots
 # ----------------------------------------------------------- #
 # Kfold CV
 # ----------------------------------------------------------- #
-resultsMortalityKfold <- resamples(list(knn = fitKnnKfoldMort, 
+resultsMortalityKfold <- resamples(list(knn = fitKnnKfoldMort,
+                                        logr = fitLLKfoldMort,
+                                        lda = fitLDAKfoldMort,
+                                        nb = fitNbKfoldMort,
                                         svm = fitSvmKfoldMort,
                                         rf = fitRfKfoldMort))
 
 summary(resultsMortalityKfold); dotplot(resultsMortalityKfold)
 
 # ----------------------------------------------------------- #
-# Loocv CV
-# ----------------------------------------------------------- #
-resultsMortalityLoocv <- resamples(list(knn = fitKnnLoocvMort,
-                                        svm = fitSvmLoocvMort,
-                                        rf = fitRfLoocvMort))
-
-summary(resultsMortalityLoocv); dotplot(resultsMortalityLoocv)
-
-# ----------------------------------------------------------- #
 # Readmission
 # ----------------------------------------------------------- #
 # kfold CV evaluation of classifiers
 # ----------------------------------------------------------- #
+set.seed(seed)
 fitKnnKfoldReadm <- train(dataset, readmission, method="knn", 
                           metric=metric, trControl=kfold)
 
+set.seed(seed)
+fitLLKfoldReadm <- train(dataset, readmission, method = "glm",
+                        metric=metric, trControl = kfold)
+
+set.seed(seed)
+fitLDAKfoldReadm <- train(dataset[,-19], readmission, 
+                          method = "lda", metric = metric, 
+                          trControl = kfold)
+
+set.seed(seed)
+fitNbKfoldReadm <- train(dataset, readmission, method = "nb",
+                        metric = metric, trControl = kfold)
+
+set.seed(seed)
 fitSvmKfoldReadm <- train(dataset, readmission, 
                           method="svmRadial", metric=metric,
                           trControl=kfold)
 
+set.seed(seed)
 fitRfKfoldReadm <- train(dataset, readmission, method="rf", 
                          metric = metric, trControl = kfold)
-
-# ----------------------------------------------------------- #
-# Loocv evaluation of classifiers
-# ----------------------------------------------------------- #
-fitKnnLoocvReadm <- train(dataset, readmission, method="knn", 
-                          metric=metric, trControl=loocv)
-
-fitSvmLoocvReadm <- train(dataset, readmission, 
-                          method="svmRadial", metric=metric,
-                          trControl=loocv)
-
-fitRfLoocvReadm <- train(dataset, readmission, method="rf", 
-                         metric = metric, trControl = loocv)
 
 # ----------------------------------------------------------- #
 # Produce summary statistics and plots
@@ -112,18 +111,12 @@ fitRfLoocvReadm <- train(dataset, readmission, method="rf",
 # Kfold CV
 # ----------------------------------------------------------- #
 resultsReadmKfold <- resamples(list(knn = fitKnnKfoldReadm, 
-                                   svm = fitSvmKfoldReadm,
-                                   rf = fitRfKfoldReadm))
+                                    lda = fitLDAKfoldReadm,
+                                    nb = fitNbKfoldReadm,
+                                    logr = fitLLKfoldReadm,
+                                    svm = fitSvmKfoldReadm,
+                                    rf = fitRfKfoldReadm))
 
 summary(resultsReadmKfold); dotplot(resultsReadmKfold)
-
-# ----------------------------------------------------------- #
-# LOOCV CV
-# ----------------------------------------------------------- #
-resultsReadmLoocv <- resamples(list(knn = fitKnnLoocvReadm, 
-                                    svm = fitSvmLoocvReadm,
-                                    rf = fitRfLoocvReadm))
-
-summary(resultsReadmLoocv); dotplot(resultsReadmLoocv)
 
 # ----------------------------------------------------------- #
