@@ -32,10 +32,12 @@ NbClust(HFmrEFpca$scores[,1:31], min.nc = 2, max.nc = 4,
 # ----------------------------------------------------------- #
 # PCA cluster plot for all data sets
 # ----------------------------------------------------------- #
-clustFull <- pca.cluster.plot(HFfullpca, 4, km.clust = 2, 
+pdf(file="../../../doc/thesis/images/clustFull.pdf")
+clustFull <- pca.cluster.plot(HFfullpca, 31, km.clust = 2, 
                               hc.clust = 2, em.clust = 2, 
                               actual = SyndClass[,2], 
                               return.clust = T, ellipse = F)
+dev.off()
 
 # ----------------------------------------------------------- #
 # Extract cluster configuration and add to data frame

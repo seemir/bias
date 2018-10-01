@@ -433,14 +433,12 @@ pca.cluster.plot <- function(pca, ncp, km.clust = 2,
   rdev <- sdev^2 / sum(sdev^2)
   cdev <- cumsum(rdev)
   subt <- paste("Cum.variance: ",round(cdev[ncp], digits))
-  hc.title <- labs(title=paste("Hierarchical Clustering on",
-              ncp,"Principle Components"),subtitle= subt) 
+  hc.title <- labs(title=paste("Hierarchical Clustering"),
+                   subtitle= subt) 
   km.title <- labs(title = paste("kMeans (k = ", km.clust, 
-              ") Clustering on ", ncp," Principle Components",
-              sep = ""),subtitle = subt)
-  em.title <- labs(title = paste("EM Clustering on ", 
-                                 ncp," Principle Components",
-              sep = ""),subtitle = subt)
+              ") Clustering", sep = ""),subtitle = subt)
+  em.title <- labs(title = paste("EM Clustering"),
+                   subtitle = subt)
   xlab <- paste("Dim", fcp, "(", 
                 round((rdev[fcp])*100, 2), 
                 "%)", sep = "")
