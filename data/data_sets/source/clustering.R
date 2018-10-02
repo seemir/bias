@@ -1,7 +1,7 @@
 # ----------------------------------------------------------- #
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
-Packages <- c("NbClust")
+Packages <- c("NbClust", "xtable")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -32,8 +32,9 @@ NbClust(HFmrEFpca$scores[,1:31], min.nc = 2, max.nc = 4,
 # ----------------------------------------------------------- #
 # PCA cluster plot for all data sets
 # ----------------------------------------------------------- #
-pdf(file="../../../doc/thesis/images/clustFull.pdf")
-clustFull <- pca.cluster.plot(HFfullpca, 31, km.clust = 2, 
+path_to_images <- "../../../doc/thesis/images/"
+pdf(file = paste(path_to_images, "ClustFull.pdf"))
+clustFull <- pca.cluster.plot(HFfullpca, 4, km.clust = 2, 
                               hc.clust = 2, em.clust = 2, 
                               actual = SyndClass[,2], 
                               return.clust = T, ellipse = F)
@@ -50,21 +51,29 @@ EMfull <- clustFull$EM
 # ----------------------------------------------------------- #
 # Compare baseline characteristics
 # ----------------------------------------------------------- #
-compare.baseline(cbind(HFfullImp, ACTfull), "ACTfull")
-compare.baseline(cbind(HFfullImp, HCfull), "HCfull")
-compare.baseline(cbind(HFfullImp, KMfull), "KMfull")
-compare.baseline(cbind(HFfullImp, EMfull), "EMfull")
+xtable(compare.baseline(cbind(HFfullImp, ACTfull),
+                        "ACTfull")[[2]][1:14,])
+xtable(compare.baseline(cbind(HFfullImp, HCfull), 
+                        "HCfull")[[2]][1:14,])
+xtable(compare.baseline(cbind(HFfullImp, KMfull), 
+                        "KMfull")[[2]][1:14,])
+xtable(compare.baseline(cbind(HFfullImp, EMfull), 
+                        "EMfull")[[2]][1:14,])
 
 # ----------------------------------------------------------- #
 # Assuming clustering by physicians is correct
 # ----------------------------------------------------------- #
+pdf(file = paste(path_to_images, "ClustpBiPhy.pdf"))
 clustPefFull <- pca.cluster.plot(HFpEFpca, 2, km.clust = 3, 
                                  hc.clust = 3, em.clust = 3, 
                                  return.clust = T, ellipse = F)
+dev.off()
 
+pdf(file = paste(path_to_images, "ClustmrBiPhy.pdf"))
 clustMrFull <- pca.cluster.plot(HFmrEFpca, 2, km.clust = 3, 
                                 hc.clust = 3, em.clust = 3, 
                                 return.clust = T, ellipse = F)
+dev.off()
 
 # ----------------------------------------------------------- #
 # Compare baseline characteristics HFpEF
@@ -73,9 +82,12 @@ HCpEFphy <- clustPefFull$HC
 KMpEFphy <- clustPefFull$KM
 EMpEFphy <- clustPefFull$EM
 
-compare.baseline(cbind(HFpEFimp, HCpEFphy), "HCpEFphy")
-compare.baseline(cbind(HFpEFimp, KMpEFphy), "KMpEFphy")
-compare.baseline(cbind(HFpEFimp, EMpEFphy), "EMpEFphy")
+xtable(compare.baseline(cbind(HFpEFimp, HCpEFphy), 
+                        "HCpEFphy")[[2]][1:14,])
+xtable(compare.baseline(cbind(HFpEFimp, KMpEFphy), 
+                        "KMpEFphy")[[2]][1:14,])
+xtable(compare.baseline(cbind(HFpEFimp, EMpEFphy), 
+                        "EMpEFphy")[[2]][1:14,])
 
 # ----------------------------------------------------------- #
 # Compare baseline characteristics HFmrEF
