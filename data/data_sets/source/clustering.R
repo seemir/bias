@@ -22,11 +22,9 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 # ----------------------------------------------------------- #
 # Determine optimal number of clusters
 # ----------------------------------------------------------- #
-NbClust(HFfullpca$scores[,1:31], min.nc = 2, max.nc = 4,
+NbClust(HFpEFpca$scores[,1:4], min.nc = 2, max.nc = 4,
         method = "kmeans")
-NbClust(HFpEFpca$scores[,1:31], min.nc = 2, max.nc = 4,
-        method = "kmeans")
-NbClust(HFmrEFpca$scores[,1:31], min.nc = 2, max.nc = 4, 
+NbClust(HFmrEFpca$scores[,1:4], min.nc = 2, max.nc = 4, 
         method = "kmeans")
 
 # ----------------------------------------------------------- #
@@ -51,14 +49,19 @@ EMfull <- clustFull$EM
 # ----------------------------------------------------------- #
 # Compare baseline characteristics
 # ----------------------------------------------------------- #
-xtable(compare.baseline(cbind(HFfullImp, ACTfull),
-                        "ACTfull")[[2]][1:14,])
-xtable(compare.baseline(cbind(HFfullImp, HCfull), 
-                        "HCfull")[[2]][1:14,])
-xtable(compare.baseline(cbind(HFfullImp, KMfull), 
-                        "KMfull")[[2]][1:14,])
-xtable(compare.baseline(cbind(HFfullImp, EMfull), 
-                        "EMfull")[[2]][1:14,])
+act_full <- compare.baseline(cbind(HFfullImp, ACTfull),
+                             "ACTfull")
+act_hc <- compare.baseline(cbind(HFfullImp, HCfull), 
+                           "HCfull")
+act_km <- compare.baseline(cbind(HFfullImp, KMfull), 
+                           "KMfull")
+act_em <- compare.baseline(cbind(HFfullImp, EMfull), 
+                           "EMfull")
+
+xtable(act_full[[2]][1:15,])
+xtable(act_hc[[2]][1:15,])
+xtable(act_km[[2]][1:15,])
+xtable(act_em[[2]][1:15,])
 
 # ----------------------------------------------------------- #
 # Assuming clustering by physicians is correct
@@ -82,12 +85,16 @@ HCpEFphy <- clustPefFull$HC
 KMpEFphy <- clustPefFull$KM
 EMpEFphy <- clustPefFull$EM
 
-xtable(compare.baseline(cbind(HFpEFimp, HCpEFphy), 
-                        "HCpEFphy")[[2]][1:14,])
-xtable(compare.baseline(cbind(HFpEFimp, KMpEFphy), 
-                        "KMpEFphy")[[2]][1:14,])
-xtable(compare.baseline(cbind(HFpEFimp, EMpEFphy), 
-                        "EMpEFphy")[[2]][1:14,])
+post_HC_p <- compare.baseline(cbind(HFpEFimp, HCpEFphy), 
+                              "HCpEFphy")
+post_KM_p <- compare.baseline(cbind(HFpEFimp, KMpEFphy), 
+                              "KMpEFphy")
+post_EM_p <- compare.baseline(cbind(HFpEFimp, EMpEFphy), 
+                              "EMpEFphy")
+
+xtable(post_HC_p[[2]][1:18,-1])
+xtable(post_KM_p[[2]][1:18,-1])
+xtable(post_EM_p[[2]][1:18,-1])
 
 # ----------------------------------------------------------- #
 # Compare baseline characteristics HFmrEF
@@ -96,9 +103,16 @@ HCmrEFphy <- clustMrFull$HC
 KMmrEFphy <- clustMrFull$KM
 EMmrEFphy <- clustMrFull$EM
 
-compare.baseline(cbind(HFmrEFimp, HCmrEFphy), "HCmrEFphy")
-compare.baseline(cbind(HFmrEFimp, KMmrEFphy), "KMmrEFphy")
-compare.baseline(cbind(HFmrEFimp, EMmrEFphy), "EMmrEFphy")
+post_HC_mr <- compare.baseline(cbind(HFmrEFimp, HCmrEFphy), 
+                               "HCmrEFphy")
+post_KM_mr <- compare.baseline(cbind(HFmrEFimp, KMmrEFphy), 
+                               "KMmrEFphy")
+post_EM_mr <- compare.baseline(cbind(HFmrEFimp, EMmrEFphy), 
+                               "EMmrEFphy")
+
+xtable(post_HC_mr[[2]][1:15,-1])
+xtable(post_KM_mr[[2]][1:15,-1])
+xtable(post_EM_mr[[2]][1:15,-1])
 
 # ----------------------------------------------------------- #
 # Assumin clustering by physicians is incorrect
@@ -131,9 +145,16 @@ HCpEFnoPhy <- clustNewPef$HC
 KMpEFnoPhy <- clustNewPef$KM
 EMpEFnoPhy <- clustNewPef$EM
 
-compare.baseline(cbind(HFpEFhiKmeans,HCpEFnoPhy),"HCpEFnoPhy")
-compare.baseline(cbind(HFpEFhiKmeans,KMpEFnoPhy),"KMpEFnoPhy")
-compare.baseline(cbind(HFpEFhiKmeans,EMpEFnoPhy),"EMpEFnoPhy")
+noPost_HC_p <-compare.baseline(cbind(HFpEFhiKmeans,
+                                     HCpEFnoPhy),"HCpEFnoPhy")
+noPost_KM_p <-compare.baseline(cbind(HFpEFhiKmeans,
+                                     KMpEFnoPhy),"KMpEFnoPhy")
+noPost_EM_p <-compare.baseline(cbind(HFpEFhiKmeans,
+                                     EMpEFnoPhy),"EMpEFnoPhy")
+
+xtable(noPost_HC_p[[2]][1:15,-1])
+xtable(noPost_KM_p[[2]][1:15,-1])
+xtable(noPost_EM_p[[2]][1:15,-1])
 
 # ----------------------------------------------------------- #
 # Compare baseline characteristics HFmrEF
@@ -142,11 +163,36 @@ HCmrEFnoPhy <- clustNewMr$HC
 KMmrEFnoPhy <- clustNewMr$KM
 EMmrEFnoPhy <- clustNewMr$EM
 
-compare.baseline(cbind(HFmrEFhiKmeans,HCmrEFnoPhy),
-                 "HCmrEFnoPhy")
-compare.baseline(cbind(HFmrEFhiKmeans,KMmrEFnoPhy),
-                 "KMmrEFnoPhy")
-compare.baseline(cbind(HFmrEFhiKmeans,EMmrEFnoPhy),
-                 "EMmrEFnoPhy")
+noPost_HC_mr<- compare.baseline(cbind(HFmrEFhiKmeans,
+                                      HCmrEFnoPhy), 
+                                "HCmrEFnoPhy")
+noPost_KM_mr<- compare.baseline(cbind(HFmrEFhiKmeans,
+                                      KMmrEFnoPhy), 
+                                "KMmrEFnoPhy")
+noPost_EM_mr<- compare.baseline(cbind(HFmrEFhiKmeans,
+                                      EMmrEFnoPhy), 
+                                "EMmrEFnoPhy")
+
+xtable(noPost_HC_mr[[2]][1:15,-1])
+xtable(noPost_KM_mr[[2]][1:15,-1])
+xtable(noPost_EM_mr[[2]][1:15,-1])
+
+# ----------------------------------------------------------- #
+# Result of all the significant baseline characteristics
+# ----------------------------------------------------------- #
+results_post <- c(post_HC_p[[1]], post_KM_p[[1]], 
+                  post_EM_p[[1]], post_HC_mr[[1]],
+                  post_KM_mr[[1]], post_EM_mr[[1]])
+results_no_post <- c(noPost_HC_p[[1]], noPost_KM_p[[1]],
+                     noPost_EM_p[[1]], noPost_HC_mr[[1]],
+                     noPost_KM_mr[[1]], noPost_EM_mr[[1]])
+
+results <- cbind(matrix(results_post, 3), 
+                 matrix(results_no_post, 3))
+
+colnames(results) <- rep(c("HFpEF", "HFmrEF"), 2)
+rownames(results) <- c("Hierarchical", "K-Means", "EM")
+
+xtable(results)
 
 # ----------------------------------------------------------- #

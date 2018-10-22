@@ -72,7 +72,12 @@ resultsMortalityKfold <- resamples(list(knn = fitKnnKfoldMort,
                                         svm = fitSvmKfoldMort,
                                         rf = fitRfKfoldMort))
 
-summary(resultsMortalityKfold); dotplot(resultsMortalityKfold)
+summary(resultsMortalityKfold)
+
+tikzDevice::tikz("classification_mortality", width = 6, 
+                 height = 5)
+dotplot(resultsMortalityKfold, main = "Mortality")
+dev.off()
 
 # ----------------------------------------------------------- #
 # Readmission
@@ -117,6 +122,10 @@ resultsReadmKfold <- resamples(list(knn = fitKnnKfoldReadm,
                                     svm = fitSvmKfoldReadm,
                                     rf = fitRfKfoldReadm))
 
-summary(resultsReadmKfold); dotplot(resultsReadmKfold)
+summary(resultsReadmKfold); 
+tikzDevice::tikz("classification_readmission", width = 6, 
+                 height = 5)
+dotplot(resultsReadmKfold, main = "Re-admission")
+dev.off()
 
 # ----------------------------------------------------------- #
