@@ -54,7 +54,11 @@ In the current clustering problem we assume that the dataset is comprised of two
 
 \subsection{Mortality Classifier}
 
-\noindent The statistical learning problem in this section is given by a two-class classification problem where mortality is the clinical outcome in question. Our objective is to see how well the algorithms mentioned in Figure (\ref{fig:ML_proc_thesis}) perform in predicting the probability of mortality. We will train the algorithms using $5$-fold cross validation and evaluate the results using 
+\noindent The statistical learning problem in this section is given by a two-class classification problem where mortality is the clinical outcome in question. Our objective is to see how well the algorithms mentioned in Figure (\ref{fig:ML_proc_thesis}) perform in predicting the probability of mortality. We will train the algorithms using $5$-fold cross validation and evaluate the results using the accuracy, i.e. the proportion of true results and the Cohen's kappa defined by:
+\begin{align}
+    \kappa \equiv \frac{p_0 - p_e}{1 - p_e}
+\end{align}
+where $p_0$ is the accuracy given by ${\mathit  {ACC}}=({\mathit  {TP}}+{\mathit  {TN}})/(P+N)$, and $p_e = 1 / N^2 \sum_{k} n_{k1}n_{k2}$, where $k$ is the number of categories / classes, $N$ the number of items and $n_{k1}$ the number of times rater $i$ predicted category $k$. Cohen's kappa is also regarded as the inter-rater agreement for qualitative (categorical) items As mentioned earlier, the statistical learning problem is that of a Binary classification problem given by weather re-admission / mortality occurred (\texttt{TRUE}) or not (\texttt{FALSE}). 
 
 \subsection{Re-admission Classifier}
 
