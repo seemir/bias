@@ -9,19 +9,25 @@
 
 \section{Cluster Analysis}
 
-\noindent In the cluster analysis, we try to see how well the various clustering algorithms perform in producing phenotypically distinct clinical patient groups with HFpEF and HFmrEF. We will organize this section in the following way: we start out by looking at the full sample data set, i.e. HFfullDataSet.Rdat. After the pre-processing, we will run the principal components thought the clustering algorithms. The idea is to see how well the clustering algorithms perform in producing patient groups that are more unique compared to the physicians evaluation. Our measure of success is the number of unique baseline characteristics that are statistically significant using the Person c2 test for categorical variables, ANOVA for normally distributed variables and Kruskal–Wallis test for non-normally distributed variables \citep{kruskal1952use}. Significance
-used is that of the conventional 5\% level. The implementation is done using the \texttt{multigrps}-function from the \texttt{CBCgrps}-package in \texttt{r} \citep{CBCgrps}. The algorithms are first going to be performed on the BI clustering HF problem, i.e. see how unique the patient groups produced are given that the only HF subtypes in the dataset is HFmrEF and HFpEF. After this is done, we will see how well the algorithms will perform in producing new clusters within the already defined patient groups from the first round. We will do the same analysis on both the groups that have been defined by the physicians and the first round clustering results.
+\noindent In the cluster analysis, we try to see how well the various clustering algorithms perform in producing phenotypically distinct clinical patient groups with HFpEF and HFmrEF. We will organize this section in the following way: we start out by looking at the full sample data set, i.e. HFfullDataSet.Rdat. After the pre-processing, we will run the principal components thought the clustering algorithms. The idea is to see how well the clustering algorithms perform in producing patient groups that are more unique compared to the physicians evaluation. Our measure of success is the number of unique baseline characteristics that are statistically significant using the Person $\chi^2$ test for categorical variables, ANOVA for normally distributed variables and Kruskal–Wallis test for non-normally distributed variables \citep{kruskal1952use}. Significance used is that of the conventional 5\% level. The implementation is done using the \texttt{multigrps}-function from the \texttt{CBCgrps}-package in \texttt{r} \citep{CBCgrps}. The algorithms are first going to be performed on the BI clustering HF problem, i.e. see how unique the patient groups produced are given that the only HF subtypes in the dataset is HFmrEF and HFpEF. After this is done, we will see how well the algorithms will perform in producing new clusters within the already defined patient groups from the first round. We will do the same analysis on both the groups that have been defined by the physicians and the first round clustering results. The full process flow for the cluster analysis is illustrated in Figure (\ref{fig:process_flow_clustering}).
+
+\begin{figure}
+    \centering
+    \input{doc/thesis/images/process_flow_clustering.tex}
+    \caption{Process flow clustering of patient groups}
+    \label{fig:process_flow_clustering}
+\end{figure}
 
 \subsection{The BI Clustering HF Problem}
 \label{subsec:bi_clust}
 
-In the current clustering problem we assume that the dataset is comprised of two clusters HFmrEF and HFpEF. Accordingly, we allow the algorithms to determine the patients that best correspond to each group. We have plotted the results of the BI clustering problem in Figure (??). This plot can in many ways seem very misguiding as it only displays the results along the two first principal components. Still, as we can see from the table below, even if you only cluster based on the first four principal components (27.32\% of variance explained), one can produce more unique phenotypically distinct patient groups than the physicians. As we can see from table (\ref{tab:baseline_char_actual_full}), the 
+In the current clustering problem we assume that the dataset is comprised of two clusters HFmrEF and HFpEF. Accordingly, we allow the algorithms to determine the patients that best correspond to each group. We have plotted the results of the BI clustering problem in section (\ref{sec:rel_plots}). This plot can in many ways seem very misguiding as it only displays the results along the two first principal components. Still, as we can see from the table below, even if you only cluster based on the first four principal components (27.32\% of variance explained), one can produce more unique phenotypically distinct patient groups than the physicians. As we can see   
 
 \input{doc/thesis/tables/baseline_char_actual_full.tex}
 
 \input{doc/thesis/tables/baseline_char_HCKM_full.tex}
 
-\noindent Hierarchical and K-Means clustering algorithms both give the highest number of significant baseline characteristics (7 for only the cont. variables in the table and 62 in total) compare with the actual clustering done by the physicians (4 for the cont. variables and 59 in total). The EM algorithm produces overall the lowest number of significant baseline characteristics (5 for cont. variables and 54 in total). Both the Hierarchical and K-Means algorithm produce the same clustering configurations. The baseline characteristics in the clustering of the patient using the Hierarchical and K-Means clustering show that for the first clustering (HFpEF) the \texttt{LVEF} are on average 57.5\% and for the second clustering (HFmrEF) the \texttt{LVEF} are on average 45\%. These are very similar values as that which was done by the physicians. We can also see for other baseline characteristics such as \texttt{ntprobnp} the average is at 2327 ng/L for the HFpEF group which is significantly different than that of the HFmrEF group 3723.5 ng/L, also this is very similar to what the physicians concluded with. For characteristics that are significantly different in the clustering with Hierarchical and K-Means clustering, but not done so for the physicians one can include the following continuous variables: hemoglobin (\texttt{hb}), packed cell volume (\texttt{pcv}) and the ewave (\texttt{ewave}). This may suggest that both the clustering algorithms can be used as appropriate tools for physicians. The results from the EM algorithm 
+\noindent from table (\ref{tab:baseline_char_actual_full}), the  Hierarchical and K-Means clustering algorithms both give the highest number of significant baseline characteristics (7 for only the cont. variables in the table and 62 in total) compare with the actual clustering done by the physicians (4 for the cont. variables and 59 in total). The EM algorithm produces overall the lowest number of significant baseline characteristics (5 for cont. variables and 54 in total). Both the Hierarchical and K-Means algorithm produce the same clustering configurations. The baseline characteristics in the clustering of the patient using the Hierarchical and K-Means clustering show that for the first clustering (HFpEF) the \texttt{LVEF} are on average 57.5\% and for the second clustering (HFmrEF) the \texttt{LVEF} are on average 45\%. These are very similar values as that which was done by the physicians. We can also see for other baseline characteristics such as \texttt{ntprobnp} the average is at 2327 ng/L for the HFpEF group which is significantly different than that of the HFmrEF group 3723.5 ng/L, also this is very similar to what the physicians concluded with. For characteristics that are significantly different in the clustering with Hierarchical and K-Means clustering, but not done so for the physicians one can include the following continuous variables: hemoglobin (\texttt{hb}), packed cell volume (\texttt{pcv}) and the ewave (\texttt{ewave}). This may suggest that both the clustering algorithms can be used as appropriate tools for physicians. The results from the EM algorithm 
 
 \input{doc/thesis/tables/baseline_char_EM_full.tex}
 
@@ -37,12 +43,18 @@ In the current clustering problem we assume that the dataset is comprised of two
 
 \section{Classification}
 
-\noindent In this section we will present the results of the classification analysis. As mentioned in ML the procedure (figure \ref{fig:ML_proc_thesis}), we run the imputed data set through the various classification algorithms and accordingly run a 10-fold cross validation in order to estimate the accuracy of the various algorithms. The accuracy along with Cohen’s kappa are the two evaluation criteria we use to rank the algorithms in this section.
+\noindent In this section we will present the results of the classification analysis. As mentioned in ML the procedure (figure \ref{fig:ML_proc_thesis}), we run the imputed data set through the various classification algorithms and accordingly run a cross validation in order to estimate the accuracy of the various algorithms. The accuracy along with Cohen’s kappa are the two evaluation criteria we use to rank the algorithms in this section. The process flow for the mentioned classification section is illustrated in Figure (\ref{fig:process_flow_classification}). 
+
+\begin{figure}
+    \centering
+    \input{doc/thesis/images/process_flow_classification.tex}
+    \caption{Process flow classification of clinical outcomes}
+    \label{fig:process_flow_classification}
+\end{figure}
 
 \subsection{Mortality Classifier}
 
-\noindent The statistical learning problem in this section is given by a two-class
-classification problem where mortality is the clinical outcome in question.
+\noindent The statistical learning problem in this section is given by a two-class classification problem where mortality is the clinical outcome in question. Our objective is to see how well the algorithms mentioned in Figure (\ref{fig:ML_proc_thesis}) perform in predicting the probability of mortality. We will train the algorithms using $5$-fold cross validation and evaluate the results using 
 
 \subsection{Re-admission Classifier}
 

@@ -31,7 +31,8 @@ NbClust(HFmrEFpca$scores[,1:4], min.nc = 2, max.nc = 4,
 # PCA cluster plot for all data sets
 # ----------------------------------------------------------- #
 path_to_images <- "../../../doc/thesis/images/"
-pdf(file = paste(path_to_images, "ClustFull.pdf"))
+pdf(file = paste(path_to_images, "ClustFull.pdf"), width = 8, 
+    height = 8)
 clustFull <- pca.cluster.plot(HFfullpca, 4, km.clust = 2, 
                               hc.clust = 2, em.clust = 2, 
                               actual = SyndClass[,2], 
@@ -66,13 +67,15 @@ xtable(act_em[[2]][1:15,])
 # ----------------------------------------------------------- #
 # Assuming clustering by physicians is correct
 # ----------------------------------------------------------- #
-pdf(file = paste(path_to_images, "ClustpBiPhy.pdf"))
+pdf(file = paste(path_to_images, "ClustpPhy.pdf"), width = 9,
+    height = 8)
 clustPefFull <- pca.cluster.plot(HFpEFpca, 2, km.clust = 3, 
                                  hc.clust = 3, em.clust = 3, 
                                  return.clust = T, ellipse = F)
 dev.off()
 
-pdf(file = paste(path_to_images, "ClustmrBiPhy.pdf"))
+pdf(file = paste(path_to_images, "ClustmrPhy.pdf"), width = 9,
+    height = 8)
 clustMrFull <- pca.cluster.plot(HFmrEFpca, 2, km.clust = 3, 
                                 hc.clust = 3, em.clust = 3, 
                                 return.clust = T, ellipse = F)
@@ -130,13 +133,19 @@ HFmrEFNewpca <- princomp(HFmrEFhiKmeans, cor = T)
 # ----------------------------------------------------------- #
 # Plot clusters 
 # ----------------------------------------------------------- #
+pdf(file = paste(path_to_images, "ClustpNoPhy.pdf"), width = 9,
+    height = 8)
 clustNewPef <- pca.cluster.plot(HFpEFNewpca, 2, km.clust = 3, 
                              hc.clust = 3, em.clust = 3, 
                              return.clust = T, ellipse = F)
+dev.off()
 
+pdf(file = paste(path_to_images, "ClustmrNoPhy.pdf"), width=9,
+    height = 8)
 clustNewMr <- pca.cluster.plot(HFmrEFNewpca, 2, km.clust = 3, 
                             hc.clust = 3, em.clust = 3, 
                             return.clust = T, ellipse = F)
+dev.off()
 
 # ----------------------------------------------------------- #
 # Compare baseline characteristics HFpEF

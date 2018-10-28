@@ -65,17 +65,18 @@ fitRfKfoldMort <- train(dataset, mortality, method="rf",
 # ----------------------------------------------------------- #
 # Kfold CV
 # ----------------------------------------------------------- #
+
 resultsMortalityKfold <- resamples(list(knn = fitKnnKfoldMort,
                                         logr = fitLLKfoldMort,
                                         lda = fitLDAKfoldMort,
                                         nb = fitNbKfoldMort,
                                         svm = fitSvmKfoldMort,
                                         rf = fitRfKfoldMort))
-
 summary(resultsMortalityKfold)
 
-tikzDevice::tikz("classification_mortality", width = 6, 
-                 height = 5)
+path_to_images <- "../../../doc/thesis/images/"
+pdf(file = paste(path_to_images, "ClassMortality.pdf"), 
+    width = 6, height = 5)
 dotplot(resultsMortalityKfold, main = "Mortality")
 dev.off()
 
@@ -123,8 +124,9 @@ resultsReadmKfold <- resamples(list(knn = fitKnnKfoldReadm,
                                     rf = fitRfKfoldReadm))
 
 summary(resultsReadmKfold); 
-tikzDevice::tikz("classification_readmission", width = 6, 
-                 height = 5)
+path_to_images <- "../../../doc/thesis/images/"
+pdf(file = paste(path_to_images, "ClassReadmission.pdf"), 
+    width = 6, height = 5)
 dotplot(resultsReadmKfold, main = "Re-admission")
 dev.off()
 
