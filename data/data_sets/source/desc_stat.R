@@ -46,7 +46,7 @@ dev.off()
 # ----------------------------------------------------------- #
 nameOrder <- c("age", "gender", "white", "asian", "black", 
                "breathless", "sbp", "dbp", "admissionwgt", 
-               "bp", "bmiadmission", "pulse", "a-fib", 
+               "bp", "bmiadmission", "pulse", "afib", 
                "copdasthma", "irondef", "dm", "obesity", 
                "copdasthma", "ihd", "comorbidities", 
                "ecgqrsduration", "ecgqrsother", "ecgrate", 
