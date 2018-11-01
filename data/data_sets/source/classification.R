@@ -1,7 +1,8 @@
 # ----------------------------------------------------------- #
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
-Packages <- c("mlbench", "caret", "elasticnet", "klarR")
+Packages <- c("mlbench", "caret", "elasticnet", "klaR", 
+              "xtable")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -72,13 +73,9 @@ resultsMortalityKfold <- resamples(list(knn = fitKnnKfoldMort,
                                         nb = fitNbKfoldMort,
                                         svm = fitSvmKfoldMort,
                                         rf = fitRfKfoldMort))
-summary(resultsMortalityKfold)
-
-path_to_images <- "../../../doc/thesis/images/"
-pdf(file = paste(path_to_images, "ClassMortality.pdf"), 
-    width = 6, height = 5)
+xtable(summary(resultsMortalityKfold)$statistics$Accuracy)
+xtable(summary(resultsMortalityKfold)$statistics$Kappa)
 dotplot(resultsMortalityKfold, main = "Mortality")
-dev.off()
 
 # ----------------------------------------------------------- #
 # Readmission
@@ -122,12 +119,7 @@ resultsReadmKfold <- resamples(list(knn = fitKnnKfoldReadm,
                                     logr = fitLLKfoldReadm,
                                     svm = fitSvmKfoldReadm,
                                     rf = fitRfKfoldReadm))
-
-summary(resultsReadmKfold); 
-path_to_images <- "../../../doc/thesis/images/"
-pdf(file = paste(path_to_images, "ClassReadmission.pdf"), 
-    width = 6, height = 5)
+summary(resultsReadmKfold)
 dotplot(resultsReadmKfold, main = "Re-admission")
-dev.off()
 
 # ----------------------------------------------------------- #
