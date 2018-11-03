@@ -20,11 +20,16 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
                            ".Rdat")), load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
+# Consolidate naming of columns for HFpEF
+# ----------------------------------------------------------- #
+HFpEFimp <- HFpEFimp[, colnames(HFfullImp)]
+
+# ----------------------------------------------------------- #
 # Determine optimal number of clusters
 # ----------------------------------------------------------- #
-NbClust(HFpEFpca$scores[,1:4], min.nc = 2, max.nc = 4,
+NbClust(HFpEFpca$scores[,1:2], min.nc = 2, max.nc = 4,
         method = "kmeans")
-NbClust(HFmrEFpca$scores[,1:4], min.nc = 2, max.nc = 4, 
+NbClust(HFmrEFpca$scores[,1:2], min.nc = 2, max.nc = 4, 
         method = "kmeans")
 
 # ----------------------------------------------------------- #
@@ -95,9 +100,9 @@ post_KM_p <- compare.baseline(cbind(HFpEFimp, KMpEFphy),
 post_EM_p <- compare.baseline(cbind(HFpEFimp, EMpEFphy), 
                               "EMpEFphy")
 
-xtable(post_HC_p[[2]][1:18,-1])
-xtable(post_KM_p[[2]][1:18,-1])
-xtable(post_EM_p[[2]][1:18,-1])
+xtable(post_HC_p[[2]][1:15,-1])
+xtable(post_KM_p[[2]][1:15,-1])
+xtable(post_EM_p[[2]][1:15,-1])
 
 # ----------------------------------------------------------- #
 # Compare baseline characteristics HFmrEF

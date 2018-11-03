@@ -120,7 +120,7 @@ HFpEFimp <- cbind(HFpEFem, HFpEFcart)
 HFmrEFimp <- cbind(HFmrEFem, HFmrEFcart) 
 
 # ----------------------------------------------------------- #
-# Sort columns and remove 328 outlier
+# Sort columns
 # ----------------------------------------------------------- #
 HFfullImp <- sort.column.names(HFfullImp, id.col = T)  
 HFpEFimp <- sort.column.names(HFpEFimp, id.col = T)
