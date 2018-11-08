@@ -2,7 +2,7 @@
 # Install relevant packages (if not already done)
 # ----------------------------------------------------------- #
 Packages <- c("mlbench", "caret", "elasticnet", "klaR", 
-              "xtable")
+              "xtable", "tikzDevice")
 # install.packages(Packages)
 
 # ----------------------------------------------------------- #
@@ -21,7 +21,7 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 # ----------------------------------------------------------- #
 # Add cross validation configuration
 # ----------------------------------------------------------- #
-kfold <- trainControl(method = "cv", number = 5)
+kfold <- trainControl(method = "cv", number = 10)
 seed <- 902109
 metric <- "Accuracy"
 
@@ -66,16 +66,22 @@ fitRfKfoldMort <- train(dataset, mortality, method="rf",
 # ----------------------------------------------------------- #
 # Kfold CV
 # ----------------------------------------------------------- #
-
 resultsMortalityKfold <- resamples(list(knn = fitKnnKfoldMort,
                                         logr = fitLLKfoldMort,
                                         lda = fitLDAKfoldMort,
                                         nb = fitNbKfoldMort,
                                         svm = fitSvmKfoldMort,
                                         rf = fitRfKfoldMort))
-xtable(summary(resultsMortalityKfold)$statistics$Accuracy)
-xtable(summary(resultsMortalityKfold)$statistics$Kappa)
+xtable(summary(resultsMortalityKfold)$statistics$Accuracy,
+      digits = 3)
+xtable(summary(resultsMortalityKfold)$statistics$Kappa,
+       digits = 3)
+
+pathToImages <- "../../../doc/thesis/images/"
+tikz(file=paste(pathToImages,"classificationMortality.tex", 
+                sep = ""), height = 5.5, standAlone = F)
 dotplot(resultsMortalityKfold, main = "Mortality")
+dev.off()
 
 # ----------------------------------------------------------- #
 # Readmission
@@ -119,7 +125,14 @@ resultsReadmKfold <- resamples(list(knn = fitKnnKfoldReadm,
                                     logr = fitLLKfoldReadm,
                                     svm = fitSvmKfoldReadm,
                                     rf = fitRfKfoldReadm))
-summary(resultsReadmKfold)
+xtable(summary(resultsReadmKfold)$statistics$Accuracy,
+       digits = 3)
+xtable(summary(resultsReadmKfold)$statistics$Kappa,
+       digits = 3)
+pathToImages <- "../../../doc/thesis/images/"
+tikz(file=paste(pathToImages,"classificationReadmission.tex", 
+                sep = ""), height = 5.5, standAlone = F)
 dotplot(resultsReadmKfold, main = "Re-admission")
+dev.off()
 
 # ----------------------------------------------------------- #

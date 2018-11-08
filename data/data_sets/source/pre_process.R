@@ -127,6 +127,11 @@ HFpEFimp <- sort.column.names(HFpEFimp, id.col = T)
 HFmrEFimp <- sort.column.names(HFmrEFimp, id.col = T)
 
 # ----------------------------------------------------------- #
+# Consolidate naming of columns for HFpEF
+# ----------------------------------------------------------- #
+HFpEFimp <- HFpEFimp[, colnames(HFfullImp)]
+
+# ----------------------------------------------------------- #
 # Save full data set
 # ----------------------------------------------------------- #
 path <- "data_files/"; r <- ".Rdat"

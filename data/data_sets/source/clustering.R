@@ -20,11 +20,6 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
                            ".Rdat")), load,.GlobalEnv)
 
 # ----------------------------------------------------------- #
-# Consolidate naming of columns for HFpEF
-# ----------------------------------------------------------- #
-HFpEFimp <- HFpEFimp[, colnames(HFfullImp)]
-
-# ----------------------------------------------------------- #
 # Determine optimal number of clusters
 # ----------------------------------------------------------- #
 NbClust(HFpEFpca$scores[,1:2], min.nc = 2, max.nc = 4,
