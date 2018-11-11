@@ -17,6 +17,10 @@
 \section{\texttt{R}-packages}
 \label{sec:r_pack}
 
+\input{doc/thesis/tables/packages.tex}
+
+\newpage
+
 \section{Descriptive Statistics}
 \label{sec:desc_stat}
 
@@ -98,7 +102,7 @@
 \begin{figure}[h!]
     \centering
     \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/ClustFull.pdf}
-    \caption[Clustering results: Binary clustering problem]{\textit{Results of Binary clustering problem}}
+    \caption[Binary clustering problem]{\textit{Results of Binary clustering problem}}
     \label{fig:bi_clust_results}
 \end{figure}
 
@@ -107,7 +111,7 @@
 \begin{figure}[h!]
     \centering
     \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/ClustpPhy.pdf}
-    \caption[Clustering results: HFpEF with Post-Diagnosis]{\textit{Clustering results of HFpEF with Post-Diagnosis}}
+    \caption[HFpEF with Post-Diagnosis]{\textit{Clustering results of HFpEF with Post-Diagnosis}}
     \label{fig:clust_results_with_post_p}
 \end{figure}
 
@@ -116,7 +120,7 @@
 \begin{figure}[h!]
     \centering
     \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/ClustmrPhy.pdf}
-    \caption[Clustering results: HFmrEF with Post-Diagnosis]{\textit{Clustering results of HFmrEF with Post-Diagnosis}}
+    \caption[HFmrEF with Post-Diagnosis]{\textit{Clustering results of HFmrEF with Post-Diagnosis}}
     \label{fig:clust_results_with_post_mr}
 \end{figure}
 
@@ -125,7 +129,7 @@
 \begin{figure}[h!]
     \centering
     \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/ClustpNoPhy.pdf}
-    \caption[Clustering results: HFpEF without Post-Diagnosis]{\textit{Clustering results of HFpEF \textit{without} Post-Diagnosis}}
+    \caption[HFpEF without Post-Diagnosis]{\textit{Clustering results of HFpEF \textit{without} Post-Diagnosis}}
     \label{fig:clust_results_without_post_p}
 \end{figure}
 
@@ -134,7 +138,7 @@
 \begin{figure}[h!]
     \centering
     \hspace*{-1cm}\includegraphics[width=1.1\textwidth]{doc/thesis/images/ClustmrNoPhy.pdf}
-    \caption[Clustering results: HFmrEF without Post-Diagnosis]{\textit{Clustering results of HFmrEF \textit{without} Post-Diagnosis}}
+    \caption[HFmrEF without Post-Diagnosis]{\textit{Clustering results of HFmrEF \textit{without} Post-Diagnosis}}
     \label{fig:clust_results_without_post_mr}
 \end{figure}
 
@@ -142,6 +146,11 @@
 \label{chap:souce_code}
 
 \noindent The following appendix presents all the relevant \texttt{R}-code used in this thesis. We have organized the chapter in accordance with the various steps in the machine learning procedure adopted in this thesis, see figure (\ref{fig:ML_proc_thesis}). We have tried to comment as much of the source code in order to ensure that an eventual re-examination of the results can be as easy and smooth as possible. Inquires about the code can be forwarded to the author on request.
+
+\section{Packages}
+\label{sec:pack_code}
+
+\lstinputlisting[language=R]{../../data/data_sets/source/packages.R}
 
 \section{Utilities}
 \label{sec:utilities}
