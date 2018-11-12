@@ -180,7 +180,7 @@ Cut dendrogram based on max relative loss of inertia criteria\\
 \noindent The algorithm takes as input $n$ observations, the defined distance measure and the number of clusters $K$ to be produced. Then all the observations $n$ are assigned a number in the set of the number corresponding to the clusters. This assignment is done at random and serves as the initial cluster assignment for the observations. Then the algorithm iterates until there is no change in cluster assignment between cluster assignment $a_t$ and $a_{t-1}$. The cluster assignments is done by computing the cluster centroid and assigning each observation in the cluster $C$ to the cluster $C_1, \hdots, C_k$ whose centroid is closest, i.e. given the distance measure. \\
 \indent The disadvantage of the k-means algorithm is that it requires a user to define the number clusters a priori, which in some cases may be seen as defeating the purpose of the cluster analysis, i.e. the results may vary with the number of clusters chosen. We have tried to address this problem by using the \texttt{r} function \texttt{NbClust()} \citep{nbclust} that uses 30 indices for determining the number of clusters and proposes to the user the best clustering scheme by the use of the majority-rule of all the indices. As for the actual implementation of the k-means clustering algorithm, we use the \texttt{kmeans()} function in the \text{stats}-package \citep{stats}. The implementation of this algorithm is wrapped in the \texttt{pca.cluster.plot()} function we mentioned in the preceding section.
 
-\vspace*{-0,25cm}\subsection{Expectation-Maximization (EM)}
+\vspace*{-0,25cm}\subsection{Expectation-Maximization}
 \label{subsec:em}
 
 \noindent The k-means algorithm is closely related to the EM algorithm \citep{dempster1977maximum} for estimating certain Gaussian mixture model(s). As we mentioned in section (\ref{subsec:impu}), the EM algorithm consists of estimating the maximum likelihood parameters of the given Gaussian(s) in question. This is done in the E-step of the algorithm and as such this is responsible for assigning the "responsibilities" for each data points based on its relative density under each mixture components. Whilst the M-step is responsible for recomputing the component density parameters based on the current responsibilities \citep{friedman2009elements}. The aim of the EM clustering algorithm is to assign the data into $K$ clusters according to the observations probability of belonging to each of the clusters. It is often stated that the EM algorithm is a "soft" version of the k-means algorithm, as the points are assigned based on a probabilistic (rather than a deterministic) approach \citep{james2013introduction}. The pseudocode for the EM algorithm is given below. Accordingly, the algorithm starts by having the user input the dataset matrix $\mathbf{D}$, a parametric model $f_\theta$, an initial distribution $\pi_0$ and a randomly selected parameter $\theta_0$. The algorithm then computes the expected responsibilities on each observations and updates the parameters $(\pi_t, \theta_t)$ with the maximum likelihood estimates $(\pi_{max}, \theta_{max})$. This is done iteratively until convergence. Being that the EM algorithm is similar to the k-means algorithm, it has also the same disadvantages, i.e the user needs to define the number of clusters to be produced. In addition, it can sometimes be very time consuming or even impossible for the algorithm to achieve convergence, i.e. no change in cluster assignment between iterations. In theory, as the exit criteria of the EM algorithm is defined by convergence, this could mean that the algorithm may never stop as convergence is not guaranteed in all cases.  As for the implementation, we use the \texttt{Mclust()} function in the \texttt{mclust} package in \texttt{r} \citep{mclust}. All the default setting are used in the implementation and as with the previous clustering algorithms, the EM algorithm is also wrapped in the \texttt{pca.var.plot()} function.\\
@@ -207,9 +207,9 @@ Cut dendrogram based on max relative loss of inertia criteria\\
 \section{Classifying Clinical Outcomes}
 \label{sec:classify_clin_out}
 
-\noindent In this section, we present the supervised classification algorithms used in this thesis. As we mention in section (\ref{sec:overview}), the classification algorithms that will be evaluated are: k-nearest neighbours, logistic regression, naive bayes, linear discriminant analysis and random forest. We will also mention the way in which we evaluate the algorithms with the K-fold cross validation. All the source code can be found in appendix (\ref{chap:souce_code}).
+\noindent In this section, we present the supervised classification algorithms used in this thesis. As we mention in section (\ref{sec:overview}), the classification algorithms that will be evaluated are: k-nearest neighbours, logistic regression, naive Bayes, linear discriminant analysis and random forest. We will also mention the way in which we evaluate the algorithms with the K-fold cross validation. All the source code can be found in appendix (\ref{chap:souce_code}).
 
-\subsection{k-Nearest Neighbours (k-NN)}
+\subsection{k-Nearest Neighbours}
 \label{subsec:knn}
 
 \noindent The first algorithm we will be presenting is the k-nearest neighbours (k-NN) algorithm. The k-NN algorithm \citep{fix1951discriminatory} is a widely used algorithm, and often for good reason. It is very intuitive and simple to understand. In addition, the algorithm performs very well in many cases. This classifier is a memory-based algorithm that classifies a given observation based on the $k$ nearest neighbours of that observation in the feature space. Mathematically, given a query point $x_0$, the k-NN algorithm tries to find the $k$ training points $x_{(r)}, r = 1, \hdots, k$ closest in distance to $x_0$, and thus classify the point $x_0$ according to the majority rule of the $k$ closest points to $x_0$, see \citep{friedman2009elements} and \citep{james2013introduction}. The pseudocode for the algorithm is given below. Based on the pseudocode, we can see that the k-NN algorithm starts out by taking as input the training data $\mathbf{X}$ which is a subset of the full dataset ${\displaystyle \mathbf{X}\subseteq \mathbf{D}}$, the class labels $\mathbf{Y}$ of $\mathbf{X}$ and the distance measure to be used $d$. The distance measure between two data points are typically assumed to be a Minkowski distance:
@@ -263,7 +263,7 @@ where if $p=1$ or 2, the distance $d$ will correspond to the Manhattan or the Eu
 \end{align}
 \noindent The probabilities $p(\boldsymbol{X}|H)$, $p(\boldsymbol{X})$ and $p(H)$ can all be estimated from the given data sample. The procedure for which the algorithm classifies a given observation into a discrete categorical outcome is given by the following \citep{leung2007naive}. Given a sample $\boldsymbol{X}$, the naive Bayes' classifier will predict that $\boldsymbol{X}$ belongs to the class having the highest a posteriori probability, conditioned on $\boldsymbol{X}$. That is $X$ is predicted to belong to the class $C_i$ if and only if $P(C_i| \boldsymbol{X}) > P(C_j | \boldsymbol{X})$ for $1 \leq j \leq n$, $j \neq i$. Rather than using a threshold value $p^\star$ as with logistic regression, one seeks to maximize the a posteriori probability and accordingly assign labels to observations. For large sample data sets the naive Bayes' classifier is especially appropriate as it can outperform many sophisticated algorithms. However, the assumption of independence among the variables is often very unrealistic and although it simplifies the estimation, the risk of high bias is very much present with the algorithm. In this thesis we will be implementing the Naive Bayes algorithm using the \texttt{nb} function in the \texttt{caret}\citep{kuhncaret} \texttt{r} package.
 
-\subsection{Linear Discriminant Analysis (LDA)}
+\subsection{Linear Discriminant Analysis}
 \label{subsec:lda}
 
 \noindent The linear discriminant analysis (LDA) algorithm is very similar to principal component analysis (PCA), i.e. they both try to look for linear combinations that best explain the data. However, LDA, tries explicitly to model the difference between the classes of data. This is done by modeling the distribution of the predictors $X$ separately in each of the response classes (i.e. given $Y$). The objective of LDA is to perform dimension reduction (similar to PCA), while preserving as much of the class discrimination information as possible. Assuming we have a $p$ dimensional random variable $X$, that is $X$ follows a multivariate normal distribution, i.e. $X \sim N(\mu,\sigma)$. This distribution is formally given by the following, i.e. an observation $X$ is assigned to the class $x$ with the following, see \cite{friedman2009elements} and \cite{james2013introduction}:
@@ -272,17 +272,19 @@ where if $p=1$ or 2, the distance $d$ will correspond to the Manhattan or the Eu
 \end{align}
 
 \noindent The LDA classifier assumes that the observation in the $k$th class is drawn from a multivariate normal distribution. By using Bayes formula, the class-specific mean vector $\mu_k$ and covariance matrix $\boldsymbol{\Sigma}$ can be defined by the following:
-\newpage
+
 \begin{align}
     \gamma_k (x) = x^T\boldsymbol{\Sigma}^{-1} \mu_k - \frac{1}{2}\mu_k^T\boldsymbol{\Sigma}^{-1} \mu_k + \log \pi_k
 \end{align}
 
 \noindent Large samples and many variables, LDA is preferred to other discriminant classifiers due to its dimensional reduction nature. The same can be said in the opposite direction. LDA is one of the most common classification algorithms with a dimensional reduction nature. Accordingly, LDA suffers from two main problems: the small sample size and the linearity problem \citep{tharwat2017linear}. The linearity problem is present if the underlying structure in the data is non-linear. Should this be the case (which is very common in many domains), then the LDA cannot find a LDA space where the discriminatory information exists in the mean, since it exists in the variance. In a two class situation with a non-linear structure in the data, this means that the means are equal. The small sample size problem is related to the low number of training samples available for each class compared with the dimensionality of the sample space \citep{tharwat2017linear}. Either way, the LDA is one of the most popular classification algorithms used in the literature related to HF and accordingly, this is the reason why we choose to include it in the following review. The implementation of this algorithm is done using the \texttt{lda()} function from the \texttt{MASS}-package in \texttt{r} \citep{MASS}.
 
-\subsection{Support Vector Machines (SVM)}
+\subsection{Support Vector Machines}
 \label{subsec:svm}
 
 \noindent The next classification algorithm is the support vector machines (SVM) \citep{vapnik1963pattern}. This classifier is based on the concept of a separating hyperplane, i.e. a flat affine subspace of dimension $p-1$. The support vector machine can be generalized to classify clinical outcomes with non-linear decision boundaries. By choosing a radial kernel (function that quantifies the similarities between two observations), we can create a classifier that takes into account the non-linear nature that is often assumed on higher dimensional data. This radial kernel is defined by the generalized inner product function: 
+\newpage
+
 \begin{align}
     K(x_i, x_i^\prime) = \exp{\left\{-\gamma \sum_{j=1}^p\left(x_{ij} - x_{i^\prime j} \right)^2\right\}}
 \end{align}
@@ -313,9 +315,7 @@ where if $p=1$ or 2, the distance $d$ will correspond to the Manhattan or the Eu
 }
 \caption{Random forest}
 \end{algorithm}
-
-
-
+\newpage
 \section{K-fold Cross-Validation}
 \label{sec:validation}
 
@@ -324,7 +324,7 @@ where if $p=1$ or 2, the distance $d$ will correspond to the Manhattan or the Eu
     CV_k = \frac{1}{nk}\sum_{i=1}^k\sum_{j=1}^n\left(Y_{ij} - \hat{Y}_{ij} \right)^2
 \end{align}
 
-\noindent The $K$-fold cross-validation estimate is one of many criteria used to evaluate the performance of various classifiers. One clear advantage of using the $K$-fold cross-validation estimate is computational, i.e. the runtime properties of the $K$-fold cross-validation algorithm are good as one limits the number of splits of the data to $K$-folds. This can also lower the variance of the prediction error since there is a high chance that all the K-folds are more different than if one was to choose $K = N$ (also called leave-one-out cross validation), see \citep{friedman2009elements}. In the setting of this thesis, we will
+\noindent The $K$-fold cross-validation estimate is one of many criteria used to evaluate the performance of various classifiers. One clear advantage of using the $K$-fold cross-validation estimate is computational, i.e. the runtime properties of the $K$-fold cross-validation algorithm are good as one limits the number of splits of the data to $K$-folds. This can also lower the variance of the prediction error since there is a high chance that all the K-folds are more different than if one was to choose $K = N$ (also called leave-one-out cross validation), see \citep{friedman2009elements}. In the setting of this thesis, we will evaluate the classification algorithm mentioned earlier using only the $K$-fold cross validation algorithm. The psedo-code of the $K$-fold algorithm is given above. The implementation of the $K$-fold cross-validation method is typically included as a sub-function in each of the implementations of the classification algorithms mentioned in the previous sections. We have chosen to use $K = 10$ folds for all algorithms to be evaluated. This is a very common choice in the literature, see e.g. \cite{liu2014new}, \cite{alonso2015exploring}, \cite{masetic2016congestive} and \cite{koulaouzidis2016telemonitoring}.
 
 \begin{algorithm}[H]{
 \SetAlgoLined
@@ -344,9 +344,5 @@ where if $p=1$ or 2, the distance $d$ will correspond to the Manhattan or the Eu
 }
 \caption{K-fold cross validation}
 \end{algorithm}
-
-\noindent evaluate the classification algorithm mentioned earlier using only the $K$-fold cross validation algorithm. The psedo-code of the $K$-fold algorithm is given above. The implementation of the $K$-fold cross-validation method is typically included as a sub-function in each of the implementations of the classification algorithms mentioned in the previous sections. We have chosen to use $K = 10$ folds for all algorithms to be evaluated. This is because it is a very common choice in the literature, see e.g. \cite{liu2014new}, \cite{alonso2015exploring}, \cite{masetic2016congestive} and \cite{koulaouzidis2016telemonitoring}.
-
-
 
 \end{document}
