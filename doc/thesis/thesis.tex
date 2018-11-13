@@ -1,7 +1,7 @@
 \documentclass[openany, 12pt]{book}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb, amsmath}
-\usepackage[colorlinks=True, linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorlinks=True, linkcolor=black, citecolor=blue]{hyperref}
 \usepackage{tabularx}
 \usepackage{ragged2e}
 \usepackage{ltablex}
@@ -73,9 +73,11 @@
 \usepackage[roman]{parnotes}
 \usepackage{pdflscape}
 \usepackage{changepage}
+\usepackage{pdfpages}
 
 \begin{document}
 
+% \includepdf[page={1}]{images/m_eng_a4.pdf} 
 \includepdf[width=1.58\textwidth,height=1.5\textheight]{m_eng_a4.pdf}
 
 \newpage{\pagestyle{empty}\cleardoublepage}
@@ -130,5 +132,8 @@
 
 \bibliography{chapters/thesis.bib}
 \addcontentsline{toc}{chapter}{Bibliography}
+
+% \includepdf[page={144}]{images/m_back_a4.pdf} 
+\includepdf[width=1.58\textwidth,height=1.5\textheight]{m_back_a4.pdf}
 
 \end{document}
