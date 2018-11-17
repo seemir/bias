@@ -22,8 +22,9 @@ lapply(gsub(" ", "", paste("data_files/", allDataFiles,
 # Add cross validation configuration
 # ----------------------------------------------------------- #
 kfold <- trainControl(method = "cv", number = 10)
-seed <- 902109
+seed <- 0123456789
 metric <- "Accuracy"
+preProcess <- "pca"
 
 # ----------------------------------------------------------- #
 # Train and evaluate the classification algorithms with kfold
@@ -39,27 +40,33 @@ readmission <- HFfullOutcomes[,4]
 # ----------------------------------------------------------- #
 set.seed(seed)
 fitKnnKfoldMort <- train(dataset, mortality, method="knn", 
-                         metric=metric, trControl=kfold)
+                         metric=metric, trControl=kfold,
+                         preProcess = preProcess)
 
 set.seed(seed)
 fitLLKfoldMort <- train(dataset, mortality, method = "glm",
-                        metric=metric, trControl = kfold)
+                        metric=metric, trControl = kfold,
+                        preProcess = preProcess)
 
 set.seed(seed)
 fitLDAKfoldMort <- train(dataset, mortality, method = "lda",
-                         metric = metric, trControl = kfold)
+                         metric = metric, trControl = kfold,
+                         preProcess = preProcess)
 
 set.seed(seed)
 fitNbKfoldMort <- train(dataset, mortality, method = "nb",
-                        metric = metric, trControl = kfold)
+                        metric = metric, trControl = kfold,
+                        preProcess = preProcess)
 
 set.seed(seed)
 fitSvmKfoldMort <- train(dataset, mortality,method="svmRadial", 
-                         metric=metric, trControl=kfold)
+                         metric=metric, trControl=kfold,
+                         preProcess = preProcess)
 
 set.seed(seed)
 fitRfKfoldMort <- train(dataset, mortality, method="rf", 
-                        metric = metric, trControl = kfold)
+                        metric = metric, trControl = kfold,
+                        preProcess = preProcess)
 
 # ----------------------------------------------------------- #
 # Produce summary statistics and plots
@@ -72,6 +79,7 @@ resultsMortalityKfold <- resamples(list(knn = fitKnnKfoldMort,
                                         nb = fitNbKfoldMort,
                                         svm = fitSvmKfoldMort,
                                         rf = fitRfKfoldMort))
+
 xtable(summary(resultsMortalityKfold)$statistics$Accuracy,
       digits = 3)
 xtable(summary(resultsMortalityKfold)$statistics$Kappa,
@@ -90,29 +98,35 @@ dev.off()
 # ----------------------------------------------------------- #
 set.seed(seed)
 fitKnnKfoldReadm <- train(dataset, readmission, method="knn", 
-                          metric=metric, trControl=kfold)
+                          metric=metric, trControl=kfold,
+                          preProcess = preProcess)
 
 set.seed(seed)
 fitLLKfoldReadm <- train(dataset, readmission, method = "glm",
-                        metric=metric, trControl = kfold)
+                        metric=metric, trControl = kfold,
+                        preProcess = preProcess)
 
 set.seed(seed)
-fitLDAKfoldReadm <- train(dataset[,-19], readmission, 
+fitLDAKfoldReadm <- train(dataset, readmission, 
                           method = "lda", metric = metric, 
-                          trControl = kfold)
+                          trControl = kfold,
+                          preProcess = preProcess)
 
 set.seed(seed)
 fitNbKfoldReadm <- train(dataset, readmission, method = "nb",
-                        metric = metric, trControl = kfold)
+                        metric = metric, trControl = kfold,
+                        preProcess = preProcess)
 
 set.seed(seed)
 fitSvmKfoldReadm <- train(dataset, readmission, 
                           method="svmRadial", metric=metric,
-                          trControl=kfold)
+                          trControl=kfold,
+                          preProcess = preProcess)
 
 set.seed(seed)
 fitRfKfoldReadm <- train(dataset, readmission, method="rf", 
-                         metric = metric, trControl = kfold)
+                         metric = metric, trControl = kfold,
+                         preProcess = preProcess)
 
 # ----------------------------------------------------------- #
 # Produce summary statistics and plots
@@ -125,10 +139,12 @@ resultsReadmKfold <- resamples(list(knn = fitKnnKfoldReadm,
                                     logr = fitLLKfoldReadm,
                                     svm = fitSvmKfoldReadm,
                                     rf = fitRfKfoldReadm))
+
 xtable(summary(resultsReadmKfold)$statistics$Accuracy,
        digits = 3)
 xtable(summary(resultsReadmKfold)$statistics$Kappa,
        digits = 3)
+
 pathToImages <- "../../../doc/thesis/images/"
 tikz(file=paste(pathToImages,"classificationReadmission.tex", 
                 sep = ""), height = 5.5, standAlone = F)
