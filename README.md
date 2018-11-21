@@ -2,7 +2,7 @@
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
-My final master thesis submitted for the degree of Master of Science in Bioinformatics and Applied Statistics at the Norwegian University of Life Sciences (NMBU). All the processes mentioned in the ML procedure in are developed using the _R_ statistical programming language (version 3.4.4 - _Someone to Lean On_) with RStudio as the integrated development environment (IDE), version 1.1.423. 
+My final master thesis submitted for the degree of Master of Science in Bioinformatics and Applied Statistics at the Norwegian University of Life Sciences (NMBU). All the processes mentioned in the ML procedure in this thesis are developed using the _R_ statistical programming language (version 3.4.4 - _Someone to Lean On_) with RStudio as the integrated development environment (IDE), version 1.1.423. 
 
 ## Abstract
 In this thesis, we attempt to investigate how well various clustering algorithms (hierarchical clustering, k-means and expectation–maximization) perform in producing phenotypically distinct clinical patient groups (i.e. phenomapping) with heart failure with preserved ejection fraction (HFpEF) and mid-range ejection fraction (HFmrEF). Furthermore, we evaluate the performance of various classification algorithms (k-nearest neighbours, logistic regression, naive Bayes, linear discriminant analysis, support vector machines and random forest) in predicting patient mortality and readmission. All the algorithms were applied on a data set consisting of 375 patients with symptomatic heart failure (HF) identified at a tertiary hospital in the United Kingdom.
