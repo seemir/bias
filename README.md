@@ -12,3 +12,5 @@ In the cluster analysis, we found that the hierarchical and k-means algorithms s
 In the classification of mortality and readmission, we found that linear discriminant analysis (LDA) and logistic regression show promising potential. That is, the level of accuracy for which the algorithms predicted mortality and readmission rank high compared to the other algorithms evaluated. LDA predicted mortality with approximately 69.9\% accuracy and readmission with 99.7\%. Logistic regression had similar results with approximately 69.6\% accuracy for mortality and 98.7\% for readmission. Similar results are reported in the literature. Our findings lend support to the idea that the application of such algorithms may help in better understanding the complex nature of a clinical syndrome such as heart failure.
 
 ## ML procedure adopted in the thesis
+
+[Imgur](https://i.imgur.com/0gwO56h.png)
