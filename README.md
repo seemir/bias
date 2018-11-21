@@ -13,5 +13,5 @@ In the classification of mortality and readmission, we found that linear discrim
 
 ## ML procedure adopted in the thesis
 <p align="center">
-  <img src = 'https://i.imgur.com/0gwO56h.png' align="centre" height="60%" width="60%"></img>
+  <img src = 'https://i.imgur.com/0gwO56h.png' align="centre" height="65%" width="65%"></img>
 </p>
