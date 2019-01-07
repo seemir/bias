@@ -3,6 +3,7 @@
 [![made-with-latex](https://img.shields.io/badge/Made%20with-LaTeX-1f425f.svg)](https://www.latex-project.org/)
 [![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive) 
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.4.4-blue.svg)](https://cran.r-project.org/)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
 My final master thesis submitted for the degree of Master of Science in Bioinformatics and Applied Statistics at the Norwegian University of Life Sciences (NMBU). All the processes mentioned in the ML procedure in this thesis are developed using the _R_ statistical programming language (version 3.4.4 - _Someone to Lean On_) with RStudio as the integrated development environment (IDE), version 1.1.423. 
 
