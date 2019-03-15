@@ -9,7 +9,7 @@ Packages <- c("reporttools", "VIM", "Hmisc", "xtable",
 # Load relevant packages and source helper functions
 # ----------------------------------------------------------- #
 lapply(Packages, library, character.only = T)
-source("_helper_func.R")
+source("utilities.R")
 
 # ----------------------------------------------------------- #
 # Load HFpEF and HFmrEF datafiles
